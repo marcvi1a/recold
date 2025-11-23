@@ -138,10 +138,12 @@ button:hover {
   flex-direction: column;
 }
 
-#start {
+#start-controls {
   background: #000;
   color: #fff;
-  font-size: 7rem;
-  font-family: monospace;
-  text-align: center;
+}
+
+#start-controls button {
+  flex: 1;
+  height: 4rem;
 }
