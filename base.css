@@ -17,8 +17,8 @@ button:hover {
   position: relative;
   overflow: hidden;
 
-  background: #378de2;
-  background: #ef0241;
+  background: #ef0241; /* sauna */
+  background: #378de2; /* ice bath */
 }
 
 #app-padding {
