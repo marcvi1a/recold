@@ -17,6 +17,8 @@ cameraStart.addEventListener("click", async () => {
     document.getElementById("camera-controls__video").disabled = false;
     document.getElementById("camera-controls__photos").disabled = false;
 
+    document.getElementById("camera-controls__video").classList.add("selected");
+
   } catch (err) {
     alert("Camera permission denied or unavailable.");
     console.error(err);

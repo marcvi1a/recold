@@ -9,6 +9,10 @@ button:hover {
   cursor: pointer;
 }
 
+.selected {
+  background: #e5e5e5;
+}
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
