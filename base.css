@@ -9,6 +9,12 @@ button:hover {
   cursor: pointer;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
 /* Main mobile frame */
 #app {
   width: 390px;
@@ -20,16 +26,16 @@ button:hover {
   background: linear-gradient(
     180deg,
     #ef0241 0%,
-    #f2efea 20%,
-    #f2efea 80%,
+    #f2efea 10%,
+    #f2efea 90%,
     #ef0241 100%
   ); /* sauna */
 
   background: linear-gradient(
     180deg,
     #378de2 0%,
-    #f2efea 20%,
-    #f2efea 80%,
+    #f2efea 10%,
+    #f2efea 90%,
     #378de2 100%
   ); /* ice bath */
 }
@@ -138,7 +144,6 @@ button:hover {
 
 .timer-controls__group {
   display: flex;
-  flex-direction: column;
 }
 
 #timer-controls .level-2 {
