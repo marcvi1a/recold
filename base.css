@@ -21,7 +21,7 @@ button:hover {
   background: linear-gradient(180deg, #378de2, #ef0241, #378de2, #ef0241, #378de2, #ef0241, #378de2, #ef0241, #378de2);
   background-size: 100% 1200%;
 
-  animation: gradient-move 48s linear infinite;
+  animation: scroll 48s linear infinite;
 }
 
 @keyframes scroll {
