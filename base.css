@@ -60,7 +60,7 @@ html, body {
   text-decoration: underline;
 }
 
-#camera-start:hover {
+button:hover {
   cursor: pointer;
 }
 
@@ -73,25 +73,22 @@ html, body {
   display: none; /* hidden until permission granted */
 }
 
-#camera-controls {
+.controls {
   flex: 1;              /* takes up leftover width */
+  height: 100%;
+
   object-fit: cover;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
 }
 
-#camera-controls button {
+.controls button {
   flex: 1;
   width: 100%;
 
   /* filter: blur(10px); */
-}
-
-#camera-controls button:hover {
-  cursor: pointer;
 }
 
 
@@ -99,7 +96,7 @@ html, body {
 
 #timer-container {
   width: 100%;
-  height: 40%;
+  height: 20%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,28 +104,10 @@ html, body {
 }
 
 #timer {
+  aspect-ratio: 9 / 16;
+  height: 100%;
+
   font-size: 48px;
   color: white;
   font-family: monospace;
-}
-
-#timer-controls {
-  flex: 1;              /* takes up leftover width */
-  object-fit: cover;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-}
-
-#timer-controls button {
-  flex: 1;
-  width: 100%;
-
-  /* filter: blur(10px); */
-}
-
-#timer-controls button:hover {
-  cursor: pointer;
 }
