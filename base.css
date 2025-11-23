@@ -107,13 +107,13 @@ button:disabled {
   display: flex;
   flex-direction: column;
   margin-top: 0.75rem;
-
-  background: #ef0241; /* sauna */
-  background: #378de2; /* ice bath */
 }
 
 #timer {
   background: #000;
+  background: #378de2; /* ice bath */
+  background: #ef0241; /* sauna */
+
   color: #fff;
   font-size: 7rem;
   font-family: monospace;
