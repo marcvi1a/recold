@@ -33,7 +33,7 @@ html, body {
   height: 50%;           /* half height = quarter screen */
   aspect-ratio: 9 / 16;   /* forces 9:16 always */
 
-  background: #00ff00;
+  background: #000;
 
   display: flex;
   align-items: center;
