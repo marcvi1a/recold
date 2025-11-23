@@ -69,3 +69,16 @@ html, body {
   background: #000;
   display: none; /* hidden until permission granted */
 }
+
+#camera-controls {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  height: 60%;           /* half height = quarter screen */
+  aspect-ratio: 7 / 16;   /* forces 9:16 always */
+
+  object-fit: cover;
+  background: #000;
+  filter: blur(10px);
+}
