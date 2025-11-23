@@ -49,10 +49,7 @@ html, body {
   background: rgba(255,255,255,0.9);
   border: none;
   border-radius: 10px;
-}
-
-#camera-start span {
-  color: #0000EE;
+  color: #559ee6;
   text-decoration: underline;
 }
 
