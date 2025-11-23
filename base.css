@@ -10,9 +10,19 @@ html, body {
   width: 390px;
   height: 844px;
   margin: 0 auto;
-  background: #f2efea;
   position: relative;
   overflow: hidden;
+
+  /* background: #f2efea; */
+  background: linear-gradient(90deg, #378de2, #37e239, #ef0241);
+  background-size: 300% 300%;
+  animation: gradient-move 8s ease infinite;
+}
+
+@keyframes gradient-move {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 #app-padding {
