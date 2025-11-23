@@ -1,8 +1,8 @@
-const startBtn = document.getElementById("start-btn");
+const cameraPreview = document.getElementById("camera-preview");
+const cameraStart = document.getElementById("camera-start");
 const camera = document.getElementById("camera");
-const startScreen = document.getElementById("start-screen");
 
-startBtn.addEventListener("click", async () => {
+cameraStart.addEventListener("click", async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: "user" }
@@ -11,7 +11,7 @@ startBtn.addEventListener("click", async () => {
     camera.srcObject = stream;
 
     // Remove overlay but DO NOT resize camera
-    startScreen.style.display = "none";
+    cameraPreview.style.display = "none";
 
   } catch (err) {
     alert("Camera permission denied or unavailable.");

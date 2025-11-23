@@ -25,19 +25,15 @@ html, body {
 }
 
 /* Blurry background covers entire screen */
-.blur-bg {
+#camera-preview {
   width: 100%;
   height: 100%;
   background: url('https://picsum.photos/800/1600') center/cover no-repeat;
   filter: blur(10px);
-  position: absolute;
 }
 
 /* Call-to-action button */
-#start-btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+#camera-start {
   transform: translate(-50%, -50%);
   padding: 20px;
   font-size: 20px;
@@ -46,32 +42,17 @@ html, body {
   border-radius: 10px;
 }
 
-/* Wrapper container enforcing 9:16 ratio */
-#camera-container {
+#camera {
   position: absolute;
   top: 0;
   left: 0;
 
   width: 50%;            /* half width of screen */
   height: 50%;           /* half height = quarter screen */
+  aspect-ratio: 9 / 16;   /* forces 9:16 always */
 
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-/* Inner box that maintains 9:16 ratio */
-#camera-box {
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 9 / 16;   /* forces 9:16 always */
-  overflow: hidden;
-}
-
-/* Camera feed */
-#camera {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
