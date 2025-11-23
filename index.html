@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>PWA Camera</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="base.css" />
+
+  <script>
+    // Register service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <!-- Initial screen -->
+    <div id="start-screen">
+      <div class="blur-bg"></div>
+      <button id="start-btn">
+        Click to allow permission of camera and start recording!
+      </button>
+    </div>
+
+    <!-- Camera screen -->
+    <video id="camera" autoplay playsinline></video>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
