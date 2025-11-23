@@ -30,8 +30,7 @@ html, body {
   top: 0;
   left: 0;
 
-  width: 50%;            /* half width of screen */
-  height: 50%;           /* half height = quarter screen */
+  height: 60%;           /* half height = quarter screen */
   aspect-ratio: 9 / 16;   /* forces 9:16 always */
 
   background: url('blur.gif') center/cover no-repeat;
@@ -56,8 +55,7 @@ html, body {
   top: 0;
   left: 0;
 
-  width: 50%;            /* half width of screen */
-  height: 50%;           /* half height = quarter screen */
+  height: 60%;           /* half height = quarter screen */
   aspect-ratio: 9 / 16;   /* forces 9:16 always */
 
   object-fit: cover;
