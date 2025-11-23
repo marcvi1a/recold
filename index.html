@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>PWA Camera</title>
+  <title>Gelofogo</title>
 
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="base.css" />
@@ -20,15 +20,16 @@
   <div id="app">
 
     <!-- Camera preview window (always visible) -->
-    <video id="camera" autoplay playsinline></video>
-
-    <!-- Initial overlay -->
-    <div id="start-screen">
-      <div class="blur-bg"></div>
-      <button id="start-btn">
-        Click to allow permission of camera and start recording!
-      </button>
-    </div>
+    <video id="camera" autoplay playsinline>
+      <!-- Initial overlay -->
+      <div id="start-screen">
+        <div class="blur-bg">
+          <button id="start-btn">
+            Click to allow permission of camera and start recording!
+          </button>
+        </div>
+      </div>
+    </video>
 
   </div>
 
