@@ -114,10 +114,6 @@ button:disabled {
 }
 
 #timer {
-  background: #000;
-  background: #ef0241; /* sauna */
-  background: #378de2; /* ice bath */
-
   color: #fff;
   font-size: 7rem;
   font-family: monospace;
@@ -157,4 +153,9 @@ button:disabled {
 #start-controls button {
   flex: 1;
   height: 4rem;
+}
+
+#start-controls__start {
+  color: #fff;
+  font-weight: bold;
 }
