@@ -158,4 +158,5 @@ button:disabled {
 #start-controls__start {
   color: #fff;
   font-weight: bold;
+  text-transform: uppercase;
 }
