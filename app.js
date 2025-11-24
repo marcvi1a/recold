@@ -9,6 +9,28 @@ const COLOR_ICE_BATH = "#378de2";
 const timer = document.getElementById("timer");
 const startButton = document.getElementById("start-controls__start");
 
+// --- Initialize mode if empty ---
+if (!localStorage.getItem("mode")) {
+  localStorage.setItem("mode", "ice bath");
+}
+
+const storedMode = localStorage.getItem("mode");
+
+// --- Apply stored mode on page load ---
+if (storedMode === "sauna") {
+  saunaButton.classList.add("selected");
+  iceBathButton.classList.remove("selected");
+  timer.style.background = COLOR_SAUNA;
+  startButton.style.background = COLOR_SAUNA;
+}
+
+if (storedMode === "ice bath") {
+  iceBathButton.classList.add("selected");
+  saunaButton.classList.remove("selected");
+  timer.style.background = COLOR_ICE_BATH;
+  startButton.style.background = COLOR_ICE_BATH;
+}
+
 
 cameraStart.addEventListener("click", async () => {
   try {
@@ -34,19 +56,19 @@ cameraStart.addEventListener("click", async () => {
 });
 
 saunaButton.addEventListener("click", () => {
-
   saunaButton.classList.add("selected");
   iceBathButton.classList.remove("selected");
-
   timer.style.background = COLOR_SAUNA;
   startButton.style.background = COLOR_SAUNA;
+
+  localStorage.setItem("mode", "sauna");
 });
 
 iceBathButton.addEventListener("click", () => {
-
   iceBathButton.classList.add("selected");
   saunaButton.classList.remove("selected");
-
   timer.style.background = COLOR_ICE_BATH;
   startButton.style.background = COLOR_ICE_BATH;
+
+  localStorage.setItem("mode", "ice-bath");
 });
