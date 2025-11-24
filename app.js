@@ -1,3 +1,9 @@
+const appTitleText = document.getElementById("app-title-text");
+
+const APP_TITLE_SAUNA = "Feel the heat!";
+const APP_TITLE_ICE_BATH = "Brrreak your limits!";
+
+
 const cameraPreview = document.getElementById("camera-preview");
 const cameraStart = document.getElementById("camera-start");
 const camera = document.getElementById("camera");
@@ -23,6 +29,8 @@ if (storedMode === "sauna") {
   iceBathButton.classList.remove("selected");
   timeDisplay.style.background = COLOR_SAUNA;
   startButton.style.background = COLOR_SAUNA;
+  appTitleText.textContent = APP_TITLE_SAUNA;
+  appTitleText.style.background = COLOR_SAUNA;
 }
 
 if (storedMode === "ice-bath") {
@@ -30,6 +38,8 @@ if (storedMode === "ice-bath") {
   saunaButton.classList.remove("selected");
   timeDisplay.style.background = COLOR_ICE_BATH;
   startButton.style.background = COLOR_ICE_BATH;
+  appTitleText.textContent = APP_TITLE_ICE_BATH;
+  appTitleText.style.background = COLOR_ICE_BATH;
 }
 
 
@@ -168,6 +178,8 @@ saunaButton.addEventListener("click", () => {
   iceBathButton.classList.remove("selected");
   timeDisplay.style.background = COLOR_SAUNA;
   startButton.style.background = COLOR_SAUNA;
+  appTitleText.textContent = APP_TITLE_SAUNA;
+  appTitleText.style.background = COLOR_SAUNA;
 
   localStorage.setItem("mode", "sauna");
   updateTimeControls();
@@ -178,6 +190,8 @@ iceBathButton.addEventListener("click", () => {
   saunaButton.classList.remove("selected");
   timeDisplay.style.background = COLOR_ICE_BATH;
   startButton.style.background = COLOR_ICE_BATH;
+  appTitleText.textContent = APP_TITLE_ICE_BATH;
+  appTitleText.style.background = COLOR_ICE_BATH;
 
   localStorage.setItem("mode", "ice-bath");
   updateTimeControls();
