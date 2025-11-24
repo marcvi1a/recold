@@ -1,6 +1,6 @@
 const appTitleText = document.getElementById("app-title-text");
 
-const APP_TITLE_SAUNA = "Feel the heat!";
+const APP_TITLE_SAUNA = "Beauty and the heat";
 const APP_TITLE_ICE_BATH = "Brrreak your limits!";
 
 
