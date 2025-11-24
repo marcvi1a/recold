@@ -125,7 +125,7 @@ button:disabled {
 }
 
 #time-display {
-  font-family: "Roboto Mono", monospace;
+  font-family: monospace;
   font-size: 7rem;
   color: #fff;
   text-align: center;
