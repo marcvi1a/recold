@@ -97,12 +97,22 @@ function formatTime(seconds) {
   return `${m}:${s}`;
 }
 
+// --- Initialize time mode (timer or countdown) ---
+if (!localStorage.getItem("time-mode")) {
+  localStorage.setItem("time-mode", "countdown");
+}
 
+const storedTimeMode = localStorage.getItem("time-mode");
 
-
-
-
-
+// Apply stored time mode
+if (storedTimeMode === "timer") {
+  buttonTimer.classList.add("selected");
+  buttonCountdown.classList.remove("selected");
+} else {
+  // default: countdown
+  buttonCountdown.classList.add("selected");
+  buttonTimer.classList.remove("selected");
+}
 
 
 
@@ -153,12 +163,14 @@ iceBathButton.addEventListener("click", () => {
 buttonTimer.addEventListener("click", () => {
   buttonTimer.classList.add("selected");
   buttonCountdown.classList.remove("selected");
+  localStorage.setItem("time-mode", "timer");
   updateTimeControls();
 });
 
 buttonCountdown.addEventListener("click", () => {
   buttonCountdown.classList.add("selected");
   buttonTimer.classList.remove("selected");
+  localStorage.setItem("time-mode", "countdown");
   updateTimeControls();
 });
 
