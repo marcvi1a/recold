@@ -146,6 +146,7 @@ saunaButton.addEventListener("click", () => {
   startButton.style.background = COLOR_SAUNA;
 
   localStorage.setItem("mode", "sauna");
+  updateTimeControls();
 });
 
 iceBathButton.addEventListener("click", () => {
@@ -155,6 +156,7 @@ iceBathButton.addEventListener("click", () => {
   startButton.style.background = COLOR_ICE_BATH;
 
   localStorage.setItem("mode", "ice-bath");
+  updateTimeControls();
 });
 
 
