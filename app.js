@@ -7,7 +7,7 @@ const saunaButton = document.getElementById("start-controls__sauna");
 const iceBathButton = document.getElementById("start-controls__ice-bath");
 const COLOR_SAUNA = "#ef0241";
 const COLOR_ICE_BATH = "#378de2";
-const timer = document.getElementById("timer");
+const timeDisplay = document.getElementById("time-display");
 const startButton = document.getElementById("start-controls__start");
 
 // --- Initialize mode if empty ---
@@ -21,14 +21,14 @@ const storedMode = localStorage.getItem("mode");
 if (storedMode === "sauna") {
   saunaButton.classList.add("selected");
   iceBathButton.classList.remove("selected");
-  timer.style.background = COLOR_SAUNA;
+  timeDisplay.style.background = COLOR_SAUNA;
   startButton.style.background = COLOR_SAUNA;
 }
 
 if (storedMode === "ice-bath") {
   iceBathButton.classList.add("selected");
   saunaButton.classList.remove("selected");
-  timer.style.background = COLOR_ICE_BATH;
+  timeDisplay.style.background = COLOR_ICE_BATH;
   startButton.style.background = COLOR_ICE_BATH;
 }
 
@@ -45,8 +45,6 @@ if (!localStorage.getItem("time-countdown-sauna")) {
 if (!localStorage.getItem("time-countdown-ice-bath")) {
   localStorage.setItem("time-countdown-ice-bath", "60");
 }
-
-const timeDisplay = document.getElementById("time-display");
 
 const buttonTimer = document.getElementById("time-controls__timer");
 const buttonCountdown = document.getElementById("time-controls__countdown");
