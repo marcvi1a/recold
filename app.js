@@ -74,6 +74,12 @@ function applySliderSettings() {
   timeDisplay.textContent = formatTime(parseInt(timeSlider.value, 10));
 }
 
+function updateSliderColor() {
+  const mode = getMode();
+  const color = mode === "sauna" ? COLOR_SAUNA : COLOR_ICE_BATH;
+  timeSlider.style.setProperty("--slider-color", color);
+}
+
 function formatTime(seconds) {
   const m = String(Math.floor(seconds / 60)).padStart(2, "0");
   const s = String(seconds % 60).padStart(2, "0");
