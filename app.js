@@ -9,12 +9,12 @@ const cameraStart = document.getElementById("camera-start");
 const camera = document.getElementById("camera");
 
 
-const saunaButton = document.getElementById("start-controls__sauna");
-const iceBathButton = document.getElementById("start-controls__ice-bath");
+const saunaButton = document.getElementById("menu-controls__sauna");
+const iceBathButton = document.getElementById("menu-controls__ice-bath");
 const COLOR_SAUNA = "#ef0241";
 const COLOR_ICE_BATH = "#378de2";
 const timeDisplay = document.getElementById("time-display");
-const startButton = document.getElementById("start-controls__start");
+const startButton = document.getElementById("menu-controls__start");
 
 // --- Initialize mode if empty ---
 if (!localStorage.getItem("mode")) {
