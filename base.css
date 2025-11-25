@@ -113,8 +113,6 @@ button:disabled {
 #camera-controls button {
   flex: 1;
   width: 100%;
-
-  /* filter: blur(10px); */
 }
 
 #time-container {
@@ -158,8 +156,13 @@ button:disabled {
   height: 32px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid var(--slider-color);
   cursor: pointer;
+
+  /* remove border — replaced by glow */
+  border: none;
+
+  /* new dynamic shadow */
+  box-shadow: 0 0 12px var(--slider-color);
 }
 
 #time-slider:active::-webkit-slider-thumb {
