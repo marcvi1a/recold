@@ -8,6 +8,9 @@ const cameraPreview = document.getElementById("camera-preview");
 const cameraStart = document.getElementById("camera-start");
 const camera = document.getElementById("camera");
 
+let currentFacingMode = "user";
+let cameraStream = null;
+
 
 const saunaButton = document.getElementById("menu-controls__sauna");
 const iceBathButton = document.getElementById("menu-controls__ice-bath");
@@ -99,21 +102,41 @@ function formatTime(seconds) {
 
 
 
-cameraStart.addEventListener("click", async () => {
+async function startCamera() {
+  // Stop old stream
+  if (cameraStream) {
+    cameraStream.getTracks().forEach((t) => t.stop());
+  }
+
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" }
+      video: { facingMode: currentFacingMode },
+      audio: false,
     });
 
+    cameraStream = stream;
     camera.srcObject = stream;
 
     cameraPreview.style.display = "none";
     camera.style.display = "block";
 
+    // Show the reverse-camera button once camera is active
+    switchCameraBtn.style.display = "flex";
   } catch (err) {
     alert("Camera permission denied or unavailable.");
     console.error(err);
+
+    // Hide button if camera fails
+    switchCameraBtn.style.display = "none";
   }
+}
+
+cameraStart.addEventListener("click", startCamera);
+
+switchCameraBtn.addEventListener("click", async () => {
+  currentFacingMode =
+    currentFacingMode === "user" ? "environment" : "user";
+  await startCamera();
 });
 
 
