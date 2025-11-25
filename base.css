@@ -85,41 +85,13 @@ button:disabled {
   text-decoration: underline;
 }
 
-/* Wrapper to hold video + switch button */
-#camera-wrapper {
+#camera {
   aspect-ratio: 9 / 16;
   height: 100%;
 
   object-fit: cover;
   background: #000;
   display: none; /* hidden until permission granted */
-
-}
-
-/* Switch camera button (top-right) */
-#switch-camera-button {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0,0,0,0.4);
-  color: #fff;
-  font-size: 1.2rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  backdrop-filter: blur(10px);
-  z-index: 20;
-  cursor: pointer;
-}
-
-#camera {
 }
 
 #camera-controls {
