@@ -9,6 +9,27 @@ const cameraStart = document.getElementById("camera-start");
 const camera = document.getElementById("camera");
 
 
+const bulletTitle = document.getElementById("bullet-title");
+const bulletPoint1 = document.getElementById("bullet-point-1");
+const bulletPoint2 = document.getElementById("bullet-point-2");
+const bulletPoint3 = document.getElementById("bullet-point-3");
+const bulletPoint4 = document.getElementById("bullet-point-4");
+const bulletPoint5 = document.getElementById("bullet-point-5");
+
+const BULLET_TITLE_SAUNA = "Sauna";
+const BULLET_TITLE_ICE_BATH = "Gelo";
+const BULLET_POINT_1_SAUNA = "p1";
+const BULLET_POINT_1_ICE_BATH = "Água abaixo de 15 ºC";
+const BULLET_POINT_2_SAUNA = "p2";
+const BULLET_POINT_2_ICE_BATH = "Min 1 min para aumentar adrenalina e dopamina";
+const BULLET_POINT_3_SAUNA = "p3";
+const BULLET_POINT_3_ICE_BATH = "Max 3 min de imersão completa até o pescoço";
+const BULLET_POINT_4_SAUNA = "p4";
+const BULLET_POINT_4_ICE_BATH = "Até 10 min só pernas para recuperação muscular";
+const BULLET_POINT_5_SAUNA = "p5";
+const BULLET_POINT_5_ICE_BATH = "Ler dicas <a href='https://gelohealth.com.br/primeiro' target='_blank'>primeiro mergulho</a>";
+
+
 const saunaButton = document.getElementById("menu-controls__sauna");
 const iceBathButton = document.getElementById("menu-controls__ice-bath");
 const COLOR_SAUNA = "#ef0241";
@@ -29,6 +50,12 @@ if (storedMode === "sauna") {
   startButton.style.background = COLOR_SAUNA;
   appTitleText.textContent = APP_TITLE_SAUNA;
   appTitleText.style.color = COLOR_SAUNA;
+  bulletTitle.textContent = BULLET_TITLE_SAUNA;
+  bulletPoint1.textContent = BULLET_POINT_1_SAUNA;
+  bulletPoint2.textContent = BULLET_POINT_2_SAUNA;
+  bulletPoint3.textContent = BULLET_POINT_3_SAUNA;
+  bulletPoint4.textContent = BULLET_POINT_4_SAUNA;
+  bulletPoint5.textContent = BULLET_POINT_5_SAUNA;
 }
 
 if (storedMode === "ice-bath") {
@@ -36,6 +63,12 @@ if (storedMode === "ice-bath") {
   startButton.style.background = COLOR_ICE_BATH;
   appTitleText.textContent = APP_TITLE_ICE_BATH;
   appTitleText.style.color = COLOR_ICE_BATH;
+  bulletTitle.textContent = BULLET_TITLE_ICE_BATH;
+  bulletPoint1.textContent = BULLET_POINT_1_ICE_BATH;
+  bulletPoint2.textContent = BULLET_POINT_2_ICE_BATH;
+  bulletPoint3.textContent = BULLET_POINT_3_ICE_BATH;
+  bulletPoint4.textContent = BULLET_POINT_4_ICE_BATH;
+  bulletPoint5.textContent = BULLET_POINT_5_ICE_BATH;
 }
 
 
@@ -122,6 +155,12 @@ saunaButton.addEventListener("click", () => {
   startButton.style.background = COLOR_SAUNA;
   appTitleText.textContent = APP_TITLE_SAUNA;
   appTitleText.style.color = COLOR_SAUNA;
+  bulletTitle.textContent = BULLET_TITLE_SAUNA;
+  bulletPoint1.textContent = BULLET_POINT_1_SAUNA;
+  bulletPoint2.textContent = BULLET_POINT_2_SAUNA;
+  bulletPoint3.textContent = BULLET_POINT_3_SAUNA;
+  bulletPoint4.textContent = BULLET_POINT_4_SAUNA;
+  bulletPoint5.textContent = BULLET_POINT_5_SAUNA;
 
   localStorage.setItem("mode", "sauna");
   applySliderSettings();
@@ -134,6 +173,12 @@ iceBathButton.addEventListener("click", () => {
   startButton.style.background = COLOR_ICE_BATH;
   appTitleText.textContent = APP_TITLE_ICE_BATH;
   appTitleText.style.color = COLOR_ICE_BATH;
+  bulletTitle.textContent = BULLET_TITLE_ICE_BATH;
+  bulletPoint1.textContent = BULLET_POINT_1_ICE_BATH;
+  bulletPoint2.textContent = BULLET_POINT_2_ICE_BATH;
+  bulletPoint3.textContent = BULLET_POINT_3_ICE_BATH;
+  bulletPoint4.textContent = BULLET_POINT_4_ICE_BATH;
+  bulletPoint5.textContent = BULLET_POINT_5_ICE_BATH;
 
   localStorage.setItem("mode", "ice-bath");
   applySliderSettings();
