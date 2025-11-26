@@ -103,21 +103,16 @@ button:disabled {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  list-style: none;
-  padding-left: 0;
 }
 
 #bullet-points ul {
   list-style: none;
-  padding-left: 0;   /* also removes left indentation */
-  margin-left: 0;
+  padding-left: 1rem;
 }
 
-#bullet-points ul {
+#bullet-points li {
   margin-bottom: 1rem;
 }
-
 
 #time-container {
   width: 100%;
