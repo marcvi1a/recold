@@ -114,6 +114,11 @@ button:disabled {
   margin-left: 0;
 }
 
+#bullet-points ul {
+  margin-bottom: 1rem;
+}
+
+
 #time-container {
   width: 100%;
   display: flex;
