@@ -19,17 +19,17 @@ const bulletPoint6 = document.getElementById("bullet-point-6");
 
 const BULLET_TITLE_SAUNA = "Sauna";
 const BULLET_TITLE_ICE_BATH = "Gelo";
-const BULLET_POINT_1_SAUNA = "Temperatura entre 70 ºC e 90 ºC";
+const BULLET_POINT_1_SAUNA = "Temperatura entre 70 ºC e 100 ºC";
 const BULLET_POINT_1_ICE_BATH = "Água abaixo de 15 ºC";
-const BULLET_POINT_2_SAUNA = "p2";
+const BULLET_POINT_2_SAUNA = "Sessões curtas e regulares para aumentar longevidade";
 const BULLET_POINT_2_ICE_BATH = "Min 1 min para aumentar adrenalina e dopamina";
-const BULLET_POINT_3_SAUNA = "p3";
+const BULLET_POINT_3_SAUNA = "Sessão após cardio para melhorar endurance";
 const BULLET_POINT_3_ICE_BATH = "Max 3 min de imersão completa até o pescoço";
-const BULLET_POINT_4_SAUNA = "p4";
-const BULLET_POINT_4_ICE_BATH = "2-3 ciclos recomendados com hidratação";
-const BULLET_POINT_5_SAUNA = "p5";
-const BULLET_POINT_5_ICE_BATH = "11 min totais por semana com 3 a 5 mergulhos.";
-const BULLET_POINT_6_SAUNA = "p6";
+const BULLET_POINT_4_SAUNA = "Sessão no fim do dia para melhorar sono";
+const BULLET_POINT_4_ICE_BATH = "Até 10 min só pernas para recuperação muscular";
+const BULLET_POINT_5_SAUNA = "100+ min totais por semana com 4 a 7 sessões";
+const BULLET_POINT_5_ICE_BATH = "11 min totais por semana com 3 a 5 mergulhos";
+const BULLET_POINT_6_SAUNA = "Combine com luz vermelha para melhorar saúde da pele";
 const BULLET_POINT_6_ICE_BATH = "<a href='https://gelohealth.com.br/primeiro' target='_blank'>Dicas primeiro mergulho</a>";
 
 
