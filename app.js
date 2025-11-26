@@ -55,7 +55,7 @@ if (storedMode === "sauna") {
   bulletPoint2.textContent = BULLET_POINT_2_SAUNA;
   bulletPoint3.textContent = BULLET_POINT_3_SAUNA;
   bulletPoint4.textContent = BULLET_POINT_4_SAUNA;
-  bulletPoint5.textContent = BULLET_POINT_5_SAUNA;
+  bulletPoint5.innerHTML = BULLET_POINT_5_SAUNA;
 }
 
 if (storedMode === "ice-bath") {
@@ -68,7 +68,7 @@ if (storedMode === "ice-bath") {
   bulletPoint2.textContent = BULLET_POINT_2_ICE_BATH;
   bulletPoint3.textContent = BULLET_POINT_3_ICE_BATH;
   bulletPoint4.textContent = BULLET_POINT_4_ICE_BATH;
-  bulletPoint5.textContent = BULLET_POINT_5_ICE_BATH;
+  bulletPoint5.innerHTML = BULLET_POINT_5_ICE_BATH;
 }
 
 
@@ -160,7 +160,7 @@ saunaButton.addEventListener("click", () => {
   bulletPoint2.textContent = BULLET_POINT_2_SAUNA;
   bulletPoint3.textContent = BULLET_POINT_3_SAUNA;
   bulletPoint4.textContent = BULLET_POINT_4_SAUNA;
-  bulletPoint5.textContent = BULLET_POINT_5_SAUNA;
+  bulletPoint5.innerHTML = BULLET_POINT_5_SAUNA;
 
   localStorage.setItem("mode", "sauna");
   applySliderSettings();
@@ -178,7 +178,7 @@ iceBathButton.addEventListener("click", () => {
   bulletPoint2.textContent = BULLET_POINT_2_ICE_BATH;
   bulletPoint3.textContent = BULLET_POINT_3_ICE_BATH;
   bulletPoint4.textContent = BULLET_POINT_4_ICE_BATH;
-  bulletPoint5.textContent = BULLET_POINT_5_ICE_BATH;
+  bulletPoint5.innerHTML = BULLET_POINT_5_ICE_BATH;
 
   localStorage.setItem("mode", "ice-bath");
   applySliderSettings();
