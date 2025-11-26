@@ -15,6 +15,7 @@ const bulletPoint2 = document.getElementById("bullet-point-2");
 const bulletPoint3 = document.getElementById("bullet-point-3");
 const bulletPoint4 = document.getElementById("bullet-point-4");
 const bulletPoint5 = document.getElementById("bullet-point-5");
+const bulletPoint6 = document.getElementById("bullet-point-6");
 
 const BULLET_TITLE_SAUNA = "Sauna";
 const BULLET_TITLE_ICE_BATH = "Gelo";
@@ -58,7 +59,7 @@ if (storedMode === "sauna") {
   bulletPoint3.textContent = BULLET_POINT_3_SAUNA;
   bulletPoint4.textContent = BULLET_POINT_4_SAUNA;
   bulletPoint5.textContent = BULLET_POINT_5_SAUNA;
-  bulletPoint5.innerHTML = BULLET_POINT_6_SAUNA;
+  bulletPoint6.innerHTML = BULLET_POINT_6_SAUNA;
 }
 
 if (storedMode === "ice-bath") {
@@ -72,7 +73,7 @@ if (storedMode === "ice-bath") {
   bulletPoint3.textContent = BULLET_POINT_3_ICE_BATH;
   bulletPoint4.textContent = BULLET_POINT_4_ICE_BATH;
   bulletPoint5.textContent = BULLET_POINT_5_ICE_BATH;
-  bulletPoint5.innerHTML = BULLET_POINT_6_ICE_BATH;
+  bulletPoint6.innerHTML = BULLET_POINT_6_ICE_BATH;
 }
 
 
@@ -165,7 +166,7 @@ saunaButton.addEventListener("click", () => {
   bulletPoint3.textContent = BULLET_POINT_3_SAUNA;
   bulletPoint4.textContent = BULLET_POINT_4_SAUNA;
   bulletPoint5.textContent = BULLET_POINT_5_SAUNA;
-  bulletPoint5.innerHTML = BULLET_POINT_6_SAUNA;
+  bulletPoint6.innerHTML = BULLET_POINT_6_SAUNA;
 
   localStorage.setItem("mode", "sauna");
   applySliderSettings();
@@ -184,7 +185,7 @@ iceBathButton.addEventListener("click", () => {
   bulletPoint3.textContent = BULLET_POINT_3_ICE_BATH;
   bulletPoint4.textContent = BULLET_POINT_4_ICE_BATH;
   bulletPoint5.textContent = BULLET_POINT_5_ICE_BATH;
-  bulletPoint5.innerHTML = BULLET_POINT_6_ICE_BATH;
+  bulletPoint6.innerHTML = BULLET_POINT_6_ICE_BATH;
 
   localStorage.setItem("mode", "ice-bath");
   applySliderSettings();
