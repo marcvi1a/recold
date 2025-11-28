@@ -1,25 +1,26 @@
 {
   "title_sauna": "Sauna",
-  "title_ice": "Ice bath",
+  "title_ice": "Ice",
 
-  "bullet1_sauna": "Between 70 ºC and 100 ºC",
-  "bullet1_ice": "Water below 15 ºC",
+  "bulletPoint1_sauna": "Between 70 ºC and 100 ºC",
+  "bulletPoint1_ice": "Water below 15 ºC",
 
-  "bullet2_sauna": "Evening session for better sleep",
-  "bullet2_ice": "Min 1 min for adrenaline and dopamine",
+  "bulletPoint2_sauna": "Evening session for better sleep",
+  "bulletPoint2_ice": "Min 1 min for adrenaline and dopamine",
 
-  "bullet3_sauna": "After cardio to improve endurance",
-  "bullet3_ice": "Max 3 min full immersion",
+  "bulletPoint3_sauna": "After cardio to improve endurance",
+  "bulletPoint3_ice": "Max 3 min full immersion",
 
-  "bullet4_sauna": "Sessions increase longevity",
-  "bullet4_ice": "Up to 10 min only legs for recovery",
+  "bulletPoint4_sauna": "Sessions increase longevity",
+  "bulletPoint4_ice": "Up to 10 min only legs for recovery",
 
-  "bullet5_sauna": "100+ min weekly",
-  "bullet5_ice": "11 min weekly",
+  "bulletPoint5_sauna": "100+ min weekly",
+  "bulletPoint5_ice": "11 min weekly",
 
-  "bullet6_ice": "<a href='https://gelohealth.com.br/primeiro' target='_blank'>First-time tips</a>",
+  "bulletPoint6_sauna": "Combine com luz vermelha para melhorar saúde da pele",
+  "bulletPoint6_ice": "<a href='https://gelohealth.com.br/primeiro' target='_blank'>First-time tips</a>",
 
   "start": "Start",
   "sauna": "Sauna",
-  "ice": "Ice Bath"
+  "ice": "Ice"
 }
