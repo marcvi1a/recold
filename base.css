@@ -45,6 +45,12 @@ button:disabled {
 }
 
 #app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#app-title {
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;
 
