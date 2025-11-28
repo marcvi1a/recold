@@ -1,9 +1,3 @@
-const appTitleText = document.getElementById("app-title-text");
-
-const APP_TITLE_SAUNA = "Brrreak your limits!";
-const APP_TITLE_ICE_BATH = "Brrreak your limits!";
-
-
 const cameraPreview = document.getElementById("camera-preview");
 const cameraStart = document.getElementById("camera-start");
 const camera = document.getElementById("camera");
@@ -51,8 +45,6 @@ const storedMode = localStorage.getItem("mode");
 if (storedMode === "sauna") {
   timeDisplay.style.color = COLOR_SAUNA;
   startButton.style.background = COLOR_SAUNA;
-  appTitleText.textContent = APP_TITLE_SAUNA;
-  appTitleText.style.color = COLOR_SAUNA;
   bulletTitle.textContent = BULLET_TITLE_SAUNA;
   bulletPoint1.textContent = BULLET_POINT_1_SAUNA;
   bulletPoint2.textContent = BULLET_POINT_2_SAUNA;
@@ -65,8 +57,6 @@ if (storedMode === "sauna") {
 if (storedMode === "ice-bath") {
   timeDisplay.style.color = COLOR_ICE_BATH;
   startButton.style.background = COLOR_ICE_BATH;
-  appTitleText.textContent = APP_TITLE_ICE_BATH;
-  appTitleText.style.color = COLOR_ICE_BATH;
   bulletTitle.textContent = BULLET_TITLE_ICE_BATH;
   bulletPoint1.textContent = BULLET_POINT_1_ICE_BATH;
   bulletPoint2.textContent = BULLET_POINT_2_ICE_BATH;
@@ -158,8 +148,6 @@ cameraStart.addEventListener("click", async () => {
 saunaButton.addEventListener("click", () => {
   timeDisplay.style.color = COLOR_SAUNA;
   startButton.style.background = COLOR_SAUNA;
-  appTitleText.textContent = APP_TITLE_SAUNA;
-  appTitleText.style.color = COLOR_SAUNA;
   bulletTitle.textContent = BULLET_TITLE_SAUNA;
   bulletPoint1.textContent = BULLET_POINT_1_SAUNA;
   bulletPoint2.textContent = BULLET_POINT_2_SAUNA;
@@ -177,8 +165,6 @@ saunaButton.addEventListener("click", () => {
 iceBathButton.addEventListener("click", () => {
   timeDisplay.style.color = COLOR_ICE_BATH;
   startButton.style.background = COLOR_ICE_BATH;
-  appTitleText.textContent = APP_TITLE_ICE_BATH;
-  appTitleText.style.color = COLOR_ICE_BATH;
   bulletTitle.textContent = BULLET_TITLE_ICE_BATH;
   bulletPoint1.textContent = BULLET_POINT_1_ICE_BATH;
   bulletPoint2.textContent = BULLET_POINT_2_ICE_BATH;

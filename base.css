@@ -52,6 +52,14 @@ button:disabled {
   }
 }
 
+.color__sauna {
+  color: #ef0241;
+}
+
+.color__ice-bath {
+  color: #378de2;
+}
+
 #camera-container {
   display: flex;
   width: 100%;
