@@ -9,9 +9,11 @@ async function applyLanguage() {
 
   const mode = getMode();
 
+  cameraStart.textContent = tr.cameraStart;
+
   bulletTitle.textContent = mode === "sauna"
-    ? tr.title_sauna
-    : tr.title_ice;
+    ? tr.bulletTitle_sauna
+    : tr.bulletTitle_ice;
 
   bulletPoint1.textContent = mode === "sauna"
     ? tr.bulletPoint1_sauna
@@ -38,9 +40,9 @@ async function applyLanguage() {
     ? tr.bulletPoint6_sauna
     : tr.bulletPoint6_ice;
 
-  saunaButton.textContent = tr.sauna;
-  iceButton.textContent = tr.ice;
-  startButton.textContent = tr.start;
+  saunaButton.textContent = tr.saunaButton;
+  iceButton.textContent = tr.iceButton;
+  startButton.textContent = tr.startButton;
 }
 
 
