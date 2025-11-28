@@ -2,22 +2,23 @@
   "title_sauna": "Sauna",
   "title_ice": "Gelo",
 
-  "bullet1_sauna": "Entre 70 ºC e 100 ºC",
-  "bullet1_ice": "Água abaixo de 15 ºC",
+  "bulletPoint1_sauna": "Entre 70 ºC e 100 ºC",
+  "bulletPoint1_ice": "Água abaixo de 15 ºC",
 
-  "bullet2_sauna": "Sessão no fim do dia para melhorar sono",
-  "bullet2_ice": "Min 1 min para adrenalina e dopamina",
+  "bulletPoint2_sauna": "Sessão no fim do dia para melhorar sono",
+  "bulletPoint2_ice": "Min 1 min para adrenalina e dopamina",
 
-  "bullet3_sauna": "Após cardio para melhorar endurance",
-  "bullet3_ice": "Max 3 min de imersão completa",
+  "bulletPoint3_sauna": "Sessão após cardio para melhorar endurance",
+  "bulletPoint3_ice": "Max 3 min de imersão completa até o pescoço",
 
-  "bullet4_sauna": "Regularidade aumenta longevidade",
-  "bullet4_ice": "Até 10 min só pernas para recuperação",
+  "bulletPoint4_sauna": "Sessões com regularidade para aumentar longevidade",
+  "bulletPoint4_ice": "Até 10 min só pernas para recuperação muscular",
 
-  "bullet5_sauna": "100+ min semanais",
-  "bullet5_ice": "11 min semanais",
+  "bulletPoint5_sauna": "100+ min totais por semana com 4 a 7 sessões",
+  "bulletPoint5_ice": "11 min totais por semana com 3 a 5 mergulhos",
 
-  "bullet6_ice": "<a href='https://gelohealth.com.br/primeiro' target='_blank'>Dicas primeiro mergulho</a>",
+  "bulletPoint6_sauna": "Combine com luz vermelha para melhorar saúde da pele",
+  "bulletPoint6_ice": "<a href='https://gelohealth.com.br/primeiro' target='_blank'>Dicas primeiro mergulho</a>",
 
   "start": "Start",
   "sauna": "Sauna",
