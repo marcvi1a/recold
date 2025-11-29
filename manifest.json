@@ -1,12 +1,12 @@
 {
-  "name": "ColdnHot",
-  "short_name": "ColdnHot",
+  "name": "ReCold",
+  "short_name": "ReCold – Record from Heat to Cold",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "theme_color": "#fff",
-  "background_color": "#fff",
+  "theme_color": "#000",
+  "background_color": "#000",
   "icons": [
-    { "src": "assets/favicon.png", "sizes": "720x720", "type": "image/png" }
+    { "src": "assets/recold.png", "sizes": "720x720", "type": "image/png" }
   ]
 }
