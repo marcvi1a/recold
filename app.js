@@ -270,14 +270,12 @@ function stopSession() {
 
 
 function hideMainUI() {
-  bulletPoints.style.display = "none";
   timeDisplay.style.display = "none";
   timeControls.style.display = "none";
   timeCountdown.style.display = "flex";
 }
 
 function showMainUI() {
-  bulletPoints.style.display = "flex";
   timeDisplay.style.display = "flex";
   timeControls.style.display = "flex";
   timeCountdown.style.display = "none";
