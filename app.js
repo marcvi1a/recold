@@ -53,8 +53,6 @@ const COLOR_ICE = "#378de2";
 const cameraPreview = document.getElementById("camera-preview");
 const camera = document.getElementById("camera");
 
-const cameraStart = document.getElementById("camera-start");
-
 const bulletPoints = document.getElementById("bullet-points");
 const bulletTitle = document.getElementById("bullet-title");
 const bulletPoint1 = document.getElementById("bullet-point-1");
@@ -63,6 +61,9 @@ const bulletPoint3 = document.getElementById("bullet-point-3");
 const bulletPoint4 = document.getElementById("bullet-point-4");
 const bulletPoint5 = document.getElementById("bullet-point-5");
 const bulletPoint6 = document.getElementById("bullet-point-6");
+
+const cameraStart = document.getElementById("camera-start");
+const timeContainer = document.getElementById("time-container");
 
 const timeDisplay = document.getElementById("time-display");
 const timeCountdown = document.getElementById("time-countdown");
@@ -167,6 +168,7 @@ cameraStart.addEventListener("click", async () => {
     cameraPreview.style.display = "none";
     cameraStart.style.display = "none";
     camera.style.display = "block";
+    timeContainer.style.marginTop: "auto";
 
   } catch (err) {
     alert("Camera permission denied or unavailable.");
