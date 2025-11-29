@@ -233,6 +233,8 @@ function startCountdown() {
 
     if (countdown <= 0) {
       clearInterval(countdownInterval);
+      // show 00:00 immediately and start main timer
+      timeCountdown.textContent = formatTime(0); // "00:00"
       beginMainTimer();
     }
   }, 1000);
