@@ -259,7 +259,9 @@ function beginMainTimer() {
 
 function resetToMainScreen() {
   bulletPoints.style.display = "flex";
+  timeDisplay.style.display = "flex";
   timeControls.style.display = "flex";
+  timeCountdown.style.display = "none";
 
   startButton.textContent = "Start";
   timeCountdown.style.color = "#171a1c";
