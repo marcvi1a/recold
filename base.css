@@ -207,15 +207,7 @@ button:disabled {
   transform: scale(1.1);
 }
 
-#countdown-screen {
-  width: 100%;
-  height: 45%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#countdown-timer {
+#time-countdown {
   font-family: "Roboto Mono", monospace;
   font-size: 7rem;
   text-align: center;

@@ -46,11 +46,16 @@ async function applyLanguage() {
 }
 
 
+const COLOR_SAUNA = "#ef0241";
+const COLOR_ICE = "#378de2";
+
+
 const cameraPreview = document.getElementById("camera-preview");
 const cameraStart = document.getElementById("camera-start");
 const camera = document.getElementById("camera");
 
 
+const bulletPoints = document.getElementById("bullet-points");
 const bulletTitle = document.getElementById("bullet-title");
 const bulletPoint1 = document.getElementById("bullet-point-1");
 const bulletPoint2 = document.getElementById("bullet-point-2");
@@ -60,16 +65,13 @@ const bulletPoint5 = document.getElementById("bullet-point-5");
 const bulletPoint6 = document.getElementById("bullet-point-6");
 
 
+const timeDisplay = document.getElementById("time-display");
+const timeCountdown = document.getElementById("time-countdown");
+const timeControls = document.getElementById("time-controls");
+
 const saunaButton = document.getElementById("menu-controls__sauna");
 const iceButton = document.getElementById("menu-controls__ice");
-const COLOR_SAUNA = "#ef0241";
-const COLOR_ICE = "#378de2";
-const timeDisplay = document.getElementById("time-display");
 const startButton = document.getElementById("menu-controls__start");
-
-
-const countdownScreen = document.getElementById("countdown-screen");
-const countdownTimer = document.getElementById("countdown-timer");
 
 
 
@@ -208,16 +210,17 @@ startButton.addEventListener("click", startSession);
 
 function startSession() {
   // hide existing UI
-  document.getElementById("time-container").style.display = "none";
-  document.getElementById("bullet-points").style.display = "none";
-  document.getElementById("countdown-screen").style.display = "flex";
+  bulletPoints.style.display = "none";
+  timeDisplay.style.display = "none";
+  timeControls.style.display = "none";
+  timeCountdown.style.display = "flex";
 
   let countdown = 10;
-  countdownTimer.textContent = countdown;
+  timeCountdown.textContent = countdown;
 
   const countdownInterval = setInterval(() => {
     countdown--;
-    countdownTimer.textContent = countdown;
+    timeCountdown.textContent = countdown;
 
     if (countdown <= 0) {
       clearInterval(countdownInterval);
@@ -231,17 +234,17 @@ function beginMainTimer() {
   const endTime = parseInt(timeSlider.value, 10);
   let finishedMark = false;
 
-  countdownTimer.textContent = formatTime(time);
+  timeCountdown.textContent = formatTime(time);
 
   const mainInterval = setInterval(() => {
     time++;
 
-    countdownTimer.textContent = formatTime(time);
+    timeCountdown.textContent = formatTime(time);
 
     // When reaches goal time, change color but keep counting
     if (!finishedMark && time >= endTime) {
       finishedMark = true;
-      countdownTimer.style.color = "red";
+      timeCountdown.style.color = "red";
     }
   }, 1000);
 
@@ -255,13 +258,11 @@ function beginMainTimer() {
 }
 
 function resetToMainScreen() {
-  countdownScreen.style.display = "none";
-  document.getElementById("time-container").style.display = "flex";
-  document.getElementById("bullet-points").style.display = "flex";
-  document.getElementById("camera-container").style.height = "45%";
+  bulletPoints.style.display = "flex";
+  timeControls.style.display = "flex";
 
   startButton.textContent = "Start";
-  countdownTimer.style.color = "#171a1c";
+  timeCountdown.style.color = "#171a1c";
 }
 
 
