@@ -168,7 +168,7 @@ cameraStart.addEventListener("click", async () => {
     cameraPreview.style.display = "none";
     cameraStart.style.display = "none";
     camera.style.display = "block";
-    timeContainer.style.marginTop: "auto";
+    timeContainer.style.marginTop = "auto";
 
   } catch (err) {
     alert("Camera permission denied or unavailable.");
