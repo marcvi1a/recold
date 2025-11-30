@@ -163,8 +163,9 @@ button:disabled {
 #time-display {
   font-family: "Roboto Mono", monospace;
   font-size: 7rem;
-  background: #f5f5f780;
   text-align: center;
+  background: #f5f5f780;
+  border-radius: 8px;
 }
 
 #time-controls {
