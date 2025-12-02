@@ -214,7 +214,7 @@ button:disabled {
   font-family: "Roboto Mono", monospace;
   font-size: 7rem;
   text-align: center;
-  color: #171a1c;
+  color: #fff;
 }
 
 #menu-container {
@@ -262,6 +262,8 @@ button:disabled {
 #menu-message {
   padding: 0 0.75rem;
   height: 4rem;
+  color: #fff;
+  font-weight: 700;
 
   justify-content: center;
   align-items: center;
