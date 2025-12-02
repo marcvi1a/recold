@@ -22,7 +22,8 @@
   "bulletPoint6_sauna": "Combine com luz vermelha para melhorar saúde da pele",
   "bulletPoint6_ice": "<a href='https://gelohealth.com.br/primeiro' target='_blank'>Dicas primeiro mergulho</a>",
 
-  "startButton": "Start",
   "saunaButton": "Sauna",
-  "iceButton": "Gelo"
+  "iceButton": "Gelo",
+  "startButton": "Start",
+  "menuMessage": "Prepare-se! Vamos dar início"
 }

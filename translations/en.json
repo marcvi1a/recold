@@ -22,7 +22,8 @@
   "bulletPoint6_sauna": "Combine com luz vermelha para melhorar saúde da pele",
   "bulletPoint6_ice": "<a href='https://gelohealth.com.br/primeiro' target='_blank'>First-time tips</a>",
 
-  "startButton": "Start",
   "saunaButton": "Sauna",
-  "iceButton": "Ice"
+  "iceButton": "Ice",
+  "startButton": "Start",
+  "menuMessage": "Get ready! We're about to start"
 }
