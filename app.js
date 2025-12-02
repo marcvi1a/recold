@@ -274,12 +274,12 @@ function stopSession() {
 function hideMainUI() {
   timeDisplay.style.display = "none";
   timeControls.style.display = "none";
-  timeCountdown.style.display = "flex";
+  timeCountdown.style.display = "block";
 }
 
 function showMainUI() {
-  timeDisplay.style.display = "flex";
-  timeControls.style.display = "flex";
+  timeDisplay.style.display = "block";
+  timeControls.style.display = "block";
   timeCountdown.style.display = "none";
 }
 
