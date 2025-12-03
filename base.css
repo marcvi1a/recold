@@ -202,6 +202,11 @@ button:disabled {
   animation: messageIn 0.28s ease-out forwards;
 }
 
+@keyframes chatIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 #time-countdown {
   font-family: "Roboto Mono", monospace;
   font-size: 7rem;
