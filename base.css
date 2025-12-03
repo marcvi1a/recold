@@ -217,6 +217,7 @@ button:disabled {
   color: #fff;
   background: #f5f5f780;
   border-radius: 8px;
+  transition: background 0.6s linear;
 }
 
 #menu-container {
