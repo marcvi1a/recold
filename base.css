@@ -73,14 +73,14 @@ button:disabled {
 }
 
 #camera {
-  display: none; /* hidden until permission granted */
+  display: block;
 
   width: 100%;
   height: 100%;
   aspect-ratio: 9 / 16;
 
   object-fit: cover;
-  display: block;
+  transform: scaleX(-1); /* <-- UNMIRRORS CAMERA */
 }
 
 #app-header,
