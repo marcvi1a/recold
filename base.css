@@ -217,7 +217,11 @@ button:disabled {
   color: #fff;
   background: #f5f5f780;
   border-radius: 8px;
-  transition: background 0.6s linear;
+
+  /* enable smooth fill animation */
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  transition: background-size 0.9s linear; /* smooth per-second movement */
 }
 
 #menu-container {

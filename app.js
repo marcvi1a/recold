@@ -265,18 +265,18 @@ function beginMainTimer() {
     const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
 
     if (!finishedMark) {
-      // update blue fill from left to right
-      timeCountdown.style.background = `
-        linear-gradient(90deg,
-          ${color80(baseColor)} ${fill}%,
-          #f5f5f780 ${fill}%)
-      `;
+      // Set the gradient once. Animate *only* background-size.
+      timeCountdown.style.background = `linear-gradient(90deg, ${color80(baseColor)}, #f5f5f780)`;
+
+      // Animate fill from left to right
+      timeCountdown.style.backgroundSize = `${fill}% 100%`;
     }
 
     if (!finishedMark && time >= endTime) {
       finishedMark = true;
 
-      timeCountdown.style.background = baseColor;
+      timeCountdown.style.background = baseColor;         // solid color
+      timeCountdown.style.backgroundSize = "100% 100%";   // stays fully fille
       timeCountdown.style.color = "red";
     }
   }, 1000);
@@ -294,11 +294,8 @@ function stopSession() {
 
   const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
 
-  timeCountdown.style.background = `
-    linear-gradient(90deg,
-      ${color80(baseColor)} 0%,
-      #f5f5f780 0%)
-  `;
+  timeCountdown.style.background = `linear-gradient(90deg, ${color80(baseColor)}, #f5f5f780)`;
+  timeCountdown.style.backgroundSize = "0% 100%";
 }
 
 function color80(hex) {
