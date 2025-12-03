@@ -282,7 +282,7 @@ function startCountdown() {
   menuMessage.style.display = "flex";
   menuControls.style.display = "none";
   startButton.style.display = "none";
-  stopButton.style.display = "flex";
+  stopButton.style.display = "block";
 
   let countdown = 3;
   timeCountdown.textContent = countdown;
@@ -355,7 +355,7 @@ function stopSession() {
 
   showMainUI();
 
-  startButton.style.display = "flex";
+  startButton.style.display = "block";
   stopButton.style.display = "none";
 
   const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
