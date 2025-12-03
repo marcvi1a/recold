@@ -43,6 +43,7 @@ async function applyLanguage() {
   saunaButton.textContent = tr.saunaButton;
   iceButton.textContent = tr.iceButton;
   startButton.textContent = tr.startButton;
+  stopButton.textContent = tr.stopButton;
   menuMessage.textContent = tr.menuMessage;
 }
 
@@ -96,6 +97,7 @@ const menuControls = document.getElementById("menu-controls");
 const saunaButton = document.getElementById("menu-controls__sauna");
 const iceButton = document.getElementById("menu-controls__ice");
 const startButton = document.getElementById("menu-controls__start");
+const stopButton = document.getElementById("menu-controls__stop");
 const menuMessage = document.getElementById("menu-message");
 
 
@@ -270,12 +272,8 @@ let countdownInterval;
 let mainInterval;
 let time = 0;
 
-startButton.addEventListener("click", handleStartStop);
-
-function handleStartStop() {
-  if (state === "idle") startCountdown();
-  else if (state === "running") stopSession();
-}
+startButton.addEventListener("click", startCountdown);
+stopButton.addEventListener("click", stopSession);
 
 function startCountdown() {
   state = "countdown";
@@ -283,8 +281,8 @@ function startCountdown() {
   hideMainUI();
   menuMessage.style.display = "flex";
   menuControls.style.display = "none";
-  startButton.textContent = "STOP";
-  menuControls.classList.add('one-button');
+  startButton.style.display = "none";
+  stopButton.style.display = "flex";
 
   let countdown = 3;
   timeCountdown.textContent = countdown;
@@ -356,8 +354,9 @@ function stopSession() {
   liveMessages.innerHTML = "";  // reset messages
 
   showMainUI();
-  startButton.textContent = "START";
-  menuControls.classList.remove('one-button');
+
+  startButton.style.display = "flex";
+  stopButton.style.display = "none";
 
   const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
 
