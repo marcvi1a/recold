@@ -25,6 +25,6 @@
   "saunaButton": "Sauna",
   "iceButton": "Ice",
   "startButton": "Start",
-  "startButton": "Stop",
+  "stopButton": "Stop",
   "menuMessage": "Get ready! We're about to start"
 }
