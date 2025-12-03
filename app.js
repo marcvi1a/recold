@@ -337,6 +337,7 @@ function beginMainTimer() {
     if (!finishedMark && time >= endTime) {
       finishedMark = true;
 
+      pushLiveMessage(`Target time reached! (${formatTime(endTime)}) Congrats! 🥳🥳`);
       timeCountdown.style.background = baseColor;
     }
   }, 1000);
