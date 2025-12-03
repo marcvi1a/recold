@@ -261,8 +261,25 @@ function beginMainTimer() {
     time++;
     timeCountdown.textContent = formatTime(time);
 
+    const fill = (time / endTime) * 100;  // percentage 0 → 100
+
+    // update blue fill from left to right
+    timeCountdown.style.background = `
+      linear-gradient(90deg,
+        ${COLOR_ICE} ${fill}%,
+        transparent ${fill}%)
+    `;
+
     if (!finishedMark && time >= endTime) {
       finishedMark = true;
+
+      // entire bar becomes blue
+      timeCountdown.style.background = `
+        linear-gradient(90deg,
+          ${COLOR_ICE} 100%,
+          ${COLOR_ICE} 100%)
+      `;
+
       timeCountdown.style.color = "red";
     }
   }, 1000);
@@ -277,6 +294,8 @@ function stopSession() {
   showMainUI();
   startButton.textContent = "START";
   timeCountdown.style.color = "#fff";
+
+  timeCountdown.style.background = `linear-gradient(90deg, ${COLOR_ICE} 0%, transparent 0%)`;
 }
 
 
