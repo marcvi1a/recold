@@ -172,7 +172,7 @@ button:disabled {
 
 #live-messages {
   position: absolute;
-  bottom: 31vh; /* sits ABOVE countdown cleanly */
+  bottom: 35vh;
   right: 1rem;
   width: 70%;
   display: flex;
