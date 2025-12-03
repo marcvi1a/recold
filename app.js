@@ -267,18 +267,14 @@ function beginMainTimer() {
     // update blue fill from left to right
     timeCountdown.style.background = `
       linear-gradient(90deg,
-        ${color25(baseColor)} ${fill}%,
+        ${color80(baseColor)} ${fill}%,
         #f5f5f780 ${fill}%)
     `;
 
     if (!finishedMark && time >= endTime) {
       finishedMark = true;
 
-      // entire bar becomes blue
-      timeCountdown.style.background = `
-        linear-gradient(90deg, ${baseColor} 100%, ${baseColor} 100%)
-      `;
-
+      timeCountdown.style.background = baseColor;
       timeCountdown.style.color = "red";
     }
   }, 1000);
@@ -298,16 +294,16 @@ function stopSession() {
 
   timeCountdown.style.background = `
     linear-gradient(90deg,
-      ${color25(baseColor)} 0%,
+      ${color80(baseColor)} 0%,
       #f5f5f780 0%)
   `;
 }
 
-function color25(hex) {
+function color80(hex) {
   const r = parseInt(hex.slice(1,3), 16);
   const g = parseInt(hex.slice(3,5), 16);
   const b = parseInt(hex.slice(5,7), 16);
-  return `rgba(${r}, ${g}, ${b}, 0.25)`;
+  return `rgba(${r}, ${g}, ${b}, 0.8)`;
 }
 
 
