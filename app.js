@@ -262,11 +262,12 @@ function beginMainTimer() {
     timeCountdown.textContent = formatTime(time);
 
     const fill = (time / endTime) * 100;  // percentage 0 → 100
+    const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
 
     // update blue fill from left to right
     timeCountdown.style.background = `
       linear-gradient(90deg,
-        ${COLOR_ICE} ${fill}%,
+        ${color50(baseColor)} ${fill}%,
         #f5f5f780 ${fill}%)
     `;
 
@@ -275,9 +276,7 @@ function beginMainTimer() {
 
       // entire bar becomes blue
       timeCountdown.style.background = `
-        linear-gradient(90deg,
-          ${COLOR_ICE} 100%,
-          ${COLOR_ICE} 100%)
+        linear-gradient(90deg, ${baseColor} 100%, ${baseColor} 100%)
       `;
 
       timeCountdown.style.color = "red";
@@ -295,11 +294,20 @@ function stopSession() {
   startButton.textContent = "START";
   timeCountdown.style.color = "#fff";
 
+  const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
+
   timeCountdown.style.background = `
     linear-gradient(90deg,
-      ${COLOR_ICE} 0%,
+      ${color50(baseColor)} 0%,
       #f5f5f780 0%)
   `;
+}
+
+function color50(hex) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r}, ${g}, ${b}, 0.5)`;
 }
 
 
