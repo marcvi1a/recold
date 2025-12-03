@@ -98,6 +98,13 @@ const iceButton = document.getElementById("menu-controls__ice");
 const startButton = document.getElementById("menu-controls__start");
 const menuMessage = document.getElementById("menu-message");
 
+const menuButtons = menuControls.children;
+if (menuButtons.length === 1) {
+  menuControls.classList.add('one-button');
+} else {
+  menuControls.classList.remove('one-button');
+}
+
 
 
 
