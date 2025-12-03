@@ -267,7 +267,7 @@ function beginMainTimer() {
     timeCountdown.style.background = `
       linear-gradient(90deg,
         ${COLOR_ICE} ${fill}%,
-        transparent ${fill}%)
+        #f5f5f780 ${fill}%)
     `;
 
     if (!finishedMark && time >= endTime) {
@@ -295,7 +295,11 @@ function stopSession() {
   startButton.textContent = "START";
   timeCountdown.style.color = "#fff";
 
-  timeCountdown.style.background = `linear-gradient(90deg, ${COLOR_ICE} 0%, transparent 0%)`;
+  timeCountdown.style.background = `
+    linear-gradient(90deg,
+      ${COLOR_ICE} 0%,
+      #f5f5f780 0%)
+  `;
 }
 
 
