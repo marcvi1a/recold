@@ -264,12 +264,14 @@ function beginMainTimer() {
     const fill = (time / endTime) * 100;  // percentage 0 → 100
     const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
 
-    // update blue fill from left to right
-    timeCountdown.style.background = `
-      linear-gradient(90deg,
-        ${color80(baseColor)} ${fill}%,
-        #f5f5f780 ${fill}%)
-    `;
+    if (!finishedMark) {
+      // update blue fill from left to right
+      timeCountdown.style.background = `
+        linear-gradient(90deg,
+          ${color80(baseColor)} ${fill}%,
+          #f5f5f780 ${fill}%)
+      `;
+    }
 
     if (!finishedMark && time >= endTime) {
       finishedMark = true;
