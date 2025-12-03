@@ -172,36 +172,33 @@ button:disabled {
 
 #live-messages {
   position: absolute;
-  bottom: 0.5rem;           /* below countdown */
-  right: 0.75rem;
-
-  width: min(78%, 300px);
+  bottom: 31vh; /* sits ABOVE countdown cleanly */
+  right: 1rem;
+  width: 70%;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-
   pointer-events: none;
-  z-index: 220;
-  max-height: calc(3.5 * 2.2rem);
-  overflow: hidden;
+  z-index: 200;
 }
 
-/* bubble style unchanged (but keep mobile-friendly font-size) */
+/* bubble style */
 .live-message {
-  background: rgba(0,0,0,0.75);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   padding: 6px 12px;
   border-radius: 14px;
   margin-top: 6px;
-  font-size: 0.88rem;
-  max-width: 100%;
+  font-size: 0.9rem;
+  max-width: 85%;
   text-align: right;
 
   opacity: 0;
   transform: translateY(10px);
-  animation: messageIn 0.28s ease-out forwards;
+  animation: chatIn 0.28s ease-out forwards;
 }
 
+/* bubble fade/slide animation */
 @keyframes chatIn {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
