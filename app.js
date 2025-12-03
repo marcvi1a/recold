@@ -98,6 +98,10 @@ const iceButton = document.getElementById("menu-controls__ice");
 const startButton = document.getElementById("menu-controls__start");
 const menuMessage = document.getElementById("menu-message");
 
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordingBlob = null;
+
 
 
 
@@ -305,6 +309,8 @@ function startCountdown() {
 function beginMainTimer() {
   state = "running";
 
+  startRecording();
+
   menuMessage.style.display = "none";
   menuControls.style.display = "flex";
 
@@ -347,6 +353,46 @@ function beginMainTimer() {
   }, 1000);
 }
 
+function startRecording() {
+  const stream = camera.srcObject;
+
+  if (!stream) {
+    console.warn("No camera stream available for recording.");
+    return;
+  }
+
+  recordedChunks = [];
+
+  try {
+    mediaRecorder = new MediaRecorder(stream, {
+      mimeType: "video/webm;codecs=vp9"
+    });
+  } catch (e) {
+    mediaRecorder = new MediaRecorder(stream, {
+      mimeType: "video/webm"
+    });
+  }
+
+  mediaRecorder.ondataavailable = (event) => {
+    if (event.data.size > 0) recordedChunks.push(event.data);
+  };
+
+  mediaRecorder.onstop = () => {
+    recordingBlob = new Blob(recordedChunks, { type: "video/webm" });
+
+    const url = URL.createObjectURL(recordingBlob);
+    const preview = document.getElementById("recording-preview");
+
+    preview.src = url;
+    preview.style.display = "block";
+
+    camera.style.display = "none";
+    cameraPreview.style.display = "none";
+  };
+
+  mediaRecorder.start();
+}
+
 function stopSession() {
   state = "idle";
 
@@ -355,8 +401,13 @@ function stopSession() {
 
   liveMessages.innerHTML = "";  // reset messages
 
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    mediaRecorder.stop();
+  }
+
   showMainUI();
-  startButton.textContent = "START";
+  startButton.textContent = "Download video and exit";
+  startButton.onclick = downloadAndExit;
   menuControls.classList.remove('one-button');
 
   const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
@@ -373,6 +424,47 @@ function color80(hex) {
   const g = parseInt(hex.slice(3,5), 16);
   const b = parseInt(hex.slice(5,7), 16);
   return `rgba(${r}, ${g}, ${b}, 0.8)`;
+}
+
+function downloadAndExit() {
+  if (!recordingBlob) return;
+
+  const url = URL.createObjectURL(recordingBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "recold-session.webm";
+  a.click();
+
+  // Try to save to gallery on mobile (best available approach)
+  if (navigator.canShare && navigator.canShare({ files: [new File([recordingBlob], "recold-session.webm", { type: "video/webm" })] })) {
+    const file = new File([recordingBlob], "recold-session.webm", { type: "video/webm" });
+    navigator.share({ files: [file], title: "ReCold Video" });
+  }
+
+  // Reset UI back to initial screen
+  resetApp();
+}
+
+function resetApp() {
+  // Hide preview
+  document.getElementById("recording-preview").style.display = "none";
+
+  // Show camera start button
+  cameraStart.style.display = "block";
+
+  // Reset camera preview
+  cameraPreview.style.display = "block";
+
+  // Reset start button
+  startButton.textContent = "START";
+  startButton.onclick = handleStartStop;
+
+  // Reset states
+  recordingBlob = null;
+  recordedChunks = [];
+  mediaRecorder = null;
+
+  showMainUI();
 }
 
 
