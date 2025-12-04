@@ -73,6 +73,7 @@ const COLOR_SAUNA = "#ef0241";
 const COLOR_ICE = "#378de2";
 
 
+const cameraContainer = document.getElementById("camera-container");
 const cameraPreview = document.getElementById("camera-preview");
 const camera = document.getElementById("camera");
 
@@ -381,23 +382,6 @@ function exitSession() {
   applyStartUI();
 }
 
-// function hideMainUI() {
-//   timeDisplay.style.display = "none";
-//   timeControls.style.pointerEvents = "none";
-//   timeControls.style.opacity = "0";
-//   timeCountdown.style.display = "block";
-//   saunaButton.style.display = "none";
-//   iceButton.style.display = "none";
-// }
-//
-// function showMainUI() {
-//   timeDisplay.style.display = "block";
-//   timeControls.style.pointerEvents = "";
-//   timeControls.style.opacity = "";
-//   timeCountdown.style.display = "none";
-//   saunaButton.style.display = "block";
-//   iceButton.style.display = "block";
-// }
 
 function applyStopUI() {
   timeDisplay.style.display = "none";
@@ -411,6 +395,9 @@ function applyStopUI() {
 }
 
 function applyExitUI() {
+  cameraContainer.style.display = "none";
+  cameraStart.style.display = "none";
+
   timeCountdown.style.display = "none";
 
   stopButton.style.display = "none";
@@ -418,6 +405,9 @@ function applyExitUI() {
 }
 
 function applyStartUI() {
+  cameraContainer.style.display = "block";
+  cameraStart.style.display = "block"; // only if permission not granted to be fixed
+
   timeDisplay.style.display = "block";
   timeControls.style.pointerEvents = "";
   timeControls.style.opacity = "";
