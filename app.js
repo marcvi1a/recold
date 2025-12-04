@@ -72,7 +72,6 @@ const TIMED_MESSAGES = {
 const COLOR_SAUNA = "#ef0241";
 const COLOR_ICE = "#378de2";
 
-
 const cameraContainer = document.getElementById("camera-container");
 const cameraPreview = document.getElementById("camera-preview");
 const camera = document.getElementById("camera");
@@ -102,6 +101,9 @@ const startButton = document.getElementById("menu-controls__start");
 const stopButton = document.getElementById("menu-controls__stop");
 const exitButton = document.getElementById("menu-controls__exit");
 const menuMessage = document.getElementById("menu-message");
+
+
+let cameraPermissions = false;
 
 
 
@@ -196,6 +198,8 @@ cameraStart.addEventListener("click", async () => {
     });
 
     camera.srcObject = stream;
+
+    cameraPermissions = true;
 
     timeContainer.style.marginTop = "auto";
     cameraStart.style.display = "none";
@@ -406,7 +410,9 @@ function applyExitUI() {
 
 function applyStartUI() {
   cameraContainer.style.display = "block";
-  cameraStart.style.display = "block"; // only if permission not granted to be fixed
+  if (!cameraPermissions) {
+    cameraStart.style.display = "block";
+  }
 
   timeDisplay.style.display = "block";
   timeControls.style.pointerEvents = "";
