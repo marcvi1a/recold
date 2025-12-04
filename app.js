@@ -44,6 +44,7 @@ async function applyLanguage() {
   iceButton.textContent = tr.iceButton;
   startButton.textContent = tr.startButton;
   stopButton.textContent = tr.stopButton;
+  exitButton.textContent = tr.exitButton;
   menuMessage.textContent = tr.menuMessage;
 }
 
@@ -98,6 +99,7 @@ const saunaButton = document.getElementById("menu-controls__sauna");
 const iceButton = document.getElementById("menu-controls__ice");
 const startButton = document.getElementById("menu-controls__start");
 const stopButton = document.getElementById("menu-controls__stop");
+const exitButton = document.getElementById("menu-controls__exit");
 const menuMessage = document.getElementById("menu-message");
 
 
@@ -278,15 +280,15 @@ let time = 0;
 
 startButton.addEventListener("click", startCountdown);
 stopButton.addEventListener("click", stopSession);
+exitButton.addEventListener("click", exitSession);
 
 function startCountdown() {
   state = "countdown";
 
-  hideMainUI();
+  applyStopUI();
   menuMessage.style.display = "flex";
   menuControls.style.display = "none";
-  startButton.style.display = "none";
-  stopButton.style.display = "block";
+
 
   let countdown = 3;
   timeCountdown.textContent = countdown;
@@ -357,12 +359,9 @@ function stopSession() {
 
   liveMessages.innerHTML = "";  // reset messages
 
-  showMainUI();
+   applyExitUI();
 
-  startButton.style.display = "block";
-  stopButton.style.display = "none";
-
-  const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
+  const baseColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;  // exitButton
 
   timeCountdown.style.background = `
     linear-gradient(90deg,
@@ -378,26 +377,53 @@ function color80(hex) {
   return `rgba(${r}, ${g}, ${b}, 0.8)`;
 }
 
+function exitSession() {
+}
 
-function hideMainUI() {
+// function hideMainUI() {
+//   timeDisplay.style.display = "none";
+//   timeControls.style.pointerEvents = "none";
+//   timeControls.style.opacity = "0";
+//   timeCountdown.style.display = "block";
+//   saunaButton.style.display = "none";
+//   iceButton.style.display = "none";
+// }
+//
+// function showMainUI() {
+//   timeDisplay.style.display = "block";
+//   timeControls.style.pointerEvents = "";
+//   timeControls.style.opacity = "";
+//   timeCountdown.style.display = "none";
+//   saunaButton.style.display = "block";
+//   iceButton.style.display = "block";
+// }
+
+function applyStopUI() {
   timeDisplay.style.display = "none";
   timeControls.style.pointerEvents = "none";
   timeControls.style.opacity = "0";
   timeCountdown.style.display = "block";
   saunaButton.style.display = "none";
   iceButton.style.display = "none";
+
+  menuMessage.style.display = "flex";
+  menuControls.style.display = "none";
 }
 
-function showMainUI() {
+function applyExitUI() {
+  timeCountdown.style.display = "none";
+
+  stopButton.style.display = "none";
+  exitButton.style.display = "block";  // exitButton
+}
+
+function applyStartUI() {
   timeDisplay.style.display = "block";
   timeControls.style.pointerEvents = "";
   timeControls.style.opacity = "";
-  timeCountdown.style.display = "none";
   saunaButton.style.display = "block";
   iceButton.style.display = "block";
 }
-
-
 
 
 applySliderSettings();
