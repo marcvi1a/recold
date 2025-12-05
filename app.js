@@ -246,6 +246,16 @@ iceButton.addEventListener("click", () => {
 });
 
 
+let mediaRecorder;
+let recordedChunks = [];
+let recordedBlob = null;
+
+
+
+
+
+
+
 function pushLiveMessage(text) {
   const msg = document.createElement("div");
   msg.className = "live-message";
@@ -312,6 +322,22 @@ function startCountdown() {
 }
 
 function beginMainTimer() {
+
+  // START RECORDING
+  const stream = camera.srcObject;
+  recordedChunks = [];
+  mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+
+  mediaRecorder.ondataavailable = e => {
+    if (e.data.size > 0) recordedChunks.push(e.data);
+  };
+
+  mediaRecorder.onstop = () => {
+    recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
+  };
+
+  mediaRecorder.start();
+
   state = "running";
 
   menuMessage.style.display = "none";
@@ -362,6 +388,10 @@ function stopSession() {
   clearInterval(countdownInterval);
   clearInterval(mainInterval);
 
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+  }
+
   liveMessages.innerHTML = "";  // reset messages
 
   applyExitUI();
@@ -383,6 +413,22 @@ function color80(hex) {
 }
 
 function exitSession() {
+  if (recordedBlob) {
+    const url = URL.createObjectURL(recordedBlob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "session.webm";
+    a.click();
+  }
+
+  // remove preview + link
+  const preview = document.getElementById("recorded-preview");
+  if (preview) preview.remove();
+
+  const dl = document.getElementById("recorded-download");
+  if (dl) dl.remove();
+
   applyStartUI();
 }
 
@@ -406,6 +452,38 @@ function applyExitUI() {
 
   stopButton.style.display = "none";
   exitButton.style.display = "block";
+
+
+  // SHOW RECORDED VIDEO PREVIEW
+  if (recordedBlob) {
+    const videoURL = URL.createObjectURL(recordedBlob);
+
+    let preview = document.getElementById("recorded-preview");
+    if (!preview) {
+      preview = document.createElement("video");
+      preview.id = "recorded-preview";
+      preview.controls = true;
+      preview.style.width = "100%";
+      preview.style.marginTop = "1rem";
+      document.getElementById("app-padding").appendChild(preview);
+    }
+    preview.src = videoURL;
+
+    // Create a download link below the video
+    let dl = document.getElementById("recorded-download");
+    if (!dl) {
+      dl = document.createElement("a");
+      dl.id = "recorded-download";
+      dl.textContent = "Download video";
+      dl.style.display = "block";
+      dl.style.marginTop = "0.5rem";
+      dl.style.textAlign = "center";
+      dl.style.color = "#0969da";
+      document.getElementById("app-padding").appendChild(dl);
+    }
+    dl.href = videoURL;
+    dl.download = "session.webm";
+  }
 }
 
 function applyStartUI() {
