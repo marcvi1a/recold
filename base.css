@@ -123,13 +123,13 @@ button:disabled {
   background-color: rgba(245, 245, 247, 0.5);
   border: none;
   border-radius: 100px;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 3rem;
+  height: 3rem;
 }
 
 #flip-camera img {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .color__sauna {

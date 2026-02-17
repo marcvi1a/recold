@@ -189,8 +189,6 @@ function formatTime(seconds) {
 }
 
 
-
-
 // --- Flip Camera ---
 const flipCameraButton = document.getElementById("flip-camera");
 let currentFacingMode = "user";
@@ -223,7 +221,6 @@ flipCameraButton.addEventListener("click", async () => {
       video: { facingMode: currentFacingMode }
     });
     camera.srcObject = stream;
-
     // Mirror front camera, un-mirror rear camera
     camera.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "scaleX(1)";
   } catch (err) {
@@ -231,8 +228,6 @@ flipCameraButton.addEventListener("click", async () => {
     console.error(err);
   }
 });
-
-
 
 
 cameraStart.addEventListener("click", async () => {
@@ -247,9 +242,15 @@ cameraStart.addEventListener("click", async () => {
 
     timeContainer.style.marginTop = "auto";
     cameraStart.style.display = "none";
-    camera.style.display = "block";
     cameraPreview.style.display = "none";
     flipCameraButton.style.display = "block";
+
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(d => d.kind === "videoinput");
+    if (videoDevices.length > 1) {
+      camera.style.display = "block";
+      return;
+    }
 
   } catch (err) {
     alert("Camera permission denied or unavailable.");
