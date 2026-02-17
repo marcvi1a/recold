@@ -191,6 +191,50 @@ function formatTime(seconds) {
 
 
 
+// --- Flip Camera ---
+const flipCameraButton = document.getElementById("flip-camera");
+let currentFacingMode = "user";
+
+flipCameraButton.addEventListener("click", async () => {
+  // Desktop: check if only one camera available
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(d => d.kind === "videoinput");
+
+    if (videoDevices.length < 2) {
+      alert("No rear camera found on this device.");
+      return;
+    }
+  } catch (err) {
+    alert("Unable to access camera devices.");
+    return;
+  }
+
+  // Toggle facing mode
+  currentFacingMode = currentFacingMode === "user" ? "environment" : "user";
+
+  // Stop existing stream
+  if (camera.srcObject) {
+    camera.srcObject.getTracks().forEach(track => track.stop());
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: currentFacingMode }
+    });
+    camera.srcObject = stream;
+
+    // Mirror front camera, un-mirror rear camera
+    camera.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "scaleX(1)";
+  } catch (err) {
+    alert("Could not switch camera: " + err.message);
+    console.error(err);
+  }
+});
+
+
+
+
 cameraStart.addEventListener("click", async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
