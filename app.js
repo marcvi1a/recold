@@ -94,9 +94,6 @@ const timeControls = document.getElementById("time-controls");
 
 const liveMessages = document.getElementById("live-messages");
 
-const downloadContainer = document.getElementById("download-container");
-const downloadVideo = document.getElementById("download-video");
-
 const menuControls = document.getElementById("menu-controls");
 const saunaButton = document.getElementById("menu-controls__sauna");
 const iceButton = document.getElementById("menu-controls__ice");
@@ -249,44 +246,6 @@ iceButton.addEventListener("click", () => {
 });
 
 
-let mediaRecorder;
-let recordedChunks = [];
-let recordedBlob = null;
-
-
-function showRecordedPreview() {
-  if (!recordedBlob) return;
-
-  const videoURL = URL.createObjectURL(recordedBlob);
-  const container = document.getElementById("app-padding");
-
-  let preview = document.getElementById("recorded-preview");
-  if (!preview) {
-    preview = document.createElement("video");
-    preview.id = "recorded-preview";
-    preview.controls = true;
-    preview.style.width = "100%";
-    preview.style.marginTop = "1rem";
-    container.appendChild(preview);
-  }
-  preview.src = videoURL;
-
-  let dl = document.getElementById("recorded-download");
-  if (!dl) {
-    dl = document.createElement("a");
-    dl.id = "recorded-download";
-    dl.textContent = "Download video";
-    dl.style.display = "block";
-    dl.style.textAlign = "center";
-    dl.style.marginTop = "0.5rem";
-    dl.style.color = "#0969da";
-    container.appendChild(dl);
-  }
-  dl.href = videoURL;
-  dl.download = "session.webm";
-}
-
-
 function pushLiveMessage(text) {
   const msg = document.createElement("div");
   msg.className = "live-message";
@@ -353,23 +312,6 @@ function startCountdown() {
 }
 
 function beginMainTimer() {
-
-  // START RECORDING
-  const stream = camera.srcObject;
-  recordedChunks = [];
-  mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-
-  mediaRecorder.ondataavailable = e => {
-    if (e.data.size > 0) recordedChunks.push(e.data);
-  };
-
-  mediaRecorder.onstop = () => {
-    recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
-    showRecordedPreview();
-  };
-
-  mediaRecorder.start();
-
   state = "running";
 
   menuMessage.style.display = "none";
@@ -420,10 +362,6 @@ function stopSession() {
   clearInterval(countdownInterval);
   clearInterval(mainInterval);
 
-  if (mediaRecorder && mediaRecorder.state !== "inactive") {
-    mediaRecorder.stop();
-  }
-
   liveMessages.innerHTML = "";  // reset messages
 
   applyExitUI();
@@ -445,22 +383,6 @@ function color80(hex) {
 }
 
 function exitSession() {
-  if (recordedBlob) {
-    const url = URL.createObjectURL(recordedBlob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "session.webm";
-    a.click();
-  }
-
-  // remove preview + link
-  const preview = document.getElementById("recorded-preview");
-  if (preview) preview.remove();
-
-  const dl = document.getElementById("recorded-download");
-  if (dl) dl.remove();
-
   applyStartUI();
 }
 
@@ -484,13 +406,9 @@ function applyExitUI() {
 
   stopButton.style.display = "none";
   exitButton.style.display = "block";
-
-  downloadContainer.style.display = "block";
 }
 
 function applyStartUI() {
-  downloadContainer.style.display = "none";
-
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
     cameraStart.style.display = "block";
