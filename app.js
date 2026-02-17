@@ -249,6 +249,7 @@ cameraStart.addEventListener("click", async () => {
     cameraStart.style.display = "none";
     camera.style.display = "block";
     cameraPreview.style.display = "none";
+    flipCameraButton.style.display = "block";
 
   } catch (err) {
     alert("Camera permission denied or unavailable.");
