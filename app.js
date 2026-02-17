@@ -242,14 +242,13 @@ cameraStart.addEventListener("click", async () => {
 
     timeContainer.style.marginTop = "auto";
     cameraStart.style.display = "none";
+    camera.style.display = "block";
     cameraPreview.style.display = "none";
-    flipCameraButton.style.display = "block";
 
     const devices = await navigator.mediaDevices.enumerateDevices();
     const videoDevices = devices.filter(d => d.kind === "videoinput");
     if (videoDevices.length > 1) {
-      camera.style.display = "block";
-      return;
+      flipCameraButton.style.display = "block";
     }
 
   } catch (err) {
