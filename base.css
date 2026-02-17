@@ -49,6 +49,10 @@ button:disabled {
   }
 }
 
+.hidden {
+  display: none;
+}
+
 #camera-container {
   position: absolute;
   top: 0;
