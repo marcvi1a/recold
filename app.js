@@ -385,11 +385,11 @@ function capturePhoto() {
   ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight);
 
   // Reset transform before watermark
-  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   const fontSize = Math.round(camera.videoWidth * 0.06);
   const iconSize = fontSize * 0.8;
-  const padding = 20;
+  const padding = 40;
   const gap = fontSize * 0.3;
 
   ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
