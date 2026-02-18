@@ -460,7 +460,7 @@ function applyStopUI() {
     timeContainer.style.marginTop = "auto";
     cameraStart.style.display = "none";
   }
-  hideFlipCameraButton();
+  if (hasMultipleCameras) hideFlipCameraButton();
 
   timeCountdown.style.display = "block";
   saunaButton.style.display = "none";
