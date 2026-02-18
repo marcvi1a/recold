@@ -96,6 +96,10 @@ const timeControls = document.getElementById("time-controls");
 
 const liveMessages = document.getElementById("live-messages");
 
+const videoLinks = document.getElementById("video-links");
+const videoLinksTitle = document.getElementById("video-links__title");
+const videoLinksList = document.getElementById("video-links__list");
+
 const menuControls = document.getElementById("menu-controls");
 const saunaButton = document.getElementById("menu-controls__sauna");
 const iceButton = document.getElementById("menu-controls__ice");
@@ -355,13 +359,15 @@ function stopRecording() {
     const blob = new Blob(recordedChunks, { type: "video/webm" });
     const url = URL.createObjectURL(blob);
 
+    const li = document.createElement("li");
     const a = document.createElement("a");
-    a.id = "download-link";
+
     a.href = url;
     a.download = "recold-session.webm";
-    a.textContent = "⬇️ Download your session";
-    a.style.cssText = "display:block; text-align:center; padding:1rem; color:#0969da;";
-    menuControls.after(a);
+    a.textContent = `⬇️ Session ${videoLinksList.children.length + 1}`;
+
+    li.appendChild(a);
+    videoLinksList.appendChild(li);
   };
 
   mediaRecorder.stop();
@@ -497,11 +503,15 @@ function applyExitUI() {
 
   timeCountdown.style.display = "none";
 
+  videoLinks.style.display = "block";
+
   stopButton.style.display = "none";
   exitButton.style.display = "block";
 }
 
 function applyStartUI() {
+  videoLinks.style.display = "none";
+
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
     cameraStart.style.display = "block";
