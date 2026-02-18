@@ -326,11 +326,11 @@ function stopRecording() {
     const a = document.createElement("a");
 
     const d = recordingStartTime;
-    const filename = `recold_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.webm`;
+    const filename = `ReCold_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.webm`;
 
     a.href = url;
     a.download = filename;
-    a.textContent = `⬇️ Session ${videoLinksList.children.length + 1}`;
+    a.textContent = `⬇️ ${filename}`;
 
     li.appendChild(a);
     videoLinksList.appendChild(li);
