@@ -503,8 +503,9 @@ function applyStopUI() {
   timeControls.style.opacity = "0";
 
   if (!cameraPermissions) {
-    timeContainer.style.marginTop = "auto";
+    cameraPreview.style.display = "none";
     cameraStart.style.display = "none";
+    timeContainer.style.marginTop = "auto";
   }
   hideFlipCameraButton();
 
@@ -535,8 +536,9 @@ function applyStartUI() {
 
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
-    timeContainer.style.marginTop = "";
+    cameraPreview.style.display = "block";
     cameraStart.style.display = "block";
+    timeContainer.style.marginTop = "";
   }
   showFlipCameraButton();
 
