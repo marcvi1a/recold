@@ -189,9 +189,16 @@ flipCameraButton.addEventListener("click", async () => {
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: currentFacingMode }
+      video: {
+        facingMode: currentFacingMode,
+        width: { ideal: 1080 },
+        height: { ideal: 1920 },
+        aspectRatio: { ideal: 9/16 }
+      }
     });
+
     camera.srcObject = stream;
+
     // Mirror front camera, un-mirror rear camera
     camera.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "scaleX(1)";
   } catch (err) {
@@ -223,7 +230,12 @@ function hideFlipCameraButton() {
 cameraStart.addEventListener("click", async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" }
+      video: {
+        facingMode: "user",
+        width: { ideal: 1080 },
+        height: { ideal: 1920 },
+        aspectRatio: { ideal: 9/16 }
+      }
     });
 
     camera.srcObject = stream;
