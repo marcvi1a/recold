@@ -407,7 +407,7 @@ function capturePhoto() {
     ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2 + 5);
 
     ctx.globalAlpha = 1; // Reset to full opacity
-    capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.9)); // also bump quality
+    capturedPhotos.push(canvas.toDataURL("image/jpeg", 1.0)); // also bump quality
   };
 }
 
