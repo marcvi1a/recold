@@ -201,17 +201,20 @@ flipCameraButton.addEventListener("click", async () => {
 });
 
 async function showFlipCameraButton() {
-  if (hasMultipleCameras) {
-    flipCameraButton.style.display = "block";
-    return;
-  }
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  const videoDevices = devices.filter(d => d.kind === "videoinput");
-  if (videoDevices.length > 1) {
-    hasMultipleCameras = true;
-    flipCameraButton.style.display = "block";
+  if (cameraPermissions) {
+    if (hasMultipleCameras) {
+      flipCameraButton.style.display = "block";
+      return;
+    }
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(d => d.kind === "videoinput");
+    if (videoDevices.length > 1) {
+      hasMultipleCameras = true;
+      flipCameraButton.style.display = "block";
+    }
   }
 };
+
 function hideFlipCameraButton() {
   flipCameraButton.style.display = "none";
 };
@@ -488,10 +491,10 @@ function applyStartUI() {
 
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
+    timeContainer.style.marginTop = "";
     cameraStart.style.display = "block";
-  } else {
-    showFlipCameraButton();
   }
+  showFlipCameraButton();
 
   timeDisplay.style.display = "block";
   timeControls.style.pointerEvents = "";
