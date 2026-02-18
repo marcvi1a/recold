@@ -446,7 +446,7 @@ function beginMainTimer() {
       timeCountdown.style.background = `
         linear-gradient(90deg,
           ${color80(baseColor)} ${fill}%,
-          rgba(0, 0, 0, 0.1) ${fill}%)
+          #f5f5f780 ${fill}%)
       `;
     }
 
@@ -481,7 +481,7 @@ function stopSession() {
   timeCountdown.style.background = `
     linear-gradient(90deg,
       ${color80(baseColor)} 0%,
-      rgba(0, 0, 0, 0.1) 0%)
+      #f5f5f780 0%)
   `;
 }
 
