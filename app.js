@@ -189,11 +189,7 @@ flipCameraButton.addEventListener("click", async () => {
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: currentFacingMode,
-        width: { ideal: 1920 },
-        height: { ideal: 1080 }
-      }
+      video: { facingMode: currentFacingMode }
     });
 
     camera.srcObject = stream;
@@ -229,11 +225,7 @@ function hideFlipCameraButton() {
 cameraStart.addEventListener("click", async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: "user",
-        width: { ideal: 1920 },
-        height: { ideal: 1080 }
-      }
+      video: { facingMode: "user" }
     });
 
     camera.srcObject = stream;
