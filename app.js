@@ -110,6 +110,9 @@ let cameraPermissions = false;
 let hasMultipleCameras = false;
 let currentFacingMode = "user";
 
+let mediaRecorder = null;
+let recordedChunks = [];
+
 
 
 
@@ -336,6 +339,22 @@ function pushLiveMessage(text) {
 }
 
 
+function beginRecording() {
+  recordedChunks = [];
+  mediaRecorder = new MediaRecorder(camera.srcObject);
+  mediaRecorder.ondataavailable = (e) => {
+    if (e.data.size > 0) recordedChunks.push(e.data);
+  };
+  mediaRecorder.start();
+}
+
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+    mediaRecorder.stop();
+  }
+}
+
+
 let state = "idle"; // idle | countdown | running
 let countdownInterval;
 let mainInterval;
@@ -365,6 +384,7 @@ function startCountdown() {
       // show 00:00 immediately and start main timer
       timeCountdown.textContent = formatTime(0); // "00:00"
       beginMainTimer();
+      beginRecording();
     }
   }, 1000);
 }
@@ -415,6 +435,7 @@ function beginMainTimer() {
 }
 
 function stopSession() {
+  stopRecording();
   state = "idle";
 
   clearInterval(countdownInterval);
@@ -465,9 +486,29 @@ function applyExitUI() {
 
   stopButton.style.display = "none";
   exitButton.style.display = "block";
+
+
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "recold-session.webm";
+    a.textContent = "Download your session";
+    a.style.display = "block";
+    a.style.textAlign = "center";
+    a.style.padding = "1rem";
+
+    menuContainer.appendChild(a);
+  };
+
+
 }
 
 function applyStartUI() {
+  menuContainer.querySelector("a")?.remove();
+
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
     cameraStart.style.display = "block";
