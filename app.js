@@ -507,8 +507,6 @@ function applyExitUI() {
 }
 
 function applyStartUI() {
-  menuContainer.querySelector("a")?.remove();
-
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
     cameraStart.style.display = "block";
