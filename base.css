@@ -290,7 +290,7 @@ button:disabled {
 
   /* background needed so slider/camera never show behind */
   background: #f2efea80;
-  background: #e6e6e6;
+  background: #e6e6e680;
 
   box-shadow: 0 -6px 12px rgba(23, 26, 28, 0.15);
   border-radius: 0;
