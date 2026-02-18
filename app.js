@@ -349,9 +349,22 @@ function beginRecording() {
 }
 
 function stopRecording() {
-  if (mediaRecorder && mediaRecorder.state !== "inactive") {
-    mediaRecorder.stop();
-  }
+  if (!mediaRecorder || mediaRecorder.state === "inactive") return;
+
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.id = "download-link";
+    a.href = url;
+    a.download = "recold-session.webm";
+    a.textContent = "⬇️ Download your session";
+    a.style.cssText = "display:block; text-align:center; padding:1rem; color:#0969da;";
+    menuControls.after(a);
+  };
+
+  mediaRecorder.stop();
 }
 
 
@@ -486,24 +499,6 @@ function applyExitUI() {
 
   stopButton.style.display = "none";
   exitButton.style.display = "block";
-
-
-  mediaRecorder.onstop = () => {
-    const blob = new Blob(recordedChunks, { type: "video/webm" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "recold-session.webm";
-    a.textContent = "Download your session";
-    a.style.display = "block";
-    a.style.textAlign = "center";
-    a.style.padding = "1rem";
-
-    menuContainer.appendChild(a);
-  };
-
-
 }
 
 function applyStartUI() {
