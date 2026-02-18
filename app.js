@@ -388,7 +388,7 @@ function capturePhoto() {
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
   const fontSize = Math.round(camera.videoWidth * 0.06);
-  const iconSize = fontSize * 1.2;
+  const iconSize = fontSize * 1.0;
   const padding = 20;
   const gap = fontSize * 0.3;
 
