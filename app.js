@@ -310,43 +310,14 @@ function pushLiveMessage(text) {
 }
 
 
-// function beginRecording() {
-//   recordedChunks = [];
-//   recordingStartTime = new Date();
-//   mediaRecorder = new MediaRecorder(camera.srcObject);
-//   mediaRecorder.ondataavailable = (e) => {
-//     if (e.data.size > 0) recordedChunks.push(e.data);
-//   };
-//   mediaRecorder.start();
-// }
-
 function beginRecording() {
   recordedChunks = [];
   recordingStartTime = new Date();
-
-  const canvas = document.createElement("canvas");
-  canvas.width = 1080;
-  canvas.height = 1920;
-  const ctx = canvas.getContext("2d");
-
-  const canvasStream = canvas.captureStream(30);
-  mediaRecorder = new MediaRecorder(canvasStream);
+  mediaRecorder = new MediaRecorder(camera.srcObject);
   mediaRecorder.ondataavailable = (e) => {
     if (e.data.size > 0) recordedChunks.push(e.data);
   };
   mediaRecorder.start();
-
-  function drawFrame() {
-    ctx.save();
-    if (currentFacingMode === "user") {
-      ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1); // mirror front camera to match preview
-    }
-    ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
-    ctx.restore();
-    if (mediaRecorder.state === "recording") requestAnimationFrame(drawFrame);
-  }
-  drawFrame();
 }
 
 function stopRecording() {
