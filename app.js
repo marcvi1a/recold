@@ -78,7 +78,7 @@ let currentFacingMode = "user";
 
 let mediaRecorder = null;
 let recordedChunks = [];
-
+let recordingStartTime = null;
 
 
 
@@ -307,6 +307,7 @@ function pushLiveMessage(text) {
 
 function beginRecording() {
   recordedChunks = [];
+  recordingStartTime = new Date();
   mediaRecorder = new MediaRecorder(camera.srcObject);
   mediaRecorder.ondataavailable = (e) => {
     if (e.data.size > 0) recordedChunks.push(e.data);
@@ -324,8 +325,11 @@ function stopRecording() {
     const li = document.createElement("li");
     const a = document.createElement("a");
 
+    const d = recordingStartTime;
+    const filename = `recold_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.webm`;
+
     a.href = url;
-    a.download = "recold-session.webm";
+    a.download = filename;
     a.textContent = `⬇️ Session ${videoLinksList.children.length + 1}`;
 
     li.appendChild(a);
@@ -499,6 +503,7 @@ applyLanguage();
 
 
 
+// lang-select is currently hidden
 const langSelect = document.getElementById("lang-select");
 
 if (!localStorage.getItem("lang")) {
