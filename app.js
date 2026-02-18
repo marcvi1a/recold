@@ -416,8 +416,10 @@ function startCountdown() {
 function beginMainTimer() {
   state = "running";
 
-  capturePhoto(); // capture immediately at t=0
-  photoInterval = setInterval(capturePhoto, 10000);
+  if (cameraPermissions) {
+    capturePhoto(); // capture immediately at t=0
+    photoInterval = setInterval(capturePhoto, 10000);
+  }
 
   menuMessage.style.display = "none";
   menuControls.style.display = "flex";
