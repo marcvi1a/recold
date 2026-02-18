@@ -401,10 +401,10 @@ function capturePhoto() {
   const icon = new Image();
   icon.src = "assets/favicon.png";
   icon.onload = () => {
-    ctx.globalAlpha = 1; // Reduce for transparency
+    ctx.globalAlpha = 0.9; // Reduce for transparency
     ctx.drawImage(icon, x, y, iconSize, iconSize);
     ctx.fillStyle = "#378de2";
-    ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2);
+    ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2 + 5);
 
     ctx.globalAlpha = 1; // Reset to full opacity
     capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.9)); // also bump quality
