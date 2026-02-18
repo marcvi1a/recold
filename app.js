@@ -191,9 +191,8 @@ flipCameraButton.addEventListener("click", async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: currentFacingMode,
-        width: { ideal: 1080 },
-        height: { ideal: 1920 },
-        aspectRatio: { ideal: 16/9 }
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
       }
     });
 
@@ -232,9 +231,8 @@ cameraStart.addEventListener("click", async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: "user",
-        width: { ideal: 1080 },
-        height: { ideal: 1920 },
-        aspectRatio: { ideal: 16/9 }
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
       }
     });
 
