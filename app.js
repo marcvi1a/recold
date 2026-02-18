@@ -372,7 +372,7 @@ function displayPhotos() {
     a.download = filename;
     a.textContent = `📷 ${filename}`;
     li.appendChild(a);
-    videoLinksList.appendChild(li);
+    mediaLinksList.appendChild(li);
   });
 }
 
