@@ -393,15 +393,15 @@ function capturePhoto() {
   const textWidth = ctx.measureText("ReCold").width;
   const totalWidth = iconSize + gap + textWidth;
 
-  const x = canvas.width - padding - totalWidth;
-  const y = canvas.height - padding - iconSize;
+  const x = padding;
+  const y = padding;
 
   const icon = new Image();
   icon.src = "assets/favicon.png";
   icon.onload = () => {
     ctx.globalAlpha = 0.7;
     ctx.drawImage(icon, x, y, iconSize, iconSize);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#378de2";  // ReCold blue
     ctx.textBaseline = "middle";
     ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2);
     ctx.globalAlpha = 1;
