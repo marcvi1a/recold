@@ -11,35 +11,6 @@ async function applyLanguage() {
 
   cameraStart.textContent = tr.cameraStart;
 
-  bulletTitle.textContent = mode === "sauna"
-    ? tr.bulletTitle_sauna
-    : tr.bulletTitle_ice;
-
-  bulletPoint1.textContent = mode === "sauna"
-    ? tr.bulletPoint1_sauna
-    : tr.bulletPoint1_ice;
-
-  bulletPoint2.textContent = mode === "sauna"
-    ? tr.bulletPoint2_sauna
-    : tr.bulletPoint2_ice;
-
-  bulletPoint3.textContent = mode === "sauna"
-    ? tr.bulletPoint3_sauna
-    : tr.bulletPoint3_ice;
-
-  bulletPoint4.textContent = mode === "sauna"
-    ? tr.bulletPoint4_sauna
-    : tr.bulletPoint4_ice;
-
-  bulletPoint5.textContent = mode === "sauna"
-    ? tr.bulletPoint5_sauna
-    : tr.bulletPoint5_ice;
-
-  // contains HTML in both PT + EN
-  bulletPoint6.innerHTML = mode === "sauna"
-    ? tr.bulletPoint6_sauna
-    : tr.bulletPoint6_ice;
-
   saunaButton.textContent = tr.saunaButton;
   iceButton.textContent = tr.iceButton;
   startButton.textContent = tr.startButton;
@@ -75,15 +46,6 @@ const COLOR_ICE = "#378de2";
 const cameraContainer = document.getElementById("camera-container");
 const cameraPreview = document.getElementById("camera-preview");
 const camera = document.getElementById("camera");
-
-const bulletPoints = document.getElementById("bullet-points");
-const bulletTitle = document.getElementById("bullet-title");
-const bulletPoint1 = document.getElementById("bullet-point-1");
-const bulletPoint2 = document.getElementById("bullet-point-2");
-const bulletPoint3 = document.getElementById("bullet-point-3");
-const bulletPoint4 = document.getElementById("bullet-point-4");
-const bulletPoint5 = document.getElementById("bullet-point-5");
-const bulletPoint6 = document.getElementById("bullet-point-6");
 
 const cameraStart = document.getElementById("camera-start");
 const timeContainer = document.getElementById("time-container");
