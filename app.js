@@ -455,8 +455,14 @@ function applyStopUI() {
   timeDisplay.style.display = "none";
   timeControls.style.pointerEvents = "none";
   timeControls.style.opacity = "0";
-  timeCountdown.style.display = "block";
+
+  if (!cameraPermissions) {
+    timeContainer.style.marginTop = "auto";
+    cameraStart.style.display = "none";
+  }
   hideFlipCameraButton();
+
+  timeCountdown.style.display = "block";
   saunaButton.style.display = "none";
   iceButton.style.display = "none";
   startButton.style.display = "none";
