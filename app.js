@@ -502,6 +502,7 @@ function applyExitUI() {
   hideFlipCameraButton();
 
   timeCountdown.style.display = "none";
+  timeContainer.style.display = "none";
 
   videoLinks.style.display = "block";
 
@@ -511,6 +512,7 @@ function applyExitUI() {
 
 function applyStartUI() {
   videoLinks.style.display = "none";
+  timeContainer.style.display = "block";
 
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
