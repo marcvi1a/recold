@@ -326,7 +326,7 @@ function stopRecording() {
     const a = document.createElement("a");
 
     const d = recordingStartTime;
-    const filename = `ReCold_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.webm`;
+    const filename = `ReCold_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}.webm`;
 
     a.href = url;
     a.download = filename;
