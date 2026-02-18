@@ -388,7 +388,7 @@ function capturePhoto() {
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
   const fontSize = Math.round(camera.videoWidth * 0.06);
-  const iconSize = fontSize * 1.0;
+  const iconSize = fontSize * 0.7;
   const padding = 20;
   const gap = fontSize * 0.3;
 
@@ -401,12 +401,12 @@ function capturePhoto() {
   const icon = new Image();
   icon.src = "assets/favicon.png";
   icon.onload = () => {
-    ctx.globalAlpha = 0.7;
+    ctx.globalAlpha = 1; // Reduce for transparency
     ctx.drawImage(icon, x, y, iconSize, iconSize);
     ctx.fillStyle = "#378de2";
     ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2);
-    ctx.globalAlpha = 1;
 
+    ctx.globalAlpha = 1; // Reset to full opacity
     capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.9)); // also bump quality
   };
 }
