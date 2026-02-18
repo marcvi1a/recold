@@ -185,6 +185,7 @@ button:disabled {
   font-size: 7rem;
   text-align: center;
   background: #f5f5f780;
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 
@@ -233,6 +234,7 @@ button:disabled {
   text-align: center;
   color: #fff;
   background: #f5f5f780;
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
 
@@ -290,6 +292,7 @@ button:disabled {
 
   /* background needed so slider/camera never show behind */
   background: #f2efea80;
+  background: #e6e6e6;
 
   box-shadow: 0 -6px 12px rgba(23, 26, 28, 0.15);
   border-radius: 0;
