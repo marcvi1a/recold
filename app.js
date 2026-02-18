@@ -108,6 +108,12 @@ if (storedMode === "ice") {
   applyLanguage();
 }
 
+function getBaseColor() {
+  return cameraPermissions
+    ? "rgba(245, 245, 247, 0.5)"
+    : "rgba(5, 5, 7, 0.1)";
+}
+
 
 // Initialize both countdown values if empty
 if (!localStorage.getItem("time-countdown-sauna")) {
@@ -446,7 +452,7 @@ function beginMainTimer() {
       timeCountdown.style.background = `
         linear-gradient(90deg,
           ${color80(themeColor)} ${fill}%,
-          #f5f5f780 ${fill}%)
+          getBaseColor() ${fill}%)
       `;
     }
 
@@ -481,7 +487,7 @@ function stopSession() {
   timeCountdown.style.background = `
     linear-gradient(90deg,
       ${color80(themeColor)} 0%,
-      #f5f5f780 0%)
+      getBaseColor() 0%)
   `;
 }
 
