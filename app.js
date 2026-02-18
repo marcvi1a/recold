@@ -389,6 +389,7 @@ function capturePhoto() {
   const padding = 20;
   const gap = fontSize * 0.3;
 
+  // Draw watermark
   ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
   const textWidth = ctx.measureText("ReCold").width;
   const totalWidth = iconSize + gap + textWidth;
