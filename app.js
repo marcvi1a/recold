@@ -80,6 +80,10 @@ let mediaRecorder = null;
 let recordedChunks = [];
 let recordingStartTime = null;
 
+let photoInterval = null;
+let capturedPhotos = [];
+
+
 
 
 // --- Initialize mode if empty ---
@@ -163,7 +167,6 @@ function formatTime(seconds) {
 }
 
 
-// --- Flip Camera ---
 flipCameraButton.addEventListener("click", async () => {
   // Desktop: check if only one camera available
   try {
@@ -344,6 +347,35 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
+function capturePhoto() {
+  const canvas = document.createElement("canvas");
+  canvas.width = camera.videoWidth;
+  canvas.height = camera.videoHeight;
+  const ctx = canvas.getContext("2d");
+
+  if (currentFacingMode === "user") {
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+  }
+
+  ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
+  capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.8));
+}
+
+function displayPhotos() {
+  capturedPhotos.forEach((dataUrl, i) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    const d = recordingStartTime;
+    const filename = `ReCold_photo-${i + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.jpg`;
+    a.href = dataUrl;
+    a.download = filename;
+    a.textContent = `📷 ${filename}`;
+    li.appendChild(a);
+    videoLinksList.appendChild(li);
+  });
+}
+
 
 let state = "idle"; // idle | countdown | running
 let countdownInterval;
@@ -361,6 +393,8 @@ function startCountdown() {
   menuMessage.style.display = "flex";
   menuControls.style.display = "none";
 
+  // reset photos on new session
+  capturedPhotos = [];
 
   let countdown = 3;
   timeCountdown.textContent = countdown;
@@ -381,6 +415,9 @@ function startCountdown() {
 
 function beginMainTimer() {
   state = "running";
+
+  capturePhoto(); // capture immediately at t=0
+  photoInterval = setInterval(capturePhoto, 10000);
 
   menuMessage.style.display = "none";
   menuControls.style.display = "flex";
@@ -425,8 +462,10 @@ function beginMainTimer() {
 }
 
 function stopSession() {
-  stopRecording();
   state = "idle";
+
+  stopRecording();
+  clearInterval(photoInterval);
 
   clearInterval(countdownInterval);
   clearInterval(mainInterval);
@@ -481,6 +520,7 @@ function applyExitUI() {
   timeCountdown.style.display = "none";
   timeContainer.style.display = "none";
 
+  displayPhotos();
   mediaLinks.style.display = "block";
 
   stopButton.style.display = "none";
