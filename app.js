@@ -404,7 +404,7 @@ function capturePhoto() {
     ctx.globalAlpha = 0.9; // Reduce for transparency
     ctx.drawImage(icon, x, y, iconSize, iconSize);
     ctx.fillStyle = "#378de2";
-    ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2 + 5);
+    ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2 + 4);
 
     ctx.globalAlpha = 1; // Reset to full opacity
     capturedPhotos.push(canvas.toDataURL("image/jpeg", 1.0)); // also bump quality
