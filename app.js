@@ -452,7 +452,7 @@ function beginMainTimer() {
       timeCountdown.style.background = `
         linear-gradient(90deg,
           ${color80(themeColor)} ${fill}%,
-          getBaseColor() ${fill}%)
+          ${getBaseColor()} ${fill}%)
       `;
     }
 
@@ -487,7 +487,7 @@ function stopSession() {
   timeCountdown.style.background = `
     linear-gradient(90deg,
       ${color80(themeColor)} 0%,
-      getBaseColor() 0%)
+      ${getBaseColor()} 0%)
   `;
 }
 
@@ -514,6 +514,8 @@ function applyStopUI() {
     timeContainer.style.marginTop = "auto";
   }
   hideFlipCameraButton();
+
+  timeCountdown.style.background = getBaseColor();
 
   timeCountdown.style.display = "block";
   saunaButton.style.display = "none";
