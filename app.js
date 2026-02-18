@@ -88,6 +88,8 @@ const bulletPoint6 = document.getElementById("bullet-point-6");
 const cameraStart = document.getElementById("camera-start");
 const timeContainer = document.getElementById("time-container");
 
+const flipCameraButton = document.getElementById("flip-camera");
+
 const timeDisplay = document.getElementById("time-display");
 const timeCountdown = document.getElementById("time-countdown");
 const timeControls = document.getElementById("time-controls");
@@ -104,6 +106,8 @@ const menuMessage = document.getElementById("menu-message");
 
 
 let cameraPermissions = false;
+
+let currentFacingMode = "user";
 
 
 
@@ -190,9 +194,6 @@ function formatTime(seconds) {
 
 
 // --- Flip Camera ---
-const flipCameraButton = document.getElementById("flip-camera");
-let currentFacingMode = "user";
-
 flipCameraButton.addEventListener("click", async () => {
   // Desktop: check if only one camera available
   try {
@@ -229,6 +230,18 @@ flipCameraButton.addEventListener("click", async () => {
   }
 });
 
+function showFlipCameraButton() {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const videoDevices = devices.filter(d => d.kind === "videoinput");
+
+  if (videoDevices.length > 1) {
+    flipCameraButton.style.display = "block";
+  }
+};
+function hideFlipCameraButton() {
+  flipCameraButton.style.display = "none";
+};
+
 
 cameraStart.addEventListener("click", async () => {
   try {
@@ -244,12 +257,7 @@ cameraStart.addEventListener("click", async () => {
     cameraStart.style.display = "none";
     camera.style.display = "block";
     cameraPreview.style.display = "none";
-
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const videoDevices = devices.filter(d => d.kind === "videoinput");
-    if (videoDevices.length > 1) {
-      flipCameraButton.style.display = "block";
-    }
+    showFlipCameraButton();
 
   } catch (err) {
     alert("Camera permission denied or unavailable.");
@@ -446,7 +454,7 @@ function applyStopUI() {
 function applyExitUI() {
   cameraContainer.style.display = "none";
   cameraStart.style.display = "none";
-  flipCameraButton.style.display = "none";
+  hideFlipCameraButton();
 
   timeCountdown.style.display = "none";
 
@@ -459,6 +467,7 @@ function applyStartUI() {
   if (!cameraPermissions) {
     cameraStart.style.display = "block";
   }
+  showFlipCameraButton();
 
   timeDisplay.style.display = "block";
   timeControls.style.pointerEvents = "";
