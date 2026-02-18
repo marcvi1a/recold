@@ -353,6 +353,21 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
+// function capturePhoto() {
+//   const canvas = document.createElement("canvas");
+//   canvas.width = camera.videoWidth;
+//   canvas.height = camera.videoHeight;
+//   const ctx = canvas.getContext("2d");
+//
+//   if (currentFacingMode === "user") {
+//     ctx.translate(canvas.width, 0);
+//     ctx.scale(-1, 1);
+//   }
+//
+//   ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
+//   capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.8));
+// }
+
 function capturePhoto() {
   const canvas = document.createElement("canvas");
   canvas.width = camera.videoWidth;
@@ -365,7 +380,34 @@ function capturePhoto() {
   }
 
   ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
-  capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.8));
+
+  // Reset transform before drawing watermark
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+  const fontSize = Math.round(canvas.width * 0.06);
+  const iconSize = fontSize * 1.2;
+  const padding = 20;
+  const gap = fontSize * 0.3;
+
+  ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
+  const textWidth = ctx.measureText("ReCold").width;
+  const totalWidth = iconSize + gap + textWidth;
+
+  const x = canvas.width - padding - totalWidth;
+  const y = canvas.height - padding - iconSize;
+
+  const icon = new Image();
+  icon.src = "assets/favicon.png";
+  icon.onload = () => {
+    ctx.globalAlpha = 0.7;
+    ctx.drawImage(icon, x, y, iconSize, iconSize);
+    ctx.fillStyle = "white";
+    ctx.textBaseline = "middle";
+    ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2);
+    ctx.globalAlpha = 1;
+
+    capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.8));
+  };
 }
 
 function displayPhotos() {
