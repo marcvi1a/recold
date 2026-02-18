@@ -193,7 +193,7 @@ flipCameraButton.addEventListener("click", async () => {
         facingMode: currentFacingMode,
         width: { ideal: 1080 },
         height: { ideal: 1920 },
-        aspectRatio: { ideal: 9/16 }
+        aspectRatio: { ideal: 16/9 }
       }
     });
 
@@ -234,7 +234,7 @@ cameraStart.addEventListener("click", async () => {
         facingMode: "user",
         width: { ideal: 1080 },
         height: { ideal: 1920 },
-        aspectRatio: { ideal: 9/16 }
+        aspectRatio: { ideal: 16/9 }
       }
     });
 
