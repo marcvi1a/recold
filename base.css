@@ -27,6 +27,7 @@ button:disabled {
   height: 100dvh;
   margin: 0 auto;
   background: #f2efea;
+  background: #e6e6e6;
   position: relative;
   overflow: hidden;
 }
