@@ -446,6 +446,7 @@ function applyStopUI() {
 function applyExitUI() {
   cameraContainer.style.display = "none";
   cameraStart.style.display = "none";
+  flipCameraButton.style.display = "none";
 
   timeCountdown.style.display = "none";
 
