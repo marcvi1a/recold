@@ -230,7 +230,7 @@ flipCameraButton.addEventListener("click", async () => {
   }
 });
 
-function showFlipCameraButton() {
+async function showFlipCameraButton() {
   const devices = await navigator.mediaDevices.enumerateDevices();
   const videoDevices = devices.filter(d => d.kind === "videoinput");
 
