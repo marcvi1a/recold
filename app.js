@@ -107,6 +107,7 @@ const menuMessage = document.getElementById("menu-message");
 
 let cameraPermissions = false;
 
+let hasMultipleCameras = false;
 let currentFacingMode = "user";
 
 
@@ -231,10 +232,14 @@ flipCameraButton.addEventListener("click", async () => {
 });
 
 async function showFlipCameraButton() {
+  if (hasMultipleCameras) {
+    flipCameraButton.style.display = "block";
+    return;
+  }
   const devices = await navigator.mediaDevices.enumerateDevices();
   const videoDevices = devices.filter(d => d.kind === "videoinput");
-
   if (videoDevices.length > 1) {
+    hasMultipleCameras = true;
     flipCameraButton.style.display = "block";
   }
 };
