@@ -489,8 +489,9 @@ function applyStartUI() {
   cameraContainer.style.display = "block";
   if (!cameraPermissions) {
     cameraStart.style.display = "block";
+  } else {
+    showFlipCameraButton();
   }
-  showFlipCameraButton();
 
   timeDisplay.style.display = "block";
   timeControls.style.pointerEvents = "";
