@@ -58,9 +58,9 @@ const timeControls = document.getElementById("time-controls");
 
 const liveMessages = document.getElementById("live-messages");
 
-const videoLinks = document.getElementById("video-links");
-const videoLinksTitle = document.getElementById("video-links__title");
-const videoLinksList = document.getElementById("video-links__list");
+const mediaLinks = document.getElementById("media-links");
+const mediaLinksTitle = document.getElementById("media-links__title");
+const mediaLinksList = document.getElementById("media-links__list");
 
 const menuControls = document.getElementById("menu-controls");
 const saunaButton = document.getElementById("menu-controls__sauna");
@@ -331,14 +331,14 @@ function stopRecording() {
     const a = document.createElement("a");
 
     const d = recordingStartTime;
-    const filename = `ReCold_session-${videoLinksList.children.length + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.webm`;
+    const filename = `ReCold_session-${mediaLinksList.children.length + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.webm`;
 
     a.href = url;
     a.download = filename;
     a.textContent = `⬇️ ${filename}`;
 
     li.appendChild(a);
-    videoLinksList.appendChild(li);
+    mediaLinksList.appendChild(li);
   };
 
   mediaRecorder.stop();
@@ -481,14 +481,14 @@ function applyExitUI() {
   timeCountdown.style.display = "none";
   timeContainer.style.display = "none";
 
-  videoLinks.style.display = "block";
+  mediaLinks.style.display = "block";
 
   stopButton.style.display = "none";
   exitButton.style.display = "block";
 }
 
 function applyStartUI() {
-  videoLinks.style.display = "none";
+  mediaLinks.style.display = "none";
   timeContainer.style.display = "block";
 
   cameraContainer.style.display = "block";
