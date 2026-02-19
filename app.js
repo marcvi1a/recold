@@ -211,7 +211,10 @@ flipCameraButton.addEventListener("click", async () => {
     });
 
     camera.srcObject = stream;
-    prepareMediaTools(stream);
+
+    camera.addEventListener("loadedmetadata", () => {
+      prepareMediaTools(stream);
+    }, { once: true });
 
     // Mirror front camera, un-mirror rear camera
     camera.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "scaleX(1)";
@@ -255,7 +258,12 @@ cameraStart.addEventListener("click", async () => {
     });
 
     camera.srcObject = stream;
-    prepareMediaTools(stream);
+
+    // Dimensions are only reliable after loadedmetadata fires.
+    // prepareMediaTools reads videoWidth/Height so it must wait for this event.
+    camera.addEventListener("loadedmetadata", () => {
+      prepareMediaTools(stream);
+    }, { once: true });
 
     cameraPermissions = true;
 
@@ -353,10 +361,9 @@ function prepareMediaTools(stream) {
   if (bestVideoMimeType) recorderOptions.mimeType = bestVideoMimeType;
 
   // --- Photo: allocate canvas once, correcting for iOS orientation ---
-  const track = stream.getVideoTracks()[0];
-  const { width: trackW, height: trackH } = track.getSettings();
-  const streamW = trackW || camera.videoWidth;
-  const streamH = trackH || camera.videoHeight;
+  // Called from loadedmetadata, so camera.videoWidth/Height are always valid here.
+  const streamW = camera.videoWidth;
+  const streamH = camera.videoHeight;
 
   // iOS reports the physical sensor's landscape dimensions even in portrait mode.
   // When drawn to canvas, the browser does NOT apply the display rotation,
