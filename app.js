@@ -199,7 +199,7 @@ flipCameraButton.addEventListener("click", async () => {
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: currentFacingMode }
+      video: { ...HIGH_RES_CONSTRAINTS, facingMode: currentFacingMode }
     });
 
     camera.srcObject = stream;
@@ -232,10 +232,17 @@ function hideFlipCameraButton() {
 };
 
 
+const HIGH_RES_CONSTRAINTS = {
+  facingMode: "user",
+  width: { ideal: 3840 },   // request up to 4K; browser caps at device max
+  height: { ideal: 2160 },
+  frameRate: { ideal: 60 }, // 60fps where supported, fallback to 30
+};
+
 cameraStart.addEventListener("click", async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" }
+      video: HIGH_RES_CONSTRAINTS
     });
 
     camera.srcObject = stream;
@@ -320,10 +327,28 @@ function pushLiveMessage(text) {
 }
 
 
+function getBestVideoMimeType() {
+  const candidates = [
+    "video/mp4;codecs=avc1",   // H.264 mp4 — Safari + some Chrome
+    "video/webm;codecs=vp9",   // VP9 webm — best quality on Chrome/Firefox
+    "video/webm;codecs=vp8",   // VP8 webm — wide fallback
+    "video/webm",              // generic webm
+    "video/mp4",               // generic mp4
+  ];
+  return candidates.find(m => MediaRecorder.isTypeSupported(m)) || "";
+}
+
 function beginRecording() {
   recordedChunks = [];
   recordingStartTime = new Date();
-  mediaRecorder = new MediaRecorder(camera.srcObject);
+
+  const mimeType = getBestVideoMimeType();
+  const options = {
+    videoBitsPerSecond: 16_000_000, // 16 Mbps — high quality, matches 4K30 streaming
+  };
+  if (mimeType) options.mimeType = mimeType;
+
+  mediaRecorder = new MediaRecorder(camera.srcObject, options);
   mediaRecorder.ondataavailable = (e) => {
     if (e.data.size > 0) recordedChunks.push(e.data);
   };
@@ -337,9 +362,8 @@ function stopRecording() {
   }
 
   mediaRecorder.onstop = () => {
-    // iOS Safari records as mp4; other browsers use webm
-    const mimeType = MediaRecorder.isTypeSupported("video/mp4") ? "video/mp4" : "video/webm";
-    const ext = mimeType === "video/mp4" ? "mp4" : "webm";
+    const mimeType = mediaRecorder.mimeType || getBestVideoMimeType() || "video/webm";
+    const ext = mimeType.includes("mp4") ? "mp4" : "webm";
     const blob = new Blob(recordedChunks, { type: mimeType });
     const d = recordingStartTime;
     capturedVideo = {
@@ -365,7 +389,7 @@ function capturePhoto() {
   }
 
   ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
-  capturedPhotos.push(canvas.toDataURL("image/jpeg", 1.0));
+  capturedPhotos.push(canvas.toDataURL("image/png"));
 }
 
 // Capture photo with watermark
@@ -458,16 +482,16 @@ function displayMedia() {
   // Then photos
   capturedPhotos.forEach((dataUrl, i) => {
     const d = recordingStartTime;
-    const filename = `ReCold_photo-${i + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.jpg`;
+    const filename = `ReCold_photo-${i + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.png`;
 
     // Convert dataURL to blob for Web Share API
     const byteString = atob(dataUrl.split(",")[1]);
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
     for (let j = 0; j < byteString.length; j++) ia[j] = byteString.charCodeAt(j);
-    const blob = new Blob([ab], { type: "image/jpeg" });
+    const blob = new Blob([ab], { type: "image/png" });
 
-    mediaLinksList.appendChild(createMediaItem({ href: dataUrl, blob, mimeType: "image/jpeg", filename, emoji: "📷", label: `Save photo ${i + 1} to gallery` }));
+    mediaLinksList.appendChild(createMediaItem({ href: dataUrl, blob, mimeType: "image/png", filename, emoji: "📷", label: `Save photo ${i + 1} to gallery` }));
   });
 }
 
