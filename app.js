@@ -393,10 +393,11 @@ function prepareMediaTools(stream) {
   // do NOT add an extra mirror — the rotation alone produces a correct portrait.
   // For non-iOS front camera (no rotation needed) we DO mirror.
   if (needsRotation) {
-    // iOS: rotate 90° CW to turn landscape sensor frame into portrait.
-    // Front camera mirroring is already baked into the iOS pixel data — skip it.
+    // iOS: rotate 90° CW, then mirror horizontally
     photoCtx.translate(streamH, 0);
     photoCtx.rotate(Math.PI / 2);
+    photoCtx.translate(streamW, 0);
+    photoCtx.scale(-1, 1);
   } else if (currentFacingMode === "user") {
     // Non-iOS front camera: mirror horizontally
     photoCtx.translate(streamW, 0);
