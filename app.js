@@ -360,27 +360,16 @@ function prepareMediaTools(stream) {
   recorderOptions = { videoBitsPerSecond: 16_000_000 };
   if (bestVideoMimeType) recorderOptions.mimeType = bestVideoMimeType;
 
-  // --- Photo: allocate canvas once, correcting for iOS orientation ---
+  // --- Photo: allocate canvas once ---
   // Called from loadedmetadata, so camera.videoWidth/Height are always valid here.
-  const streamW = camera.videoWidth;
-  const streamH = camera.videoHeight;
+  // drawImage(videoElement) in Safari/Chrome already renders with the correct
+  // display orientation — no manual rotation needed.
+  photoDrawW = camera.videoWidth;
+  photoDrawH = camera.videoHeight;
 
-  // iOS reports the physical sensor's landscape dimensions even in portrait mode.
-  // When drawn to canvas, the browser does NOT apply the display rotation,
-  // so we must rotate manually.
-  const streamIsLandscape = streamW > streamH;
-  const screenIsPortrait = window.screen.width < window.screen.height ||
-                           window.innerWidth < window.innerHeight;
-  const needsRotation = streamIsLandscape && screenIsPortrait;
-
-  // Store native draw dimensions for capturePhoto
-  photoDrawW = streamW;
-  photoDrawH = streamH;
-
-  // Canvas output: portrait when rotating (swap dims), native otherwise
   photoCanvas = document.createElement("canvas");
-  photoCanvas.width  = needsRotation ? streamH : streamW;
-  photoCanvas.height = needsRotation ? streamW : streamH;
+  photoCanvas.width  = photoDrawW;
+  photoCanvas.height = photoDrawH;
   photoCtx = photoCanvas.getContext("2d", { willReadFrequently: false });
 }
 
@@ -420,53 +409,18 @@ function stopRecording() {
 function capturePhoto() {
   const w = photoDrawW;
   const h = photoDrawH;
-  const outW = photoCanvas.width;
-  const outH = photoCanvas.height;
   const isFront = currentFacingMode === "user";
 
-  if (outW < outH) {
-    // iOS: portrait output from landscape sensor source — rotate 90° CW, then
-    // mirror horizontally only for the front camera.
-
-    // Step 1: draw raw frame into a temp landscape canvas
-    const tmp = document.createElement("canvas");
-    tmp.width = w;
-    tmp.height = h;
-    tmp.getContext("2d").drawImage(camera, 0, 0, w, h);
-
-    // Step 2: rotate 90° CW into portrait canvas
-    photoCtx.save();
-    photoCtx.translate(outW, 0);
-    photoCtx.rotate(Math.PI / 2);
-    photoCtx.drawImage(tmp, 0, 0, w, h);
-    photoCtx.restore();
-
-    if (isFront) {
-      // Step 3: flip the portrait canvas horizontally in-place (front cam only)
-      const flipped = document.createElement("canvas");
-      flipped.width = outW;
-      flipped.height = outH;
-      const fCtx = flipped.getContext("2d");
-      fCtx.translate(outW, 0);
-      fCtx.scale(-1, 1);
-      fCtx.drawImage(photoCanvas, 0, 0);
-      flipped.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
-    } else {
-      photoCanvas.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
-    }
-  } else {
-    // No rotation needed.
-    // Front camera: mirror horizontally so saved photo matches the preview.
-    // Rear camera: draw as-is.
-    photoCtx.save();
-    if (isFront) {
-      photoCtx.translate(outW, 0);
-      photoCtx.scale(-1, 1);
-    }
-    photoCtx.drawImage(camera, 0, 0, w, h);
-    photoCtx.restore();
-    photoCanvas.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
+  photoCtx.save();
+  if (isFront) {
+    // Mirror horizontally so the saved photo matches what the user sees in the preview.
+    photoCtx.translate(w, 0);
+    photoCtx.scale(-1, 1);
   }
+  photoCtx.drawImage(camera, 0, 0, w, h);
+  photoCtx.restore();
+
+  photoCanvas.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
 }
 
 // Capture photo with watermark
