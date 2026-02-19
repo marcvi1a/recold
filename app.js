@@ -89,6 +89,8 @@ let bestVideoMimeType = "";
 let recorderOptions = {};
 let photoCanvas = null;   // reused across captures — no allocation per photo
 let photoCtx = null;
+let photoDrawW = 0;       // native stream width  — what capturePhoto draws at
+let photoDrawH = 0;       // native stream height — what capturePhoto draws at
 
 
 
@@ -364,31 +366,41 @@ function prepareMediaTools(stream) {
   const needsRotation = streamIsLandscape && screenIsPortrait;
 
   // Canvas output dimensions: swap w/h when rotating so the photo is portrait
+  photoDrawW = streamW;   // always draw at the stream's native dimensions
+  photoDrawH = streamH;
   photoCanvas = document.createElement("canvas");
   photoCanvas.width  = needsRotation ? streamH : streamW;
   photoCanvas.height = needsRotation ? streamW : streamH;
   photoCtx = photoCanvas.getContext("2d", { willReadFrequently: false });
 
-  // Bake all transforms in once — order matters:
-  // 1. Rotate 90° CW to fix landscape sensor (iOS only)
-  // 2. Mirror for front camera
+  // Bake all transforms in once.
+  //
+  // After a 90° CW rotation the canvas coordinate space has effectively been
+  // transposed: what was streamW becomes the height axis and streamH becomes
+  // the width axis. So the mirror translate must use streamH (the new width),
+  // NOT streamW.
+  //
+  // Proof for rotation case (canvas = streamH × streamW):
+  //   translate(streamH, 0) → rotate(90°CW)
+  //   → draw origin is now at top-left of the portrait canvas ✓
+  //   To also mirror: translate(streamH, 0) again (the post-rotation width)
+  //   then scale(-1, 1) ✓
   if (needsRotation && currentFacingMode === "user") {
-    // Rotate 90° CW: translate to right edge, then rotate
-    photoCtx.translate(photoCanvas.width, 0);
+    // Rotate 90° CW, then mirror
+    photoCtx.translate(streamH, 0);
     photoCtx.rotate(Math.PI / 2);
-    // Mirror horizontally (flip across the new horizontal axis after rotation)
-    photoCtx.translate(streamW, 0);
+    photoCtx.translate(streamH, 0);   // streamH is the width after rotation
     photoCtx.scale(-1, 1);
   } else if (needsRotation) {
     // Rotate 90° CW only (rear camera)
-    photoCtx.translate(photoCanvas.width, 0);
+    photoCtx.translate(streamH, 0);
     photoCtx.rotate(Math.PI / 2);
   } else if (currentFacingMode === "user") {
     // No rotation needed, just mirror
-    photoCtx.translate(photoCanvas.width, 0);
+    photoCtx.translate(streamW, 0);
     photoCtx.scale(-1, 1);
   }
-  // else: rear camera, no rotation needed — identity transform
+  // else: rear camera, no rotation — identity transform
 }
 
 
@@ -426,9 +438,9 @@ function stopRecording() {
 
 function capturePhoto() {
   // Canvas, dimensions and transforms are all pre-warmed in prepareMediaTools().
-  // Draw at the stream's native size — the pre-baked transform handles
-  // rotation and mirroring without any per-call overhead.
-  photoCtx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight);
+  // Always draw at the stream's native dimensions — the pre-baked transform
+  // handles rotation and mirroring without any per-call overhead.
+  photoCtx.drawImage(camera, 0, 0, photoDrawW, photoDrawH);
 
   // toBlob is async — hands encoding off so the main thread stays free.
   // JPEG 0.95 is visually lossless and ~10x faster to encode than PNG.
