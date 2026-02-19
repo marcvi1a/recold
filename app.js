@@ -438,13 +438,33 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
+// function capturePhoto() {
+//   // Draw at the stream's native dimensions — pre-baked transform does the rest.
+//   photoCtx.drawImage(camera, 0, 0, photoDrawW, photoDrawH);
+//   photoCanvas.toBlob((blob) => {
+//     capturedPhotos.push(blob);
+//   }, "image/jpeg", 0.95);
+// }
+
 function capturePhoto() {
-  // Draw at the stream's native dimensions — pre-baked transform does the rest.
-  photoCtx.drawImage(camera, 0, 0, photoDrawW, photoDrawH);
+  photoCtx.save();
+
+  // Flip photo horizontally if preview is mirrored
+  if (currentFacingMode === "user") {
+    // Undo the CSS mirror applied to the video preview
+    photoCtx.scale(-1, 1);
+    photoCtx.drawImage(camera, -photoDrawW, 0, photoDrawW, photoDrawH);
+  } else {
+    photoCtx.drawImage(camera, 0, 0, photoDrawW, photoDrawH);
+  }
+
+  photoCtx.restore();
+
   photoCanvas.toBlob((blob) => {
     capturedPhotos.push(blob);
   }, "image/jpeg", 0.95);
 }
+
 
 // Capture photo with watermark
 // function capturePhoto() {
