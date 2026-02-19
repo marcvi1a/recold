@@ -393,11 +393,13 @@ function prepareMediaTools(stream) {
   // do NOT add an extra mirror — the rotation alone produces a correct portrait.
   // For non-iOS front camera (no rotation needed) we DO mirror.
   if (needsRotation) {
-    // iOS: rotate 90° CW, then mirror horizontally
-    photoCtx.translate(streamH, 0);
-    photoCtx.rotate(Math.PI / 2);
-    photoCtx.translate(streamW, 0);
-    photoCtx.scale(-1, 1);
+    // iOS sensor is landscape. Rotate 90° CW to make portrait.
+    // After rotation the axes swap: old streamW is now the height, old streamH is the width.
+    // Then mirror horizontally so text reads left-to-right (front camera is naturally mirrored).
+    photoCtx.translate(photoCanvas.width, 0);          // move to right edge of portrait canvas
+    photoCtx.rotate(Math.PI / 2);                       // rotate 90° CW
+    photoCtx.translate(streamW, 0);                     // move to right edge of (now-rotated) width
+    photoCtx.scale(-1, 1);                              // flip horizontally
   } else if (currentFacingMode === "user") {
     // Non-iOS front camera: mirror horizontally
     photoCtx.translate(streamW, 0);
