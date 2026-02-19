@@ -501,10 +501,14 @@ function capturePhoto() {
 //   };
 // }
 
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
 function createMediaItem({ href, blob, mimeType, filename, emoji, label }) {
   const li = document.createElement("li");
 
-  if (navigator.share) {
+  if (isIOS() && navigator.share) {
     const btn = document.createElement("button");
     btn.textContent = `${emoji} ${label}`;
     btn.style.cssText = "background:none;border:1px solid #0969da;color:#0969da;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:0.9rem;cursor:pointer;margin:4px 0;";
