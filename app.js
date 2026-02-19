@@ -397,7 +397,11 @@ function prepareMediaTools(stream) {
     // Front camera mirroring is already baked into the iOS pixel data — skip it.
     photoCtx.translate(streamH, 0);
     photoCtx.rotate(Math.PI / 2);
-  } 
+  } else if (currentFacingMode === "user") {
+    // Non-iOS front camera: mirror horizontally
+    photoCtx.translate(streamW, 0);
+    photoCtx.scale(-1, 1);
+  }
   // Rear camera, no rotation: identity transform
 }
 
@@ -434,15 +438,6 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
-// function capturePhoto() {
-//   // Draw at the stream's native dimensions — pre-baked transform does the rest.
-//   photoCtx.drawImage(camera, 0, 0, photoDrawW, photoDrawH);
-//   photoCanvas.toBlob((blob) => {
-//     capturedPhotos.push(blob);
-//   }, "image/jpeg", 0.95);
-// }
-
-// marchere
 function capturePhoto() {
   photoCtx.save();
 
@@ -461,7 +456,6 @@ function capturePhoto() {
     capturedPhotos.push(blob);
   }, "image/jpeg", 0.95);
 }
-
 
 // Capture photo with watermark
 // function capturePhoto() {
