@@ -353,63 +353,64 @@ function stopRecording() {
   mediaRecorder.stop();
 }
 
-// function capturePhoto() {
-//   const canvas = document.createElement("canvas");
-//   canvas.width = camera.videoWidth;
-//   canvas.height = camera.videoHeight;
-//   const ctx = canvas.getContext("2d");
-//
-//   if (currentFacingMode === "user") {
-//     ctx.translate(canvas.width, 0);
-//     ctx.scale(-1, 1);
-//   }
-//
-//   ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
-//   capturedPhotos.push(canvas.toDataURL("image/jpeg", 0.8));
-// }
-
 function capturePhoto() {
-  const scale = 2; // render at 2x for sharpness
   const canvas = document.createElement("canvas");
-  canvas.width = camera.videoWidth * scale;
-  canvas.height = camera.videoHeight * scale;
+  canvas.width = camera.videoWidth;
+  canvas.height = camera.videoHeight;
   const ctx = canvas.getContext("2d");
 
-  ctx.scale(scale, scale);
-
   if (currentFacingMode === "user") {
-    ctx.translate(camera.videoWidth, 0);
+    ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
   }
 
-  ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight);
-
-  // Reset transform before watermark
-  ctx.setTransform(scale, 0, 0, scale, 0, 0);
-
-  const fontSize = Math.round(camera.videoWidth * 0.06);
-  const iconSize = fontSize * 0.8;
-  const padding = 10;
-  const gap = fontSize * 0.3;
-
-  ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
-  ctx.textBaseline = "middle";
-
-  const x = padding;
-  const y = padding;
-
-  const icon = new Image();
-  icon.src = "assets/favicon.png";
-  icon.onload = () => {
-    ctx.globalAlpha = 0.9; // Reduce for transparency
-    ctx.drawImage(icon, x, y, iconSize, iconSize);
-    ctx.fillStyle = "#378de2";
-    ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2 + 5);
-
-    ctx.globalAlpha = 1; // Reset to full opacity
-    capturedPhotos.push(canvas.toDataURL("image/jpeg", 1.0)); // also bump quality
-  };
+  ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
+  capturedPhotos.push(canvas.toDataURL("image/jpeg", 1.0));
 }
+
+// Capture photo with watermark
+// function capturePhoto() {
+//   const scale = 2; // render at 2x for sharpness
+//   const canvas = document.createElement("canvas");
+//   canvas.width = camera.videoWidth * scale;
+//   canvas.height = camera.videoHeight * scale;
+//   const ctx = canvas.getContext("2d");
+//
+//   ctx.scale(scale, scale);
+//
+//   if (currentFacingMode === "user") {
+//     ctx.translate(camera.videoWidth, 0);
+//     ctx.scale(-1, 1);
+//   }
+//
+//   ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight);
+//
+//   // Reset transform before watermark
+//   ctx.setTransform(scale, 0, 0, scale, 0, 0);
+//
+//   const fontSize = Math.round(camera.videoWidth * 0.06);
+//   const iconSize = fontSize * 0.8;
+//   const padding = 10;
+//   const gap = fontSize * 0.3;
+//
+//   ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
+//   ctx.textBaseline = "middle";
+//
+//   const x = padding;
+//   const y = padding;
+//
+//   const icon = new Image();
+//   icon.src = "assets/favicon.png";
+//   icon.onload = () => {
+//     ctx.globalAlpha = 0.9; // Reduce for transparency
+//     ctx.drawImage(icon, x, y, iconSize, iconSize);
+//     ctx.fillStyle = "#378de2";
+//     ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2 + 5);
+//
+//     ctx.globalAlpha = 1; // Reset to full opacity
+//     capturedPhotos.push(canvas.toDataURL("image/jpeg", 1.0)); // also bump quality
+//   };
+// }
 
 function displayPhotos() {
   capturedPhotos.forEach((dataUrl, i) => {
