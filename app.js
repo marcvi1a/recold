@@ -82,6 +82,7 @@ let recordingStartTime = null;
 
 let photoInterval = null;
 let capturedPhotos = [];
+let capturedVideo = null;
 
 
 
@@ -333,21 +334,16 @@ function stopRecording() {
   if (!mediaRecorder || mediaRecorder.state === "inactive") return;
 
   mediaRecorder.onstop = () => {
-    const blob = new Blob(recordedChunks, { type: "video/webm" });
-    const url = URL.createObjectURL(blob);
-
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-
+    // iOS Safari records as mp4; other browsers use webm
+    const mimeType = MediaRecorder.isTypeSupported("video/mp4") ? "video/mp4" : "video/webm";
+    const ext = mimeType === "video/mp4" ? "mp4" : "webm";
+    const blob = new Blob(recordedChunks, { type: mimeType });
     const d = recordingStartTime;
-    const filename = `ReCold_session-${mediaLinksList.children.length + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.webm`;
-
-    a.href = url;
-    a.download = filename;
-    a.textContent = `⬇️ ${filename}`;
-
-    li.appendChild(a);
-    mediaLinksList.appendChild(li);
+    capturedVideo = {
+      blob,
+      mimeType,
+      filename: `ReCold_session_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.${ext}`
+    };
   };
 
   mediaRecorder.stop();
@@ -412,17 +408,62 @@ function capturePhoto() {
 //   };
 // }
 
-function displayPhotos() {
-  capturedPhotos.forEach((dataUrl, i) => {
-    const li = document.createElement("li");
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+function createMediaItem({ href, blob, mimeType, filename, emoji, label }) {
+  const li = document.createElement("li");
+
+  if (isIOS() && navigator.share) {
+    const btn = document.createElement("button");
+    btn.textContent = `${emoji} ${label}`;
+    btn.style.cssText = "background:none;border:1px solid #0969da;color:#0969da;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:0.9rem;cursor:pointer;margin:4px 0;";
+    btn.addEventListener("click", async () => {
+      try {
+        const file = new File([blob], filename, { type: mimeType });
+        await navigator.share({ files: [file], title: "ReCold" });
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          const win = window.open();
+          win.document.write(`<img src="${href}" style="max-width:100%" />`);
+          win.document.title = filename;
+        }
+      }
+    });
+    li.appendChild(btn);
+  } else {
     const a = document.createElement("a");
+    a.href = href;
+    a.download = filename;
+    a.textContent = `${emoji} ${filename}`;
+    li.appendChild(a);
+  }
+
+  return li;
+}
+
+function displayMedia() {
+  // Video first
+  if (capturedVideo) {
+    const { blob, mimeType, filename } = capturedVideo;
+    const href = URL.createObjectURL(blob);
+    mediaLinksList.appendChild(createMediaItem({ href, blob, mimeType, filename, emoji: "⬇️", label: "Save video to gallery" }));
+  }
+
+  // Then photos
+  capturedPhotos.forEach((dataUrl, i) => {
     const d = recordingStartTime;
     const filename = `ReCold_photo-${i + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.jpg`;
-    a.href = dataUrl;
-    a.download = filename;
-    a.textContent = `📷 ${filename}`;
-    li.appendChild(a);
-    mediaLinksList.appendChild(li);
+
+    // Convert dataURL to blob for Web Share API
+    const byteString = atob(dataUrl.split(",")[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let j = 0; j < byteString.length; j++) ia[j] = byteString.charCodeAt(j);
+    const blob = new Blob([ab], { type: "image/jpeg" });
+
+    mediaLinksList.appendChild(createMediaItem({ href: dataUrl, blob, mimeType: "image/jpeg", filename, emoji: "📷", label: `Save photo ${i + 1} to gallery` }));
   });
 }
 
@@ -443,8 +484,9 @@ function startCountdown() {
   menuMessage.style.display = "flex";
   menuControls.style.display = "none";
 
-  // reset photos on new session
+  // reset photos/video on new session
   capturedPhotos = [];
+  capturedVideo = null;
 
   let countdown = 3;
   timeCountdown.textContent = countdown;
@@ -575,7 +617,7 @@ function applyExitUI() {
   timeCountdown.style.display = "none";
   timeContainer.style.display = "none";
 
-  displayPhotos();
+  displayMedia();
   mediaLinks.style.display = "block";
 
   stopButton.style.display = "none";
