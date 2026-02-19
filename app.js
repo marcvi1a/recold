@@ -350,20 +350,45 @@ function prepareMediaTools(stream) {
   recorderOptions = { videoBitsPerSecond: 16_000_000 };
   if (bestVideoMimeType) recorderOptions.mimeType = bestVideoMimeType;
 
-  // --- Photo: allocate canvas once at the stream's native resolution ---
+  // --- Photo: allocate canvas once, correcting for iOS orientation ---
   const track = stream.getVideoTracks()[0];
-  const { width, height } = track.getSettings();
+  const { width: trackW, height: trackH } = track.getSettings();
+  const streamW = trackW || camera.videoWidth;
+  const streamH = trackH || camera.videoHeight;
+
+  // iOS reports the sensor's native landscape dimensions even in portrait mode.
+  // Detect this: stream is wider than tall, but the screen is taller than wide.
+  const streamIsLandscape = streamW > streamH;
+  const screenIsPortrait = window.screen.width < window.screen.height ||
+                           window.innerWidth < window.innerHeight;
+  const needsRotation = streamIsLandscape && screenIsPortrait;
+
+  // Canvas output dimensions: swap w/h when rotating so the photo is portrait
   photoCanvas = document.createElement("canvas");
-  photoCanvas.width = width || camera.videoWidth;
-  photoCanvas.height = height || camera.videoHeight;
+  photoCanvas.width  = needsRotation ? streamH : streamW;
+  photoCanvas.height = needsRotation ? streamW : streamH;
   photoCtx = photoCanvas.getContext("2d", { willReadFrequently: false });
 
-  // Pre-apply the front-camera mirror transform once —
-  // it never changes mid-session so we bake it in here.
-  if (currentFacingMode === "user") {
+  // Bake all transforms in once — order matters:
+  // 1. Rotate 90° CW to fix landscape sensor (iOS only)
+  // 2. Mirror for front camera
+  if (needsRotation && currentFacingMode === "user") {
+    // Rotate 90° CW: translate to right edge, then rotate
+    photoCtx.translate(photoCanvas.width, 0);
+    photoCtx.rotate(Math.PI / 2);
+    // Mirror horizontally (flip across the new horizontal axis after rotation)
+    photoCtx.translate(streamW, 0);
+    photoCtx.scale(-1, 1);
+  } else if (needsRotation) {
+    // Rotate 90° CW only (rear camera)
+    photoCtx.translate(photoCanvas.width, 0);
+    photoCtx.rotate(Math.PI / 2);
+  } else if (currentFacingMode === "user") {
+    // No rotation needed, just mirror
     photoCtx.translate(photoCanvas.width, 0);
     photoCtx.scale(-1, 1);
   }
+  // else: rear camera, no rotation needed — identity transform
 }
 
 
@@ -400,14 +425,16 @@ function stopRecording() {
 }
 
 function capturePhoto() {
-  // Canvas and transform are pre-warmed in prepareMediaTools() — just draw and encode.
-  photoCtx.drawImage(camera, 0, 0, photoCanvas.width, photoCanvas.height);
+  // Canvas, dimensions and transforms are all pre-warmed in prepareMediaTools().
+  // Draw at the stream's native size — the pre-baked transform handles
+  // rotation and mirroring without any per-call overhead.
+  photoCtx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight);
 
-  // toBlob is async and hands encoding off to the browser,
-  // keeping the main thread free (no jank).
+  // toBlob is async — hands encoding off so the main thread stays free.
+  // JPEG 0.95 is visually lossless and ~10x faster to encode than PNG.
   photoCanvas.toBlob((blob) => {
     capturedPhotos.push(blob);
-  }, "image/jpeg", 1.0);  // Quality 0.95 JPEG is visually lossless and ~10x faster to encode than PNG.
+  }, "image/jpeg", 0.95);
 }
 
 // Capture photo with watermark
