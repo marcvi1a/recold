@@ -358,49 +358,44 @@ function prepareMediaTools(stream) {
   const streamW = trackW || camera.videoWidth;
   const streamH = trackH || camera.videoHeight;
 
-  // iOS reports the sensor's native landscape dimensions even in portrait mode.
-  // Detect this: stream is wider than tall, but the screen is taller than wide.
+  // iOS reports the physical sensor's landscape dimensions even in portrait mode.
+  // When drawn to canvas, the browser does NOT apply the display rotation,
+  // so we must rotate manually.
   const streamIsLandscape = streamW > streamH;
   const screenIsPortrait = window.screen.width < window.screen.height ||
                            window.innerWidth < window.innerHeight;
   const needsRotation = streamIsLandscape && screenIsPortrait;
 
-  // Canvas output dimensions: swap w/h when rotating so the photo is portrait
-  photoDrawW = streamW;   // always draw at the stream's native dimensions
+  // Store native draw dimensions for capturePhoto
+  photoDrawW = streamW;
   photoDrawH = streamH;
+
+  // Canvas output: portrait when rotating (swap dims), native otherwise
   photoCanvas = document.createElement("canvas");
   photoCanvas.width  = needsRotation ? streamH : streamW;
   photoCanvas.height = needsRotation ? streamW : streamH;
   photoCtx = photoCanvas.getContext("2d", { willReadFrequently: false });
 
-  // Bake all transforms in once.
+  // Bake transforms once. Key insight after rotation:
+  // the coordinate space is transposed — the drawable width becomes streamH,
+  // not streamW. So the mirror translate must use streamH.
   //
-  // After a 90° CW rotation the canvas coordinate space has effectively been
-  // transposed: what was streamW becomes the height axis and streamH becomes
-  // the width axis. So the mirror translate must use streamH (the new width),
-  // NOT streamW.
-  //
-  // Proof for rotation case (canvas = streamH × streamW):
-  //   translate(streamH, 0) → rotate(90°CW)
-  //   → draw origin is now at top-left of the portrait canvas ✓
-  //   To also mirror: translate(streamH, 0) again (the post-rotation width)
-  //   then scale(-1, 1) ✓
-  if (needsRotation && currentFacingMode === "user") {
-    // Rotate 90° CW, then mirror
-    photoCtx.translate(streamH, 0);
-    photoCtx.rotate(Math.PI / 2);
-    photoCtx.translate(streamH, 0);   // streamH is the width after rotation
-    photoCtx.scale(-1, 1);
-  } else if (needsRotation) {
-    // Rotate 90° CW only (rear camera)
+  // iOS front camera stream pixels are already left-right mirrored by the OS.
+  // The CSS scaleX(-1) on <video> corrects this for display, but drawImage()
+  // gets the raw mirrored pixels. So for iOS (needsRotation) front camera we
+  // do NOT add an extra mirror — the rotation alone produces a correct portrait.
+  // For non-iOS front camera (no rotation needed) we DO mirror.
+  if (needsRotation) {
+    // iOS: rotate 90° CW to turn landscape sensor frame into portrait.
+    // Front camera mirroring is already baked into the iOS pixel data — skip it.
     photoCtx.translate(streamH, 0);
     photoCtx.rotate(Math.PI / 2);
   } else if (currentFacingMode === "user") {
-    // No rotation needed, just mirror
+    // Non-iOS front camera: mirror horizontally
     photoCtx.translate(streamW, 0);
     photoCtx.scale(-1, 1);
   }
-  // else: rear camera, no rotation — identity transform
+  // Rear camera, no rotation: identity transform
 }
 
 
@@ -437,13 +432,8 @@ function stopRecording() {
 }
 
 function capturePhoto() {
-  // Canvas, dimensions and transforms are all pre-warmed in prepareMediaTools().
-  // Always draw at the stream's native dimensions — the pre-baked transform
-  // handles rotation and mirroring without any per-call overhead.
+  // Draw at the stream's native dimensions — pre-baked transform does the rest.
   photoCtx.drawImage(camera, 0, 0, photoDrawW, photoDrawH);
-
-  // toBlob is async — hands encoding off so the main thread stays free.
-  // JPEG 0.95 is visually lossless and ~10x faster to encode than PNG.
   photoCanvas.toBlob((blob) => {
     capturedPhotos.push(blob);
   }, "image/jpeg", 0.95);
