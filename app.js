@@ -383,9 +383,6 @@ function prepareMediaTools(stream) {
   photoCanvas.height = needsRotation ? streamW : streamH;
   photoCtx = photoCanvas.getContext("2d", { willReadFrequently: false });
 
-  // Reset any previously baked transform (e.g. after flipping camera)
-  photoCtx.setTransform(1, 0, 0, 1, 0, 0);
-
   // Bake transforms once. Key insight after rotation:
   // the coordinate space is transposed — the drawable width becomes streamH,
   // not streamW. So the mirror translate must use streamH.
