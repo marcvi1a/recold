@@ -397,11 +397,7 @@ function prepareMediaTools(stream) {
     // Front camera mirroring is already baked into the iOS pixel data — skip it.
     photoCtx.translate(streamH, 0);
     photoCtx.rotate(Math.PI / 2);
-  } else if (currentFacingMode === "user") {
-    // Non-iOS front camera: mirror horizontally
-    photoCtx.translate(streamW, 0);
-    photoCtx.scale(-1, 1);
-  }
+  } 
   // Rear camera, no rotation: identity transform
 }
 
@@ -446,6 +442,7 @@ function stopRecording() {
 //   }, "image/jpeg", 0.95);
 // }
 
+// marchere
 function capturePhoto() {
   photoCtx.save();
 
