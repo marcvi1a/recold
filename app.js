@@ -360,17 +360,49 @@ function prepareMediaTools(stream) {
   recorderOptions = { videoBitsPerSecond: 16_000_000 };
   if (bestVideoMimeType) recorderOptions.mimeType = bestVideoMimeType;
 
-  // --- Photo: allocate canvas once ---
-  photoDrawW = camera.videoWidth;
-  photoDrawH = camera.videoHeight;
+  // --- Photo: allocate canvas once, correcting for iOS orientation ---
+  // Called from loadedmetadata, so camera.videoWidth/Height are always valid here.
+  const streamW = camera.videoWidth;
+  const streamH = camera.videoHeight;
 
-  // DEBUG — remove once orientation is confirmed correct
-  alert(`videoWidth=${photoDrawW} videoHeight=${photoDrawH} screen=${window.screen.width}x${window.screen.height} inner=${window.innerWidth}x${window.innerHeight} facing=${currentFacingMode}`);
+  // iOS reports the physical sensor's landscape dimensions even in portrait mode.
+  // When drawn to canvas, the browser does NOT apply the display rotation,
+  // so we must rotate manually.
+  const streamIsLandscape = streamW > streamH;
+  const screenIsPortrait = window.screen.width < window.screen.height ||
+                           window.innerWidth < window.innerHeight;
+  const needsRotation = streamIsLandscape && screenIsPortrait;
 
+  // Store native draw dimensions for capturePhoto
+  photoDrawW = streamW;
+  photoDrawH = streamH;
+
+  // Canvas output: portrait when rotating (swap dims), native otherwise
   photoCanvas = document.createElement("canvas");
-  photoCanvas.width  = photoDrawW;
-  photoCanvas.height = photoDrawH;
+  photoCanvas.width  = needsRotation ? streamH : streamW;
+  photoCanvas.height = needsRotation ? streamW : streamH;
   photoCtx = photoCanvas.getContext("2d", { willReadFrequently: false });
+
+  // Bake transforms once. Key insight after rotation:
+  // the coordinate space is transposed — the drawable width becomes streamH,
+  // not streamW. So the mirror translate must use streamH.
+  //
+  // iOS front camera stream pixels are already left-right mirrored by the OS.
+  // The CSS scaleX(-1) on <video> corrects this for display, but drawImage()
+  // gets the raw mirrored pixels. So for iOS (needsRotation) front camera we
+  // do NOT add an extra mirror — the rotation alone produces a correct portrait.
+  // For non-iOS front camera (no rotation needed) we DO mirror.
+  if (needsRotation) {
+    // iOS: rotate 90° CW to turn landscape sensor frame into portrait.
+    // Front camera mirroring is already baked into the iOS pixel data — skip it.
+    photoCtx.translate(streamH, 0);
+    photoCtx.rotate(Math.PI / 2);
+  } else if (currentFacingMode === "user") {
+    // Non-iOS front camera: mirror horizontally
+    photoCtx.translate(streamW, 0);
+    photoCtx.scale(-1, 1);
+  }
+  // Rear camera, no rotation: identity transform
 }
 
 
@@ -407,20 +439,11 @@ function stopRecording() {
 }
 
 function capturePhoto() {
-  const w = photoDrawW;
-  const h = photoDrawH;
-  const isFront = currentFacingMode === "user";
-
-  photoCtx.save();
-  if (isFront) {
-    // Mirror horizontally so the saved photo matches what the user sees in the preview.
-    photoCtx.translate(w, 0);
-    photoCtx.scale(-1, 1);
-  }
-  photoCtx.drawImage(camera, 0, 0, w, h);
-  photoCtx.restore();
-
-  photoCanvas.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
+  // Draw at the stream's native dimensions — pre-baked transform does the rest.
+  photoCtx.drawImage(camera, 0, 0, photoDrawW, photoDrawH);
+  photoCanvas.toBlob((blob) => {
+    capturedPhotos.push(blob);
+  }, "image/jpeg", 0.95);
 }
 
 // Capture photo with watermark
