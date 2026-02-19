@@ -331,7 +331,10 @@ function beginRecording() {
 }
 
 function stopRecording() {
-  if (!mediaRecorder || mediaRecorder.state === "inactive") return;
+  if (!mediaRecorder || mediaRecorder.state === "inactive") {
+    applyExitUI();  // no recording in progress, go straight to exit UI
+    return;
+  }
 
   mediaRecorder.onstop = () => {
     // iOS Safari records as mp4; other browsers use webm
@@ -344,6 +347,7 @@ function stopRecording() {
       mimeType,
       filename: `ReCold_session_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.${ext}`
     };
+    applyExitUI();
   };
 
   mediaRecorder.stop();
@@ -558,15 +562,13 @@ function beginMainTimer() {
 function stopSession() {
   state = "idle";
 
-  stopRecording();
+  stopRecording();  // applyExitUI is called from inside mediaRecorder.onstop
   clearInterval(photoInterval);
 
   clearInterval(countdownInterval);
   clearInterval(mainInterval);
 
   liveMessages.innerHTML = "";  // reset messages
-
-  applyExitUI();
 
   const themeColor = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;  // exitButton
 
