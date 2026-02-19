@@ -404,11 +404,10 @@ function capturePhoto() {
   photoCtx.drawImage(camera, 0, 0, photoCanvas.width, photoCanvas.height);
 
   // toBlob is async and hands encoding off to the browser,
-  // keeping the main thread free (no jank). Quality 0.95 JPEG is
-  // visually lossless and ~10x faster to encode than PNG.
+  // keeping the main thread free (no jank).
   photoCanvas.toBlob((blob) => {
     capturedPhotos.push(blob);
-  }, "image/jpeg", 0.95);
+  }, "image/jpeg", 1.0);  // Quality 0.95 JPEG is visually lossless and ~10x faster to encode than PNG.
 }
 
 // Capture photo with watermark
