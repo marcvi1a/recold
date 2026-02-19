@@ -422,11 +422,12 @@ function capturePhoto() {
   const h = photoDrawH;
   const outW = photoCanvas.width;
   const outH = photoCanvas.height;
-
-  photoCtx.save();
+  const isFront = currentFacingMode === "user";
 
   if (outW < outH) {
-    // Portrait output from landscape source — needs 90° CW rotation + horizontal flip
+    // iOS: portrait output from landscape sensor source — rotate 90° CW, then
+    // mirror horizontally only for the front camera.
+
     // Step 1: draw raw frame into a temp landscape canvas
     const tmp = document.createElement("canvas");
     tmp.width = w;
@@ -434,23 +435,34 @@ function capturePhoto() {
     tmp.getContext("2d").drawImage(camera, 0, 0, w, h);
 
     // Step 2: rotate 90° CW into portrait canvas
+    photoCtx.save();
     photoCtx.translate(outW, 0);
     photoCtx.rotate(Math.PI / 2);
     photoCtx.drawImage(tmp, 0, 0, w, h);
     photoCtx.restore();
 
-    // Step 3: flip the portrait canvas horizontally in-place
-    const flipped = document.createElement("canvas");
-    flipped.width = outW;
-    flipped.height = outH;
-    const fCtx = flipped.getContext("2d");
-    fCtx.translate(outW, 0);
-    fCtx.scale(-1, 1);
-    fCtx.drawImage(photoCanvas, 0, 0);
-
-    flipped.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
+    if (isFront) {
+      // Step 3: flip the portrait canvas horizontally in-place (front cam only)
+      const flipped = document.createElement("canvas");
+      flipped.width = outW;
+      flipped.height = outH;
+      const fCtx = flipped.getContext("2d");
+      fCtx.translate(outW, 0);
+      fCtx.scale(-1, 1);
+      fCtx.drawImage(photoCanvas, 0, 0);
+      flipped.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
+    } else {
+      photoCanvas.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
+    }
   } else {
-    // No rotation needed — draw directly
+    // No rotation needed.
+    // Front camera: mirror horizontally so saved photo matches the preview.
+    // Rear camera: draw as-is.
+    photoCtx.save();
+    if (isFront) {
+      photoCtx.translate(outW, 0);
+      photoCtx.scale(-1, 1);
+    }
     photoCtx.drawImage(camera, 0, 0, w, h);
     photoCtx.restore();
     photoCanvas.toBlob((blob) => { capturedPhotos.push(blob); }, "image/jpeg", 0.95);
