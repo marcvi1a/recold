@@ -509,7 +509,6 @@ function createMediaItem({ href, blob, mimeType, filename, emoji, label }) {
   const li = document.createElement("li");
 
   if (isIOS() && navigator.share) {
-    // iOS: styled share button (original behaviour)
     const btn = document.createElement("button");
     btn.textContent = `${emoji} ${label}`;
     btn.style.cssText = "background:none;border:1px solid #0969da;color:#0969da;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:0.9rem;cursor:pointer;margin:4px 0;";
@@ -527,30 +526,11 @@ function createMediaItem({ href, blob, mimeType, filename, emoji, label }) {
     });
     li.appendChild(btn);
   } else {
-    // Android / desktop: download link + small share button to the right
-    li.style.cssText = "display:flex;align-items:center;gap:8px;margin:4px 0;";
-
     const a = document.createElement("a");
     a.href = href;
     a.download = filename;
     a.textContent = `${emoji} ${filename}`;
     li.appendChild(a);
-
-    if (navigator.share) {
-      const shareBtn = document.createElement("button");
-      shareBtn.textContent = "⬆️";
-      shareBtn.title = "Share";
-      shareBtn.style.cssText = "background:none;border:1px solid #0969da;border-radius:8px;padding:4px 8px;font-size:0.9rem;cursor:pointer;line-height:1;flex-shrink:0;";
-      shareBtn.addEventListener("click", async () => {
-        try {
-          const file = new File([blob], filename, { type: mimeType });
-          await navigator.share({ files: [file], title: "ReCold" });
-        } catch (err) {
-          if (err.name !== "AbortError") console.error(err);
-        }
-      });
-      li.appendChild(shareBtn);
-    }
   }
 
   return li;
