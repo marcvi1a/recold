@@ -361,11 +361,11 @@ function prepareMediaTools(stream) {
   if (bestVideoMimeType) recorderOptions.mimeType = bestVideoMimeType;
 
   // --- Photo: allocate canvas once ---
-  // Called from loadedmetadata, so camera.videoWidth/Height are always valid here.
-  // drawImage(videoElement) in Safari/Chrome already renders with the correct
-  // display orientation — no manual rotation needed.
   photoDrawW = camera.videoWidth;
   photoDrawH = camera.videoHeight;
+
+  // DEBUG — remove once orientation is confirmed correct
+  alert(`videoWidth=${photoDrawW} videoHeight=${photoDrawH} screen=${window.screen.width}x${window.screen.height} inner=${window.innerWidth}x${window.innerHeight} facing=${currentFacingMode}`);
 
   photoCanvas = document.createElement("canvas");
   photoCanvas.width  = photoDrawW;
