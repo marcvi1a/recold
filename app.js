@@ -84,6 +84,12 @@ let photoInterval = null;
 let capturedPhotos = [];
 let capturedVideo = null;
 
+// Pre-computed at camera-init time so beginRecording / capturePhoto have zero setup cost
+let bestVideoMimeType = "";
+let recorderOptions = {};
+let photoCanvas = null;   // reused across captures — no allocation per photo
+let photoCtx = null;
+
 
 
 
@@ -203,6 +209,7 @@ flipCameraButton.addEventListener("click", async () => {
     });
 
     camera.srcObject = stream;
+    prepareMediaTools(stream);
 
     // Mirror front camera, un-mirror rear camera
     camera.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "scaleX(1)";
@@ -246,6 +253,7 @@ cameraStart.addEventListener("click", async () => {
     });
 
     camera.srcObject = stream;
+    prepareMediaTools(stream);
 
     cameraPermissions = true;
 
@@ -327,28 +335,42 @@ function pushLiveMessage(text) {
 }
 
 
-function getBestVideoMimeType() {
+// Called once after getUserMedia succeeds. Pre-computes everything so
+// beginRecording() and capturePhoto() have zero decision-making at session start.
+function prepareMediaTools(stream) {
+  // --- Video: pick best supported codec once ---
   const candidates = [
-    "video/mp4;codecs=avc1",   // H.264 mp4 — Safari + some Chrome
-    "video/webm;codecs=vp9",   // VP9 webm — best quality on Chrome/Firefox
-    "video/webm;codecs=vp8",   // VP8 webm — wide fallback
-    "video/webm",              // generic webm
-    "video/mp4",               // generic mp4
+    "video/mp4;codecs=avc1",
+    "video/webm;codecs=vp9",
+    "video/webm;codecs=vp8",
+    "video/webm",
+    "video/mp4",
   ];
-  return candidates.find(m => MediaRecorder.isTypeSupported(m)) || "";
+  bestVideoMimeType = candidates.find(m => MediaRecorder.isTypeSupported(m)) || "";
+  recorderOptions = { videoBitsPerSecond: 16_000_000 };
+  if (bestVideoMimeType) recorderOptions.mimeType = bestVideoMimeType;
+
+  // --- Photo: allocate canvas once at the stream's native resolution ---
+  const track = stream.getVideoTracks()[0];
+  const { width, height } = track.getSettings();
+  photoCanvas = document.createElement("canvas");
+  photoCanvas.width = width || camera.videoWidth;
+  photoCanvas.height = height || camera.videoHeight;
+  photoCtx = photoCanvas.getContext("2d", { willReadFrequently: false });
+
+  // Pre-apply the front-camera mirror transform once —
+  // it never changes mid-session so we bake it in here.
+  if (currentFacingMode === "user") {
+    photoCtx.translate(photoCanvas.width, 0);
+    photoCtx.scale(-1, 1);
+  }
 }
+
 
 function beginRecording() {
   recordedChunks = [];
   recordingStartTime = new Date();
-
-  const mimeType = getBestVideoMimeType();
-  const options = {
-    videoBitsPerSecond: 16_000_000, // 16 Mbps — high quality, matches 4K30 streaming
-  };
-  if (mimeType) options.mimeType = mimeType;
-
-  mediaRecorder = new MediaRecorder(camera.srcObject, options);
+  mediaRecorder = new MediaRecorder(camera.srcObject, recorderOptions);
   mediaRecorder.ondataavailable = (e) => {
     if (e.data.size > 0) recordedChunks.push(e.data);
   };
@@ -362,7 +384,7 @@ function stopRecording() {
   }
 
   mediaRecorder.onstop = () => {
-    const mimeType = mediaRecorder.mimeType || getBestVideoMimeType() || "video/webm";
+    const mimeType = mediaRecorder.mimeType || bestVideoMimeType || "video/webm";
     const ext = mimeType.includes("mp4") ? "mp4" : "webm";
     const blob = new Blob(recordedChunks, { type: mimeType });
     const d = recordingStartTime;
@@ -378,18 +400,15 @@ function stopRecording() {
 }
 
 function capturePhoto() {
-  const canvas = document.createElement("canvas");
-  canvas.width = camera.videoWidth;
-  canvas.height = camera.videoHeight;
-  const ctx = canvas.getContext("2d");
+  // Canvas and transform are pre-warmed in prepareMediaTools() — just draw and encode.
+  photoCtx.drawImage(camera, 0, 0, photoCanvas.width, photoCanvas.height);
 
-  if (currentFacingMode === "user") {
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
-  }
-
-  ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
-  capturedPhotos.push(canvas.toDataURL("image/png"));
+  // toBlob is async and hands encoding off to the browser,
+  // keeping the main thread free (no jank). Quality 0.95 JPEG is
+  // visually lossless and ~10x faster to encode than PNG.
+  photoCanvas.toBlob((blob) => {
+    capturedPhotos.push(blob);
+  }, "image/jpeg", 0.95);
 }
 
 // Capture photo with watermark
@@ -480,18 +499,11 @@ function displayMedia() {
   }
 
   // Then photos
-  capturedPhotos.forEach((dataUrl, i) => {
+  capturedPhotos.forEach((blob, i) => {
     const d = recordingStartTime;
-    const filename = `ReCold_photo-${i + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.png`;
-
-    // Convert dataURL to blob for Web Share API
-    const byteString = atob(dataUrl.split(",")[1]);
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let j = 0; j < byteString.length; j++) ia[j] = byteString.charCodeAt(j);
-    const blob = new Blob([ab], { type: "image/png" });
-
-    mediaLinksList.appendChild(createMediaItem({ href: dataUrl, blob, mimeType: "image/png", filename, emoji: "📷", label: `Save photo ${i + 1} to gallery` }));
+    const filename = `ReCold_photo-${i + 1}_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}_${String(d.getHours()).padStart(2,"0")}${String(d.getMinutes()).padStart(2,"0")}.jpg`;
+    const href = URL.createObjectURL(blob);
+    mediaLinksList.appendChild(createMediaItem({ href, blob, mimeType: "image/jpeg", filename, emoji: "📷", label: `Save photo ${i + 1} to gallery` }));
   });
 }
 
