@@ -454,7 +454,7 @@ function capturePhoto() {
 
   photoCanvas.toBlob((blob) => {
     capturedPhotos.push(blob);
-  }, "image/jpeg", 0.95);
+  }, "image/jpeg", 1.0);
 }
 
 // Capture photo with watermark
