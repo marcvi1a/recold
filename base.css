@@ -352,4 +352,12 @@ button:disabled {
 
 #download-banner {
   background-color: red;
+  position: sticky;
+  z-index: 999;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+#download-banner p {
+  margin: 0;
 }
