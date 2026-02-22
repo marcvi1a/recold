@@ -756,37 +756,6 @@ langSelect.addEventListener("change", async (e) => {
 
 
 
-// Download banner
-
-// let deferredPrompt = null;
-//
-// window.addEventListener("beforeinstallprompt", (e) => {
-//   e.preventDefault();
-//   deferredPrompt = e;
-//
-//   // Show banner only when install is actually available
-//   setTimeout(showDownloadBanner, 1000);
-// });
-//
-// function showDownloadBanner() {
-//   downloadBanner.style.display = "block";
-// }
-//
-// async function triggerInstall() {
-//   if (!deferredPrompt) return;
-//
-//   deferredPrompt.prompt();
-//   await deferredPrompt.userChoice;
-//
-//   deferredPrompt = null; // can only be used once
-//   downloadBanner.style.display = "none";
-// }
-//
-// downloadBanner.addEventListener("click", triggerInstall);
-//
-
-
-
 
 // Download banner
 
@@ -808,15 +777,24 @@ function showDownloadBanner() {
 
 async function triggerInstall() {
   if (deferredPrompt) {
-    // Native install prompt available (Android Chrome etc.)
+    // Native install prompt available — app not yet installed
     deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
+    const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null; // can only be used once
-    downloadBanner.style.display = "none";
+    if (outcome === "accepted") {
+      downloadBanner.style.display = "none";
+    }
+  } else if (isAndroidChrome()) {
+    // PWA is likely already installed — navigate to the canonical URL so
+    // Android Chrome intercepts it and opens the installed app instead.
+    window.location.href = "https://recold.app";
   } else {
-    // Fallback: no prompt available (e.g. iOS, Firefox) — do nothing on click,
-    // the banner text should guide the user manually
+    // iOS / Firefox: banner text guides the user manually — no action needed
   }
+}
+
+function isAndroidChrome() {
+  return /Android/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
 }
 
 if (isRunningInBrowser()) {
