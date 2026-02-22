@@ -393,7 +393,7 @@ button:disabled {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 16px 48px rgba(0,0,0,0.25);
-  padding: 2rem;
+  padding: 1.5rem;
   box-sizing: border-box;
   max-height: 90dvh;
   overflow-y: auto;
