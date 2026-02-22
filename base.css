@@ -362,6 +362,7 @@ button:disabled {
 }
 
 #install-banner__text {
+  color: #fff;
   margin: 0;
 }
 
