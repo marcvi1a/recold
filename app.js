@@ -886,7 +886,8 @@ async function triggerInstall() {
       p.textContent = "Installing ReCold...";
       pwaAlreadyInstalled = true;
       setTimeout(updateInstallBannerText, 5000);
-    } else if (isIOS()) {
+    }
+  } else if (isIOS()) {
     // iOS Safari: no install prompt — show step-by-step popup
     openIOSPopup();
   }
