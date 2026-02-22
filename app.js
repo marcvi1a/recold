@@ -898,7 +898,7 @@ async function triggerInstall() {
       const p = installBanner.querySelector("p");
       p.textContent = "Installing ReCold...";
       pwaAlreadyInstalled = true;
-      setTimeout(updateInstallBannerText, 8000);
+      async setTimeout(updateInstallBannerText, 4000);
     }
   } else if (isIOSSafari()) {
     // iOS Safari instructions
