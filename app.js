@@ -758,14 +758,48 @@ langSelect.addEventListener("change", async (e) => {
 
 // Download banner
 
+// let deferredPrompt = null;
+//
+// window.addEventListener("beforeinstallprompt", (e) => {
+//   e.preventDefault();
+//   deferredPrompt = e;
+//
+//   // Show banner only when install is actually available
+//   setTimeout(showDownloadBanner, 1000);
+// });
+//
+// function showDownloadBanner() {
+//   downloadBanner.style.display = "block";
+// }
+//
+// async function triggerInstall() {
+//   if (!deferredPrompt) return;
+//
+//   deferredPrompt.prompt();
+//   await deferredPrompt.userChoice;
+//
+//   deferredPrompt = null; // can only be used once
+//   downloadBanner.style.display = "none";
+// }
+//
+// downloadBanner.addEventListener("click", triggerInstall);
+//
+
+
+
+
+// Download banner
+
 let deferredPrompt = null;
+
+function isRunningInBrowser() {
+  return !window.matchMedia("(display-mode: standalone)").matches
+    && navigator.standalone !== true; // iOS Safari PWA check
+}
 
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-
-  // Show banner only when install is actually available
-  setTimeout(showDownloadBanner, 1000);
 });
 
 function showDownloadBanner() {
@@ -773,13 +807,21 @@ function showDownloadBanner() {
 }
 
 async function triggerInstall() {
-  if (!deferredPrompt) return;
+  if (deferredPrompt) {
+    // Native install prompt available (Android Chrome etc.)
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null; // can only be used once
+    downloadBanner.style.display = "none";
+  } else {
+    // Fallback: no prompt available (e.g. iOS, Firefox) — do nothing on click,
+    // the banner text should guide the user manually
+  }
+}
 
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-
-  deferredPrompt = null; // can only be used once
-  downloadBanner.style.display = "none";
+// Show banner whenever the app is opened in a browser tab, not as installed PWA
+if (isRunningInBrowser()) {
+  setTimeout(showDownloadBanner, 1000);
 }
 
 downloadBanner.addEventListener("click", triggerInstall);
