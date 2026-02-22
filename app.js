@@ -74,6 +74,7 @@ const menuMessage = document.getElementById("menu-message");
 
 const installBanner = document.getElementById("install-banner");
 const installBannerText = document.getElementById("install-banner__text");
+const iosInstallOverlay = document.getElementById("ios-install-overlay");
 const iosInstallPopup = document.getElementById("ios-install-popup");
 const iosInstallPopupClose = document.getElementById("ios-install-popup__close");
 
@@ -814,22 +815,23 @@ function showInstallBanner() {
 }
 
 function openIOSPopup(mode) {
-  if (mode === "chrome") {
-    iosInstallPopup.setAttribute("data-mode", "chrome");
-  } else {
-    iosInstallPopup.setAttribute("data-mode", "safari");
-  }
+  iosInstallPopup.setAttribute("data-mode", mode === "chrome" ? "chrome" : "safari");
   iosInstallPopup.classList.remove("hidden");
+  iosInstallOverlay.classList.remove("hidden");
 }
 
 function closeIOSPopup() {
   iosInstallPopup.classList.add("hidden");
+  iosInstallOverlay.classList.add("hidden");
 }
 
 iosInstallPopupClose.addEventListener("click", (e) => {
-  e.stopPropagation(); // don't re-trigger banner click
+  e.stopPropagation();
   closeIOSPopup();
 });
+
+// Close when clicking outside the popup (on the overlay)
+iosInstallOverlay.addEventListener("click", closeIOSPopup);
 
 async function triggerInstall() {
   if (pwaAlreadyInstalled) {

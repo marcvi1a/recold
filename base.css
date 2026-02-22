@@ -368,26 +368,38 @@ button:disabled {
 
 
 
-/* iOS install popup — expands below the banner */
+/* iOS install overlay — full-screen dimmed backdrop */
+#ios-install-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+/* iOS install popup — floating modal */
 #ios-install-popup {
-  position: relative;
-  z-index: 998;
-  width: 100%;
-  margin: -1.5rem 0 1rem; /* pull up flush under banner */
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 2rem);
+  max-width: 358px;
+  z-index: 9999;
+
   background: #fff;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
   padding: 1rem;
   box-sizing: border-box;
+  max-height: 90dvh;
+  overflow-y: auto;
 
-  /* slide-down animation */
-  transform-origin: top center;
-  animation: popupSlideDown 0.28s ease-out;
+  animation: popupSlideDown 0.22s ease-out;
 }
 
 @keyframes popupSlideDown {
-  from { opacity: 0; transform: translateY(-12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translate(-50%, -46%); }
+  to   { opacity: 1; transform: translate(-50%, -50%); }
 }
 
 #ios-install-popup__header {
