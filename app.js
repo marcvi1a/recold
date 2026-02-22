@@ -865,7 +865,7 @@ async function triggerInstall() {
       const p = installBanner.querySelector("p");
       p.textContent = "Installing ReCold...";
       pwaAlreadyInstalled = true;
-      setTimeout(updateInstallBannerText, 1000);
+      setTimeout(updateInstallBannerText, 4000);
     }
   }
   // iOS / Firefox: no prompt available — banner text guides the user manually
