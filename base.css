@@ -353,7 +353,7 @@ button:disabled {
 #install-banner {
   background-color: #ef0241;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);  
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   position: sticky;
   z-index: 999;
   cursor: pointer;
@@ -409,7 +409,7 @@ button:disabled {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 #ios-install-popup__app {
