@@ -350,7 +350,7 @@ button:disabled {
 }
 
 
-#download-banner {
+#install-banner {
   background-color: red;
   position: sticky;
   z-index: 999;
@@ -360,6 +360,6 @@ button:disabled {
   padding: 1rem;
 }
 
-#download-banner p {
+#install-banner p {
   margin: 0;
 }

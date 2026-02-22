@@ -70,7 +70,7 @@ const stopButton = document.getElementById("menu-controls__stop");
 const exitButton = document.getElementById("menu-controls__exit");
 const menuMessage = document.getElementById("menu-message");
 
-const downloadBanner = document.getElementById("download-banner");
+const installBanner = document.getElementById("install-banner");
 
 
 let cameraPermissions = false;
@@ -757,83 +757,40 @@ langSelect.addEventListener("change", async (e) => {
 
 
 
-// Download banner
+// Install banner
 
 let deferredPrompt = null;
-let pwaAlreadyInstalled = false;
 
 function isRunningInBrowser() {
   return !window.matchMedia("(display-mode: standalone)").matches
     && navigator.standalone !== true; // iOS Safari PWA check
 }
 
-function isAndroidChrome() {
-  return /Android/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
-}
-
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  pwaAlreadyInstalled = false;
-  updateBannerText();
 });
 
-function updateBannerText() {
-  const p = downloadBanner.querySelector("p");
-  if (!p) return;
-  if (pwaAlreadyInstalled) {
-    p.textContent = "Already installed — open ReCold from your home screen";
-    downloadBanner.style.cursor = "default";
-  } else {
-    p.textContent = "Install ReCold on your home screen for the best experience";
-    downloadBanner.style.cursor = "pointer";
-  }
-}
-
-// navigator.getInstalledRelatedApps() tells us if this PWA is already installed.
-// Requires the manifest to have a "related_applications" entry with
-// { platform: "webapp", url: "https://recold.app/manifest.json" }
-// It only works on Android Chrome over HTTPS.
-async function checkIfInstalled() {
-  if (!isAndroidChrome()) return;
-  try {
-    if ("getInstalledRelatedApps" in navigator) {
-      const apps = await navigator.getInstalledRelatedApps();
-      if (apps.length > 0) {
-        pwaAlreadyInstalled = true;
-        updateBannerText();
-      }
-    }
-  } catch (e) {
-    // API unavailable or blocked — silently ignore
-  }
-}
-
-function showDownloadBanner() {
-  downloadBanner.style.display = "block";
-  updateBannerText();
-  checkIfInstalled(); // async — will update banner text if already installed
+function showinstallBanner() {
+  installBanner.style.display = "block";
 }
 
 async function triggerInstall() {
-  if (pwaAlreadyInstalled) {
-    // There is no JS API to programmatically launch an installed PWA.
-    // The banner text already tells the user to open from home screen.
-    return;
-  }
   if (deferredPrompt) {
+    // Native install prompt available — app not yet installed
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null; // can only be used once
     if (outcome === "accepted") {
-      downloadBanner.style.display = "none";
+      installBanner.style.display = "none";
     }
+  } else {
+    // iOS / Firefox: banner text guides the user manually — no action needed
   }
-  // iOS / Firefox: no prompt available — banner text guides the user manually
 }
 
 if (isRunningInBrowser()) {
-  setTimeout(showDownloadBanner, 1000);
+  setTimeout(showinstallBanner, 1000);
 }
 
-downloadBanner.addEventListener("click", triggerInstall);
+installBanner.addEventListener("click", triggerInstall);
