@@ -348,3 +348,8 @@ button:disabled {
   justify-content: center;
   align-items: center;
 }
+
+
+#download-banner {
+  background-color: red;
+}
