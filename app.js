@@ -71,6 +71,8 @@ const exitButton = document.getElementById("menu-controls__exit");
 const menuMessage = document.getElementById("menu-message");
 
 const installBanner = document.getElementById("install-banner");
+const iosInstallPopup = document.getElementById("ios-install-popup");
+const iosInstallPopupClose = document.getElementById("ios-install-popup__close");
 
 
 let cameraPermissions = false;
@@ -811,10 +813,14 @@ function isAndroidChrome() {
   return /Android/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
 }
 
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  // If prompt fires, app is definitely not installed
+    // If prompt fires, app is definitely not installed
   pwaAlreadyInstalled = false;
   updateInstallBannerText();
 });
@@ -829,8 +835,7 @@ function updateInstallBannerText() {
 }
 
 // getInstalledRelatedApps() detects if this PWA is already installed on Android Chrome.
-// Requires manifest.json to include:
-// "related_applications": [{ "platform": "webapp", "url": "https://recold.app/manifest.json" }]
+// Requires manifest.json to include: "related_applications": [{ "platform": "webapp", "url": "https://recold.app/manifest.json" }]
 async function checkIfInstalled() {
   if (!isAndroidChrome()) return;
   try {
@@ -848,9 +853,23 @@ async function checkIfInstalled() {
 
 function showInstallBanner() {
   updateInstallBannerText();
-  installBanner.style.display = "block";
+  installBanner.classList.remove("hidden");
+  installBanner.style.display = "";  // let CSS class control display
   checkIfInstalled(); // async — updates text if already installed
 }
+
+function openIOSPopup() {
+  iosInstallPopup.classList.remove("hidden");
+}
+
+function closeIOSPopup() {
+  iosInstallPopup.classList.add("hidden");
+}
+
+iosInstallPopupClose.addEventListener("click", (e) => {
+  e.stopPropagation(); // don't re-trigger banner click
+  closeIOSPopup();
+});
 
 async function triggerInstall() {
   if (pwaAlreadyInstalled) {
@@ -858,6 +877,7 @@ async function triggerInstall() {
     return;
   }
   if (deferredPrompt) {
+    // Android Chrome: native install prompt
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null; // can only be used once
@@ -866,9 +886,10 @@ async function triggerInstall() {
       p.textContent = "Installing ReCold...";
       pwaAlreadyInstalled = true;
       setTimeout(updateInstallBannerText, 5000);
-    }
+    } else if (isIOS()) {
+    // iOS Safari: no install prompt — show step-by-step popup
+    openIOSPopup();
   }
-  // iOS / Firefox: no prompt available — banner text guides the user manually
 }
 
 if (isRunningInBrowser()) {
