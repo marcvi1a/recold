@@ -862,6 +862,7 @@ async function triggerInstall() {
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null; // can only be used once
     if (outcome === "accepted") {
+      pwaAlreadyInstalled = true;
       updateInstallBannerText();
     }
   }
