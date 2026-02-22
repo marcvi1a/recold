@@ -807,19 +807,26 @@ function showDownloadBanner() {
 }
 
 async function triggerInstall() {
+  // If beforeinstallprompt hasn't fired yet, wait up to 3s for it
+  if (!deferredPrompt) {
+    deferredPrompt = await Promise.race([
+      new Promise(resolve => window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        resolve(e);
+      }, { once: true })),
+      new Promise(resolve => setTimeout(() => resolve(null), 3000))
+    ]);
+  }
+
   if (deferredPrompt) {
-    // Native install prompt available (Android Chrome etc.)
     deferredPrompt.prompt();
     await deferredPrompt.userChoice;
-    deferredPrompt = null; // can only be used once
+    deferredPrompt = null;
     downloadBanner.style.display = "none";
-  } else {
-    // Fallback: no prompt available (e.g. iOS, Firefox) — do nothing on click,
-    // the banner text should guide the user manually
   }
+  // else: no prompt available (iOS, Firefox) — banner click does nothing
 }
 
-// Show banner whenever the app is opened in a browser tab, not as installed PWA
 if (isRunningInBrowser()) {
   setTimeout(showDownloadBanner, 1000);
 }
