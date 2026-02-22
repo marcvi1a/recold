@@ -10,6 +10,6 @@
   "theme_color": "#000",
   "background_color": "#fff",
   "icons": [
-    { "src": "assets/favicon.png", "sizes": "720x720", "type": "image/png" }
+    { "src": "assets/app.png", "sizes": "720x720", "type": "image/png" }
   ]
 }
