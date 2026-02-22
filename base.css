@@ -352,6 +352,7 @@ button:disabled {
 
 #install-banner {
   background-color: #ef0241;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
   position: sticky;
   z-index: 999;
   cursor: pointer;
