@@ -4,8 +4,11 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "related_applications": [
+    { "platform": "webapp", "url": "https://recold.app/manifest.json" }
+  ],
   "theme_color": "#000",
-  "background_color": "#000",
+  "background_color": "#fff",
   "icons": [
     { "src": "assets/favicon.png", "sizes": "720x720", "type": "image/png" }
   ]
