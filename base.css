@@ -373,7 +373,7 @@ button:disabled {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
+  z-index: 99998;
 }
 
 /* iOS install popup — floating modal */
@@ -384,7 +384,7 @@ button:disabled {
   transform: translate(-50%, -50%);
   width: calc(100% - 2rem);
   max-width: 358px;
-  z-index: 9999;
+  z-index: 99999;
 
   background: #fff;
   border-radius: 16px;
