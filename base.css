@@ -433,7 +433,7 @@ button:disabled {
 #ios-install-popup__desc {
   font-size: 0.75rem;
   color: #666;
-  max-width: 250px;
+  max-width: 240px;
   line-height: 1.3;
 }
 
