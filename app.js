@@ -813,8 +813,16 @@ function isAndroidChrome() {
   return /Android/.test(navigator.userAgent) && /Chrome/.test(navigator.userAgent);
 }
 
-function isIOS() {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+function isIOSChrome() {
+  // iOS Chrome identifies itself with "CriOS" in the UA
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && /CriOS/.test(navigator.userAgent);
+}
+
+function isIOSSafari() {
+  // iOS Safari: iOS device, no CriOS, no FxiOS, no other browser tokens
+  return /iPad|iPhone|iPod/.test(navigator.userAgent)
+    && !window.MSStream
+    && !(/CriOS|FxiOS|OPiOS|mercury/.test(navigator.userAgent));
 }
 
 window.addEventListener("beforeinstallprompt", (e) => {
@@ -858,7 +866,12 @@ function showInstallBanner() {
   checkIfInstalled(); // async — updates text if already installed
 }
 
-function openIOSPopup() {
+function openIOSPopup(mode) {
+  if (mode === "chrome") {
+    iosInstallPopup.setAttribute("data-mode", "chrome");
+  } else {
+    iosInstallPopup.setAttribute("data-mode", "safari");
+  }
   iosInstallPopup.classList.remove("hidden");
 }
 
@@ -885,11 +898,14 @@ async function triggerInstall() {
       const p = installBanner.querySelector("p");
       p.textContent = "Installing ReCold...";
       pwaAlreadyInstalled = true;
-      setTimeout(updateInstallBannerText, 5000);
+      setTimeout(updateInstallBannerText, 8000);
     }
-  } else if (isIOS()) {
-    // iOS Safari: no install prompt — show step-by-step popup
-    openIOSPopup();
+  } else if (isIOSSafari()) {
+    // iOS Safari instructions
+    openIOSPopup("safari");
+  } else if (isIOSChrome()) {
+    // iOS Chrome instructions
+    openIOSPopup("chrome");
   }
 }
 

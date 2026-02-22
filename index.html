@@ -51,66 +51,112 @@
           </div>
           <button id="ios-install-popup__close" aria-label="Close">&#x2715;</button>
         </div>
-        <p id="ios-install-popup__title">Install in 2 steps</p>
-        <div id="ios-install-popup__steps">
+
+        <!-- Safari instructions -->
+        <div class="ios-popup-safari">
+          <p id="ios-install-popup__title">Install in 2 steps</p>
+          <div id="ios-install-popup__steps">
+            <div class="ios-step">
+              <div class="ios-step__label">
+                <span class="ios-step__num">1</span>
+                Tap the <strong>Share</strong> button
+                <svg class="ios-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"/><path d="m8 6 4-4 4 4"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+                in Safari's toolbar
+              </div>
+              <div class="ios-step__img-wrap">
+                <svg viewBox="0 0 300 64" xmlns="http://www.w3.org/2000/svg" class="ios-step__img">
+                  <rect width="300" height="64" fill="#f2f2f7" rx="12"/>
+                  <text x="24" y="38" font-size="22" fill="#888" text-anchor="middle">&#8249;</text>
+                  <text x="64" y="38" font-size="22" fill="#ccc" text-anchor="middle">&#8250;</text>
+                  <rect x="116" y="12" width="40" height="40" rx="10" fill="#378de2" opacity="0.18"/>
+                  <svg x="126" y="16" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#378de2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v13"/><path d="m8 6 4-4 4 4"/><rect x="3" y="11" width="18" height="11" rx="2"/>
+                  </svg>
+                  <text x="136" y="58" font-size="9" fill="#378de2" text-anchor="middle" font-weight="bold">Share</text>
+                  <text x="200" y="36" font-size="18" fill="#888" text-anchor="middle">&#9741;</text>
+                  <rect x="225" y="20" width="18" height="16" rx="3" fill="none" stroke="#888" stroke-width="1.8"/>
+                  <text x="234" y="31" font-size="9" fill="#888" text-anchor="middle">2</text>
+                  <rect x="10" y="4" width="280" height="0.5" fill="#c8c8cc"/>
+                </svg>
+              </div>
+            </div>
+            <div class="ios-step">
+              <div class="ios-step__label">
+                <span class="ios-step__num">2</span>
+                Tap <strong>Add to Home Screen</strong>
+                <svg class="ios-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+              </div>
+              <div class="ios-step__img-wrap">
+                <svg viewBox="0 0 300 88" xmlns="http://www.w3.org/2000/svg" class="ios-step__img">
+                  <rect width="300" height="88" fill="#f2f2f7" rx="12"/>
+                  <rect x="10" y="8" width="280" height="32" rx="8" fill="#fff"/>
+                  <text x="44" y="28" font-size="13" fill="#333">Copy</text>
+                  <text x="24" y="29" font-size="16" fill="#555">&#128203;</text>
+                  <rect x="10" y="48" width="280" height="32" rx="8" fill="#378de2" opacity="0.12"/>
+                  <rect x="10" y="48" width="280" height="32" rx="8" fill="none" stroke="#378de2" stroke-width="1.5"/>
+                  <svg x="18" y="54" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#378de2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/>
+                  </svg>
+                  <text x="44" y="68" font-size="13" fill="#378de2" font-weight="600">Add to Home Screen</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chrome instructions -->
+        <div class="ios-popup-chrome">
+          <p class="ios-chrome-msg">
+            Chrome on iPhone can't install apps.<br>
+            Open this page in <strong>Safari</strong> to add ReCold to your home screen.
+          </p>
           <div class="ios-step">
             <div class="ios-step__label">
               <span class="ios-step__num">1</span>
-              Tap the <strong>Share</strong> button
+              Tap the <strong>Share</strong> button in Chrome's toolbar
               <svg class="ios-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"/><path d="m8 6 4-4 4 4"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
-              in Safari's toolbar
             </div>
             <div class="ios-step__img-wrap">
-              <!-- SVG illustration: Safari bottom toolbar with Share button highlighted -->
-              <svg viewBox="0 0 300 64" xmlns="http://www.w3.org/2000/svg" class="ios-step__img">
-                <rect width="300" height="64" fill="#f2f2f7" rx="12"/>
-                <!-- toolbar icons row -->
-                <!-- back -->
-                <text x="24" y="38" font-size="22" fill="#888" text-anchor="middle">&#8249;</text>
-                <!-- forward -->
-                <text x="64" y="38" font-size="22" fill="#ccc" text-anchor="middle">&#8250;</text>
-                <!-- share — highlighted -->
-                <rect x="116" y="12" width="40" height="40" rx="10" fill="#378de2" opacity="0.18"/>
-                <svg x="126" y="16" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#378de2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Chrome iOS toolbar: share icon is top-right -->
+              <svg viewBox="0 0 300 52" xmlns="http://www.w3.org/2000/svg" class="ios-step__img">
+                <rect width="300" height="52" fill="#f2f2f7" rx="12"/>
+                <!-- address bar -->
+                <rect x="10" y="10" width="220" height="30" rx="8" fill="#fff" stroke="#ddd" stroke-width="1"/>
+                <text x="120" y="30" font-size="11" fill="#888" text-anchor="middle">recold.app</text>
+                <!-- share button — highlighted -->
+                <rect x="242" y="10" width="30" height="30" rx="8" fill="#378de2" opacity="0.18"/>
+                <svg x="249" y="15" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#378de2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2v13"/><path d="m8 6 4-4 4 4"/><rect x="3" y="11" width="18" height="11" rx="2"/>
                 </svg>
-                <text x="136" y="58" font-size="9" fill="#378de2" text-anchor="middle" font-weight="bold">Share</text>
-                <!-- bookmarks -->
-                <text x="200" y="36" font-size="18" fill="#888" text-anchor="middle">&#9741;</text>
-                <!-- tabs -->
-                <rect x="225" y="20" width="18" height="16" rx="3" fill="none" stroke="#888" stroke-width="1.8"/>
-                <text x="234" y="31" font-size="9" fill="#888" text-anchor="middle">2</text>
-                <!-- address bar hint -->
-                <rect x="10" y="4" width="280" height="0.5" fill="#c8c8cc"/>
+                <!-- more button -->
+                <text x="284" y="30" font-size="18" fill="#888" text-anchor="middle">&#8943;</text>
               </svg>
             </div>
           </div>
           <div class="ios-step">
             <div class="ios-step__label">
               <span class="ios-step__num">2</span>
-              Tap <strong>Add to Home Screen</strong>
-              <svg class="ios-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+              Tap <strong>Open in Safari</strong>
+              <svg class="ios-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
             <div class="ios-step__img-wrap">
-              <!-- SVG illustration: Share sheet with "Add to Home Screen" row highlighted -->
               <svg viewBox="0 0 300 88" xmlns="http://www.w3.org/2000/svg" class="ios-step__img">
                 <rect width="300" height="88" fill="#f2f2f7" rx="12"/>
-                <!-- rows -->
-                <!-- copy row -->
                 <rect x="10" y="8" width="280" height="32" rx="8" fill="#fff"/>
-                <text x="44" y="28" font-size="13" fill="#333">Copy</text>
-                <text x="24" y="29" font-size="16" fill="#555">&#128203;</text>
-                <!-- Add to Home Screen row — highlighted -->
+                <text x="44" y="28" font-size="13" fill="#333">Copy Link</text>
+                <text x="24" y="29" font-size="16" fill="#555">&#128279;</text>
+                <!-- Open in Safari row — highlighted -->
                 <rect x="10" y="48" width="280" height="32" rx="8" fill="#378de2" opacity="0.12"/>
                 <rect x="10" y="48" width="280" height="32" rx="8" fill="none" stroke="#378de2" stroke-width="1.5"/>
                 <svg x="18" y="54" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#378de2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/>
+                  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                 </svg>
-                <text x="44" y="68" font-size="13" fill="#378de2" font-weight="600">Add to Home Screen</text>
+                <text x="44" y="68" font-size="13" fill="#378de2" font-weight="600">Open in Safari</text>
               </svg>
             </div>
           </div>
         </div>
+
       </div>
 
 

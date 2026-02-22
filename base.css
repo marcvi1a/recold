@@ -491,6 +491,29 @@ button:disabled {
   border: 1px solid #e0e0e5;
 }
 
+/* Show/hide popup content based on browser mode */
+#ios-install-popup .ios-popup-safari,
+#ios-install-popup .ios-popup-chrome {
+  display: none;
+}
+#ios-install-popup[data-mode="safari"] .ios-popup-safari {
+  display: block;
+}
+#ios-install-popup[data-mode="chrome"] .ios-popup-chrome {
+  display: block;
+}
+
+.ios-chrome-msg {
+  font-size: 0.9rem;
+  color: #171a1c;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+  padding: 0.75rem;
+  background: #fff8e1;
+  border-radius: 8px;
+  border-left: 3px solid #f5a623;
+}
+
 .ios-step__img {
   width: 100%;
   display: block;
