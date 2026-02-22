@@ -9,6 +9,8 @@ async function applyLanguage() {
 
   const mode = getMode();
 
+  installBannerText.textContent = tr.installBannerText;
+
   cameraStart.textContent = tr.cameraStart;
 
   saunaButton.textContent = tr.saunaButton;
@@ -71,6 +73,7 @@ const exitButton = document.getElementById("menu-controls__exit");
 const menuMessage = document.getElementById("menu-message");
 
 const installBanner = document.getElementById("install-banner");
+const installBannerText = document.getElementById("install-banner__text");
 const iosInstallPopup = document.getElementById("ios-install-popup");
 const iosInstallPopupClose = document.getElementById("ios-install-popup__close");
 
@@ -834,10 +837,8 @@ window.addEventListener("beforeinstallprompt", (e) => {
 });
 
 function updateInstallBannerText() {
-  const p = installBanner.querySelector("p");
-  if (!p) return;
   if (pwaAlreadyInstalled) {
-    p.textContent = "ReCold is already installed on your phone";
+    installBannerText.textContent = "ReCold is already installed on your phone";
     installBanner.style.cursor = "default";
   }
 }
@@ -895,8 +896,7 @@ async function triggerInstall() {
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null; // can only be used once
     if (outcome === "accepted") {
-      const p = installBanner.querySelector("p");
-      p.textContent = "Installing ReCold...";
+      installBannerText.textContent = "Installing ReCold...";
       pwaAlreadyInstalled = true;
       setTimeout(updateInstallBannerText, 4000);
     }

@@ -361,7 +361,7 @@ button:disabled {
   text-align: center;
 }
 
-#install-banner p {
+#install-banner__text {
   margin: 0;
 }
 
