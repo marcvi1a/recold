@@ -469,20 +469,19 @@ document.addEventListener("visibilitychange", async () => {
   if (document.visibilityState !== "visible") return;
   if (!cameraPermissions) return;
 
-  const stream = camera.srcObject;
-  if (!stream) return;
-
-  const tracks = stream.getVideoTracks();
-  const isFrozen = tracks.length === 0 || tracks[0].readyState === "ended";
-  if (!isFrozen) return;
-
-  // Stop session if recording was in progress
+  // Stop session if recording or countdown was in progress
   if (state === "running" || state === "countdown") {
     stopSession();
   }
 
-  // Restart the camera stream
+  // Always restart the stream on resume — some browsers/OS suspend frame
+  // delivery without formally ending the track, so readyState checks are unreliable
   try {
+    // Stop existing tracks first to release the camera
+    if (camera.srcObject) {
+      camera.srcObject.getTracks().forEach(t => t.stop());
+    }
+
     const newStream = await navigator.mediaDevices.getUserMedia({
       video: { ...HIGH_RES_CONSTRAINTS, facingMode: currentFacingMode }
     });
