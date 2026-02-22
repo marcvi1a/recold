@@ -464,49 +464,37 @@ function capturePhoto() {
   }, "image/jpeg", 1.0);
 }
 
-// Capture photo with watermark
-// function capturePhoto() {
-//   const scale = 2; // render at 2x for sharpness
-//   const canvas = document.createElement("canvas");
-//   canvas.width = camera.videoWidth * scale;
-//   canvas.height = camera.videoHeight * scale;
-//   const ctx = canvas.getContext("2d");
-//
-//   ctx.scale(scale, scale);
-//
-//   if (currentFacingMode === "user") {
-//     ctx.translate(camera.videoWidth, 0);
-//     ctx.scale(-1, 1);
-//   }
-//
-//   ctx.drawImage(camera, 0, 0, camera.videoWidth, camera.videoHeight);
-//
-//   // Reset transform before watermark
-//   ctx.setTransform(scale, 0, 0, scale, 0, 0);
-//
-//   const fontSize = Math.round(camera.videoWidth * 0.06);
-//   const iconSize = fontSize * 0.8;
-//   const padding = 10;
-//   const gap = fontSize * 0.3;
-//
-//   ctx.font = `bold ${fontSize}px Poppins, sans-serif`;
-//   ctx.textBaseline = "middle";
-//
-//   const x = padding;
-//   const y = padding;
-//
-//   const icon = new Image();
-//   icon.src = "assets/favicon.png";
-//   icon.onload = () => {
-//     ctx.globalAlpha = 0.9; // Reduce for transparency
-//     ctx.drawImage(icon, x, y, iconSize, iconSize);
-//     ctx.fillStyle = "#378de2";
-//     ctx.fillText("ReCold", x + iconSize + gap, y + iconSize / 2 + 5);
-//
-//     ctx.globalAlpha = 1; // Reset to full opacity
-//     capturedPhotos.push(canvas.toDataURL("image/jpeg", 1.0)); // also bump quality
-//   };
-// }
+// Camera recovery on app resume
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState !== "visible") return;
+  if (!cameraPermissions) return;
+
+  const stream = camera.srcObject;
+  if (!stream) return;
+
+  const tracks = stream.getVideoTracks();
+  const isFrozen = tracks.length === 0 || tracks[0].readyState === "ended";
+  if (!isFrozen) return;
+
+  // Stop session if recording was in progress
+  if (state === "running" || state === "countdown") {
+    stopSession();
+  }
+
+  // Restart the camera stream
+  try {
+    const newStream = await navigator.mediaDevices.getUserMedia({
+      video: { ...HIGH_RES_CONSTRAINTS, facingMode: currentFacingMode }
+    });
+    camera.srcObject = newStream;
+    camera.addEventListener("loadedmetadata", () => {
+      prepareMediaTools(newStream);
+    }, { once: true });
+  } catch (err) {
+    console.error("Could not restart camera:", err);
+  }
+});
+
 
 function isIOS() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -758,47 +746,6 @@ langSelect.addEventListener("change", async (e) => {
   await applyLanguage();
 });
 
-
-
-
-
-// // Install banner
-//
-// let deferredPrompt = null;
-//
-// function isRunningInBrowser() {
-//   return !window.matchMedia("(display-mode: standalone)").matches
-//     && navigator.standalone !== true; // iOS Safari PWA check
-// }
-//
-// window.addEventListener("beforeinstallprompt", (e) => {
-//   e.preventDefault();
-//   deferredPrompt = e;
-// });
-//
-// function showInstallBanner() {
-//   installBanner.style.display = "block";
-// }
-//
-// async function triggerInstall() {
-//   if (deferredPrompt) {
-//     // Native install prompt available — app not yet installed
-//     deferredPrompt.prompt();
-//     const { outcome } = await deferredPrompt.userChoice;
-//     deferredPrompt = null; // can only be used once
-//     if (outcome === "accepted") {
-//       installBanner.style.display = "none";
-//     }
-//   } else {
-//     // iOS / Firefox: banner text guides the user manually — no action needed
-//   }
-// }
-//
-// if (isRunningInBrowser()) {
-//   setTimeout(showInstallBanner, 1000);
-// }
-//
-// installBanner.addEventListener("click", triggerInstall);
 
 
 
