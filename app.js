@@ -762,73 +762,86 @@ function showDownloadBanner() {
 
   downloadBanner.style.display = "block";
 
-  // // Already running as installed PWA? Do nothing.
-  // const isStandalone =
-  //   window.matchMedia("(display-mode: standalone)").matches ||
-  //   window.navigator.standalone === true; // iOS Safari
-  //
-  // if (isStandalone) return;
-  //
-  // // Only show once per browser session
-  // if (sessionStorage.getItem("install-nudge-shown")) return;
-  // sessionStorage.setItem("install-nudge-shown", "1");
-  //
-  // function detectPlatform() {
-  //   const ua = navigator.userAgent;
-  //   if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return "ios";
-  //   if (/android/i.test(ua)) return "android";
-  //   return "desktop";
-  // }
-  //
-  // function buildSteps(platform) {
-  //   if (platform === "ios") {
-  //     return `
-  //       Tap the <strong>Share</strong> button&nbsp;⬆️ at the bottom of Safari,
-  //       then choose <strong>"Add to Home Screen"</strong>.
-  //     `;
-  //   }
-  //   if (platform === "android") {
-  //     return `
-  //       Tap the <strong>⋮ menu</strong> in Chrome,
-  //       then choose <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.
-  //     `;
-  //   }
-  //   // Desktop fallback
-  //   return `
-  //     Click the <strong>install icon</strong> (⊕) in your browser's address bar
-  //     to add ReCold to your desktop.
-  //   `;
-  // }
-  //
-  // function showPopup() {
-  //   const platform = detectPlatform();
-  //
-  //   const popup = document.createElement("div");
-  //   popup.id = "install-popup";
-  //
-  //   popup.innerHTML = `
-  //     <div id="install-popup__header">
-  //       <p id="install-popup__title">📲 Add ReCold to your home screen</p>
-  //       <button id="install-popup__close" aria-label="Dismiss">✕</button>
-  //     </div>
-  //     <p id="install-popup__steps">${buildSteps(platform)}</p>
-  //     <div id="install-popup__arrow"></div>
-  //   `;
-  //
-  //   document.getElementById("app").appendChild(popup);
-  //
-  //   function dismiss() {
-  //     popup.classList.add("hiding");
-  //     popup.addEventListener("animationend", () => popup.remove(), { once: true });
-  //   }
-  //
-  //   document.getElementById("install-popup__close").addEventListener("click", dismiss);
-  //
-  //   // Auto-dismiss after 9 seconds
-  //   setTimeout(dismiss, 9000);
-  // }
-  //
-  // setTimeout(showPopup, 1000);
+            // // Already running as installed PWA? Do nothing.
+            // const isStandalone =
+            //   window.matchMedia("(display-mode: standalone)").matches ||
+            //   window.navigator.standalone === true; // iOS Safari
+            //
+            // if (isStandalone) return;
+            //
+            // // Only show once per browser session
+            // if (sessionStorage.getItem("install-nudge-shown")) return;
+            // sessionStorage.setItem("install-nudge-shown", "1");
+            //
+            // function detectPlatform() {
+            //   const ua = navigator.userAgent;
+            //   if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return "ios";
+            //   if (/android/i.test(ua)) return "android";
+            //   return "desktop";
+            // }
+            //
+            // function buildSteps(platform) {
+            //   if (platform === "ios") {
+            //     return `
+            //       Tap the <strong>Share</strong> button&nbsp;⬆️ at the bottom of Safari,
+            //       then choose <strong>"Add to Home Screen"</strong>.
+            //     `;
+            //   }
+            //   if (platform === "android") {
+            //     return `
+            //       Tap the <strong>⋮ menu</strong> in Chrome,
+            //       then choose <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.
+            //     `;
+            //   }
+            //   // Desktop fallback
+            //   return `
+            //     Click the <strong>install icon</strong> (⊕) in your browser's address bar
+            //     to add ReCold to your desktop.
+            //   `;
+            // }
+            //
+            // function showPopup() {
+            //   const platform = detectPlatform();
+            //
+            //   const popup = document.createElement("div");
+            //   popup.id = "install-popup";
+            //
+            //   popup.innerHTML = `
+            //     <div id="install-popup__header">
+            //       <p id="install-popup__title">📲 Add ReCold to your home screen</p>
+            //       <button id="install-popup__close" aria-label="Dismiss">✕</button>
+            //     </div>
+            //     <p id="install-popup__steps">${buildSteps(platform)}</p>
+            //     <div id="install-popup__arrow"></div>
+            //   `;
+            //
+            //   document.getElementById("app").appendChild(popup);
+            //
+            //   function dismiss() {
+            //     popup.classList.add("hiding");
+            //     popup.addEventListener("animationend", () => popup.remove(), { once: true });
+            //   }
+            //
+            //   document.getElementById("install-popup__close").addEventListener("click", dismiss);
+            //
+            //   // Auto-dismiss after 9 seconds
+            //   setTimeout(dismiss, 9000);
+            // }
+            //
+            // setTimeout(showPopup, 1000);
+
 }
 
 setTimeout(showDownloadBanner, 1000);
+
+
+async function triggerInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null; // can only be used once
+}
+
+downloadBanner.addEventListener("click", () => {
+  triggerInstall();
+});
