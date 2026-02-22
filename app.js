@@ -758,21 +758,19 @@ langSelect.addEventListener("change", async (e) => {
 
 // Download banner
 
-// let deferredPrompt = null;
-//
-// window.addEventListener("beforeinstallprompt", (e) => {
-//   e.preventDefault();
-//   deferredPrompt = e;
-//
-//   // Show banner only when install is actually available
-//   setTimeout(showDownloadBanner, 1000);
-// });
+let deferredPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Show banner only when install is actually available
+  setTimeout(showDownloadBanner, 1000);
+});
 
 function showDownloadBanner() {
   downloadBanner.style.display = "block";
 }
-
-setTimeout(showDownloadBanner, 1000);
 
 async function triggerInstall() {
   if (!deferredPrompt) return;
