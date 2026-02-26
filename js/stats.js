@@ -27,7 +27,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   const modeLabel = await getModeLabel(mode);
 
   ctx.fillStyle    = "#ffffff";
-  ctx.font         = "bold 48px 'Montserrat', sans-serif";
+  ctx.font         = "bold 44px 'Montserrat', sans-serif";
   ctx.textAlign    = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(modeLabel, W / 2, H / 2 - 60);
@@ -43,7 +43,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
 
   // ── ReCold logo: favicon + wordmark, always COLOR_ICE ───────────────────────
   const LOGO_Y        = H - cardPad - 28;
-  const ICON_SIZE     = 48;
+  const ICON_SIZE     = 44;
   const WORDMARK_FONT = "bold 52px 'Poppins', sans-serif";
   const GAP           = 14;
 
