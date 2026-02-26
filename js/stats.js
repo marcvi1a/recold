@@ -45,7 +45,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   const LOGO_Y        = H - cardPad - 28;
   const ICON_SIZE     = 44;
   const WORDMARK_FONT = "bold 52px 'Poppins', sans-serif";
-  const GAP           = 14;
+  const GAP           = 12;
 
   // Set font + baseline before measuring so metrics are accurate
   ctx.font         = WORDMARK_FONT;
