@@ -213,7 +213,7 @@ function beginMainTimer() {
 export function stopSession() {
   state = "idle";
 
-  stopRecording(applyExitUI);
+  stopRecording(applyExitUI, { mode: getMode(), elapsedSeconds: time });
   clearInterval(photoInterval);
   clearInterval(countdownInterval);
   clearInterval(mainInterval);

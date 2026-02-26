@@ -1,5 +1,6 @@
 import { dom, HIGH_RES_CONSTRAINTS } from "./config.js";
 import { isIOS } from "./install.js";
+import { generateStatsImage } from "./stats.js";
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -13,6 +14,7 @@ export let recordingStartTime = null;
 
 export let capturedPhotos = [];
 export let capturedVideo  = null;
+export let capturedStats  = null;  // PNG blob of the stats card
 
 // Pre-computed at camera-init time
 let bestVideoMimeType = "";
@@ -178,9 +180,14 @@ export function beginRecording() {
   mediaRecorder.start();
 }
 
-export function stopRecording(onStop) {
+export function stopRecording(onStop, { mode, elapsedSeconds } = {}) {
+  // Always generate the stats card, regardless of camera permission
+  const statsPromise = generateStatsImage({ mode, elapsedSeconds }).then(blob => {
+    capturedStats = blob;
+  });
+
   if (!mediaRecorder || mediaRecorder.state === "inactive") {
-    onStop();
+    statsPromise.then(onStop);
     return;
   }
 
@@ -193,7 +200,7 @@ export function stopRecording(onStop) {
       blob, mimeType,
       filename: `ReCold_session_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.${ext}`,
     };
-    onStop();
+    statsPromise.then(onStop);
   };
 
   mediaRecorder.stop();
@@ -202,6 +209,7 @@ export function stopRecording(onStop) {
 export function resetCapturedMedia() {
   capturedPhotos = [];
   capturedVideo  = null;
+  capturedStats  = null;
 }
 
 // ─── Photo capture ────────────────────────────────────────────────────────────
@@ -257,6 +265,25 @@ function createMediaItem({ href, blob, mimeType, filename, emoji, label }) {
 export function displayMedia() {
   dom.mediaLinksList.innerHTML = "";
 
+  // ── Stats card (always present) ────────────────────────────────────────────
+  if (capturedStats) {
+    const href     = URL.createObjectURL(capturedStats);
+    const d        = recordingStartTime || new Date();
+    const filename = `ReCold_stats_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.png`;
+
+    // Preview image
+    const img       = document.createElement("img");
+    img.src         = href;
+    img.style.cssText = "width:100%;border-radius:8px;margin-bottom:0.5rem;display:block;";
+    dom.mediaLinksList.appendChild(img);
+
+    // Download link below the preview
+    dom.mediaLinksList.appendChild(
+      createMediaItem({ href, blob: capturedStats, mimeType: "image/png", filename, emoji: "🏅", label: "Save stats image" })
+    );
+  }
+
+  // ── Video ──────────────────────────────────────────────────────────────────
   if (capturedVideo) {
     const { blob, mimeType, filename } = capturedVideo;
     const href = URL.createObjectURL(blob);
@@ -265,6 +292,7 @@ export function displayMedia() {
     );
   }
 
+  // ── Photos ─────────────────────────────────────────────────────────────────
   capturedPhotos.forEach((blob, i) => {
     const d        = recordingStartTime;
     const filename = `ReCold_photo-${i+1}_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.jpg`;
