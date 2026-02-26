@@ -32,5 +32,8 @@
   "menuMessage": "Get ready! We're about to start",
 
   "saunaLabel": "Sauna",
-  "iceBathLabel": "Ice bath"
+  "iceBathLabel": "Ice bath",
+
+  "goalReached": "Goal reached: {{time}}",
+  "congrats": "Congrats! 🥳🥳"
 }

@@ -30,5 +30,8 @@
   "menuMessage": "Prepare-se! Vamos dar início",
 
   "saunaLabel": "Sauna",
-  "iceBathLabel": "Banheira de gelo"
+  "iceBathLabel": "Banheira de gelo",
+  
+  "goalReached": "Objetivo atingido: {{time}}",
+  "congrats": "Parabéns! 🥳🥳"
 }
