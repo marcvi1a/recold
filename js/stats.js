@@ -1,4 +1,4 @@
-import { COLOR_SAUNA, COLOR_ICE } from "./config.js";
+import { COLOR_ICE } from "./config.js";
 
 /**
  * Generates a transparent-background PNG stats card and returns it as a Blob.
@@ -8,7 +8,7 @@ import { COLOR_SAUNA, COLOR_ICE } from "./config.js";
  * @param {number}        opts.elapsedSeconds  – raw seconds from clock start to STOP
  * @returns {Promise<Blob>}
  */
-export function generateStatsImage({ mode, elapsedSeconds }) {
+export async function generateStatsImage({ mode, elapsedSeconds }) {
   const W = 720;
   const H = 480;
 
@@ -20,47 +20,70 @@ export function generateStatsImage({ mode, elapsedSeconds }) {
   // ── Background: fully transparent ───────────────────────────────────────────
   ctx.clearRect(0, 0, W, H);
 
-  // ── Theme colour ─────────────────────────────────────────────────────────────
-  const themeColor = mode === "sauna" ? COLOR_SAUNA : COLOR_ICE;
-
-  // ── Subtle rounded card ──────────────────────────────────────────────────────
-  const pad = 40;
-  roundRect(ctx, pad, pad, W - pad * 2, H - pad * 2, 32);
+  // ── Rounded dark card (no border) ───────────────────────────────────────────
+  const cardPad = 40;
+  roundRect(ctx, cardPad, cardPad, W - cardPad * 2, H - cardPad * 2, 32);
   ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
   ctx.fill();
 
-  // ── Thin accent border ───────────────────────────────────────────────────────
-  roundRect(ctx, pad, pad, W - pad * 2, H - pad * 2, 32);
-  ctx.strokeStyle = themeColor;
-  ctx.lineWidth   = 3;
-  ctx.stroke();
-
-  // ── Mode label: SAUNA / ICE ──────────────────────────────────────────────────
-  ctx.fillStyle  = themeColor;
-  ctx.font       = "bold 72px 'Poppins', 'Montserrat', sans-serif";
-  ctx.textAlign  = "center";
+  // ── Mode label: SAUNA / ICE — always white, Montserrat ──────────────────────
+  ctx.fillStyle    = "#ffffff";
+  ctx.font         = "bold 72px 'Montserrat', sans-serif";
+  ctx.textAlign    = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(mode.toUpperCase(), W / 2, H / 2 - 60);
 
-  // ── Time stamp ───────────────────────────────────────────────────────────────
+  // ── Time stamp — always white, Montserrat ────────────────────────────────────
   const m = Math.floor(elapsedSeconds / 60);
   const s = elapsedSeconds % 60;
   const timeLabel = m > 0 ? `${m}m ${s}s` : `${s}s`;
 
-  ctx.fillStyle  = "#ffffff";
-  ctx.font       = "bold 96px 'Roboto Mono', monospace";
+  ctx.fillStyle = "#ffffff";
+  ctx.font      = "bold 96px 'Montserrat', sans-serif";
   ctx.fillText(timeLabel, W / 2, H / 2 + 52);
 
-  // ── ReCold logo (wordmark) ───────────────────────────────────────────────────
-  ctx.font       = "700 30px 'Poppins', 'Montserrat', sans-serif";
-  ctx.fillStyle  = themeColor;
-  ctx.globalAlpha = 0.9;
-  ctx.fillText("ReCold", W / 2, H - pad - 28);
-  ctx.globalAlpha = 1;
+  // ── ReCold logo: favicon + wordmark, always COLOR_ICE ───────────────────────
+  const LOGO_Y        = H - cardPad - 28;
+  const ICON_SIZE     = 32;
+  const WORDMARK_FONT = "bold 30px 'Montserrat', sans-serif";
+  const GAP           = 10;   // space between icon and text
+
+  // Measure wordmark width so we can centre icon + text together
+  ctx.font = WORDMARK_FONT;
+  const textW  = ctx.measureText("ReCold").width;
+  const totalW = ICON_SIZE + GAP + textW;
+  const startX = W / 2 - totalW / 2;
+
+  // Draw favicon (load once, ignore errors gracefully)
+  try {
+    const icon = await loadImage("assets/favicon.png");
+    ctx.drawImage(icon, startX, LOGO_Y - ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+  } catch (_) {
+    // favicon not available — skip icon, text will still render centred
+  }
+
+  // Draw wordmark to the right of the icon
+  ctx.font         = WORDMARK_FONT;
+  ctx.fillStyle    = COLOR_ICE;
+  ctx.textAlign    = "left";
+  ctx.textBaseline = "middle";
+  ctx.globalAlpha  = 0.9;
+  ctx.fillText("ReCold", startX + ICON_SIZE + GAP, LOGO_Y);
+  ctx.globalAlpha  = 1;
 
   // ── Return as PNG blob ───────────────────────────────────────────────────────
   return new Promise((resolve) => {
     canvas.toBlob(resolve, "image/png");
+  });
+}
+
+// ─── Helper: load an image as a promise ──────────────────────────────────────
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload  = () => resolve(img);
+    img.onerror = reject;
+    img.src     = src;
   });
 }
 
