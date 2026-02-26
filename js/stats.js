@@ -1,4 +1,5 @@
 import { COLOR_ICE } from "./config.js";
+import { getModeLabel } from "./i18n.js";
 
 /**
  * Generates a transparent-background PNG stats card and returns it as a Blob.
@@ -22,12 +23,14 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
 
   const cardPad = 40;
 
-  // ── Mode label: SAUNA / ICE — always white, Montserrat ──────────────────────
+  // ── Mode label — localised, always white, Montserrat ────────────────────────
+  const modeLabel = await getModeLabel(mode);
+
   ctx.fillStyle    = "#ffffff";
   ctx.font         = "bold 48px 'Montserrat', sans-serif";
   ctx.textAlign    = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(mode.toUpperCase(), W / 2, H / 2 - 60);
+  ctx.fillText(modeLabel, W / 2, H / 2 - 60);
 
   // ── Time stamp — always white, Montserrat ────────────────────────────────────
   const m = Math.floor(elapsedSeconds / 60);
@@ -42,7 +45,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   const LOGO_Y        = H - cardPad - 28;
   const ICON_SIZE     = 32;
   const WORDMARK_FONT = "bold 30px 'Montserrat', sans-serif";
-  const GAP           = 10;   // space between icon and text
+  const GAP           = 10;
 
   // Measure wordmark width so we can centre icon + text together
   ctx.font = WORDMARK_FONT;

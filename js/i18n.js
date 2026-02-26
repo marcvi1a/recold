@@ -23,6 +23,16 @@ export async function applyLanguage() {
   dom.menuMessage.textContent       = tr.menuMessage;
 }
 
+/**
+ * Returns the localised display label for the given mode,
+ * e.g. "Sauna" / "Ice bath" in EN, "Sauna" / "Banho de gelo" in PT.
+ */
+export async function getModeLabel(mode) {
+  const lang = localStorage.getItem("lang") || "en";
+  const tr   = await loadTranslations(lang);
+  return mode === "sauna" ? tr.saunaLabel : tr.iceBathLabel;
+}
+
 export function initLanguage() {
   if (!localStorage.getItem("lang")) {
     localStorage.setItem("lang", "en");
