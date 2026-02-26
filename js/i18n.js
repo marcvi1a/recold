@@ -46,6 +46,8 @@ export async function getTranslation(key, replacements = {}) {
   }
   return str;
 }
+
+export function initLanguage() {
   if (!localStorage.getItem("lang")) {
     localStorage.setItem("lang", "en");
   }
