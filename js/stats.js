@@ -47,28 +47,36 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   const WORDMARK_FONT = "bold 52px 'Poppins', sans-serif";
   const GAP           = 14;
 
-  // Measure wordmark width so we can centre icon + text together
-  ctx.font = WORDMARK_FONT;
-  const textW  = ctx.measureText("ReCold").width;
+  // Set font + baseline before measuring so metrics are accurate
+  ctx.font         = WORDMARK_FONT;
+  ctx.textBaseline = "middle";
+  ctx.textAlign    = "left";
+
+  const metrics    = ctx.measureText("ReCold");
+  const textW      = metrics.width;
+  // Visual centre offset: difference between alphabetic-baseline "middle" anchor
+  // and the true optical centre of the glyphs
+  const textVisualCentreOffset = (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2;
+
   const totalW = ICON_SIZE + GAP + textW;
   const startX = W / 2 - totalW / 2;
+
+  // Icon Y: align its centre to the same optical centre as the text
+  const iconY = LOGO_Y - textVisualCentreOffset - ICON_SIZE / 2;
 
   // Draw favicon (load once, ignore errors gracefully)
   try {
     const icon = await loadImage("assets/favicon.png");
-    ctx.drawImage(icon, startX, LOGO_Y - ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+    ctx.drawImage(icon, startX, iconY, ICON_SIZE, ICON_SIZE);
   } catch (_) {
     // favicon not available — skip icon, text will still render centred
   }
 
-  // Draw wordmark to the right of the icon
-  ctx.font         = WORDMARK_FONT;
-  ctx.fillStyle    = COLOR_ICE;
-  ctx.textAlign    = "left";
-  ctx.textBaseline = "middle";
-  ctx.globalAlpha  = 0.9;
+  // Draw wordmark
+  ctx.fillStyle   = COLOR_ICE;
+  ctx.globalAlpha = 0.9;
   ctx.fillText("ReCold", startX + ICON_SIZE + GAP, LOGO_Y);
-  ctx.globalAlpha  = 1;
+  ctx.globalAlpha = 1;
 
   // ── Return as PNG blob ───────────────────────────────────────────────────────
   return new Promise((resolve) => {
