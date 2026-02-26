@@ -1,5 +1,5 @@
 import { dom, COLOR_SAUNA, COLOR_ICE, TIMED_MESSAGES } from "./config.js";
-import { getMode, applyLanguage } from "./i18n.js";
+import { getMode, applyLanguage, getTranslation } from "./i18n.js";
 import {
   cameraPermissions, capturePhoto, beginRecording, stopRecording,
   resetCapturedMedia, displayMedia, showFlipCameraButton, hideFlipCameraButton,
@@ -203,8 +203,8 @@ function beginMainTimer() {
 
     if (!finishedMark && time >= endTime) {
       finishedMark = true;
-      pushLiveMessage(`Goal reached: ${formatTime(endTime)}`);
-      setTimeout(() => pushLiveMessage("Congrats! 🥳🥳"), 500);
+      getTranslation("goalReached", { time: formatTime(endTime) }).then(pushLiveMessage);
+      setTimeout(() => getTranslation("congrats").then(pushLiveMessage), 500);
       dom.timeCountdown.style.background = tc;
     }
   }, 1000);

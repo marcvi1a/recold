@@ -33,7 +33,19 @@ export async function getModeLabel(mode) {
   return mode === "sauna" ? tr.saunaLabel : tr.iceBathLabel;
 }
 
-export function initLanguage() {
+/**
+ * Returns a single localised string by key.
+ * Supports {{placeholder}} interpolation, e.g. getTranslation("goalReached", { time: "1m 30s" })
+ */
+export async function getTranslation(key, replacements = {}) {
+  const lang = localStorage.getItem("lang") || "en";
+  const tr   = await loadTranslations(lang);
+  let str    = tr[key] ?? key;
+  for (const [token, value] of Object.entries(replacements)) {
+    str = str.replace(`{{${token}}}`, value);
+  }
+  return str;
+}
   if (!localStorage.getItem("lang")) {
     localStorage.setItem("lang", "en");
   }
