@@ -27,5 +27,8 @@
   "startButton": "Start",
   "stopButton": "Stop",
   "exitButton": "Exit",
-  "menuMessage": "Prepare-se! Vamos dar início"
+  "menuMessage": "Prepare-se! Vamos dar início",
+
+  "saunaLabel": "Sauna",
+  "iceBathLabel": "Banheira de gelo"
 }
