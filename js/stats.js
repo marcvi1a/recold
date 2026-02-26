@@ -43,9 +43,9 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
 
   // ── ReCold logo: favicon + wordmark, always COLOR_ICE ───────────────────────
   const LOGO_Y        = H - cardPad - 28;
-  const ICON_SIZE     = 32;
-  const WORDMARK_FONT = "bold 30px 'Montserrat', sans-serif";
-  const GAP           = 10;
+  const ICON_SIZE     = 60;
+  const WORDMARK_FONT = "bold 60px 'Poppins', sans-serif";
+  const GAP           = 14;
 
   // Measure wordmark width so we can centre icon + text together
   ctx.font = WORDMARK_FONT;
