@@ -2,16 +2,16 @@ import { COLOR_ICE } from "./config.js";
 import { getModeLabel } from "./i18n.js";
 
 /**
- * Generates a transparent-background PNG stats card and returns it as a Blob.
+ * Generates a transparent-background PNG stats card for one or more rounds.
  *
- * @param {object} opts
- * @param {"sauna"|"ice"} opts.mode
- * @param {number}        opts.elapsedSeconds  – raw seconds from clock start to STOP
+ * @param {Array<{mode: "sauna"|"ice", elapsedSeconds: number}>} rounds
  * @returns {Promise<Blob>}
  */
-export async function generateStatsImage({ mode, elapsedSeconds }) {
-  const W = 720;
-  const H = 480;
+export async function generateStatsImage(rounds) {
+  const W        = 720;
+  const ROUND_H  = 200;  // height per round row
+  const LOGO_H   = 100;  // space for the ReCold logo at the bottom
+  const H        = rounds.length * ROUND_H + LOGO_H;
 
   const canvas = document.createElement("canvas");
   canvas.width  = W;
@@ -21,28 +21,40 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   // ── Background: fully transparent ───────────────────────────────────────────
   ctx.clearRect(0, 0, W, H);
 
-  const cardPad = 40;
+  // ── Draw each round ────────────────────────────────────────────────────────
+  for (let i = 0; i < rounds.length; i++) {
+    const { mode, elapsedSeconds } = rounds[i];
+    const y       = i * ROUND_H;
+    const centreY = y + ROUND_H / 2;
 
-  // ── Mode label — localised, always white, Montserrat ────────────────────────
-  const modeLabel = await getModeLabel(mode);
+    // Subtle separator line between rounds (skip first)
+    if (i > 0) {
+      ctx.strokeStyle = "rgba(255,255,255,0.2)";
+      ctx.lineWidth   = 1;
+      ctx.beginPath();
+      ctx.moveTo(60, y);
+      ctx.lineTo(W - 60, y);
+      ctx.stroke();
+    }
 
-  ctx.fillStyle    = "#ffffff";
-  ctx.font         = "bold 44px 'Montserrat', sans-serif";
-  ctx.textAlign    = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText(modeLabel, W / 2, H / 2 - 60);
+    // Mode label — localised, always white, Montserrat
+    const modeLabel = await getModeLabel(mode);
+    ctx.fillStyle    = "#ffffff";
+    ctx.font         = "bold 44px 'Montserrat', sans-serif";
+    ctx.textAlign    = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(modeLabel, W / 2, centreY - 30);
 
-  // ── Time stamp — always white, Montserrat ────────────────────────────────────
-  const m = Math.floor(elapsedSeconds / 60);
-  const s = elapsedSeconds % 60;
-  const timeLabel = m > 0 ? `${m}m ${s}s` : `${s}s`;
+    // Time stamp — always white, Montserrat
+    const m         = Math.floor(elapsedSeconds / 60);
+    const s         = elapsedSeconds % 60;
+    const timeLabel = m > 0 ? `${m}m ${s}s` : `${s}s`;
+    ctx.font = "bold 72px 'Montserrat', sans-serif";
+    ctx.fillText(timeLabel, W / 2, centreY + 42);
+  }
 
-  ctx.fillStyle = "#ffffff";
-  ctx.font      = "bold 96px 'Montserrat', sans-serif";
-  ctx.fillText(timeLabel, W / 2, H / 2 + 52);
-
-  // ── ReCold logo: favicon + wordmark, always COLOR_ICE ───────────────────────
-  const LOGO_Y        = H - cardPad - 28;
+  // ── ReCold logo: favicon + wordmark, always COLOR_ICE ─────────────────────
+  const LOGO_Y        = H - LOGO_H / 2;
   const ICON_SIZE     = 44;
   const WORDMARK_FONT = "bold 52px 'Poppins', sans-serif";
   const GAP           = 12;
@@ -52,8 +64,8 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   ctx.textBaseline = "middle";
   ctx.textAlign    = "left";
 
-  const metrics    = ctx.measureText("ReCold");
-  const textW      = metrics.width;
+  const metrics               = ctx.measureText("ReCold");
+  const textW                 = metrics.width;
   // Visual centre offset: difference between alphabetic-baseline "middle" anchor
   // and the true optical centre of the glyphs
   const textVisualCentreOffset = (metrics.actualBoundingBoxAscent - metrics.actualBoundingBoxDescent) / 2;
@@ -73,7 +85,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   }
 
   // Draw wordmark
-  ctx.fillStyle   = COLOR_ICE;
+  ctx.fillStyle = COLOR_ICE;
   ctx.fillText("ReCold", startX + ICON_SIZE + GAP, LOGO_Y);
 
   // ── Return as PNG blob ───────────────────────────────────────────────────────
