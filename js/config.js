@@ -60,8 +60,14 @@ export const dom = {
   iceButton:       document.getElementById("menu-controls__ice"),
   startButton:     document.getElementById("menu-controls__start"),
   stopButton:      document.getElementById("menu-controls__stop"),
+  addButton:       document.getElementById("menu-controls__add"),
   exitButton:      document.getElementById("menu-controls__exit"),
   menuMessage:     document.getElementById("menu-message"),
+
+  // Add-round banner
+  addRoundBanner:         document.getElementById("add-round-banner"),
+  addRoundBannerTitle:    document.getElementById("add-round-banner__title"),
+  addRoundBannerSubtitle: document.getElementById("add-round-banner__subtitle"),
 
   // Install banner
   installBanner:        document.getElementById("install-banner"),

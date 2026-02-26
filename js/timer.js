@@ -2,8 +2,11 @@ import { dom, COLOR_SAUNA, COLOR_ICE, TIMED_MESSAGES } from "./config.js";
 import { getMode, applyLanguage, getTranslation } from "./i18n.js";
 import {
   cameraPermissions, capturePhoto, beginRecording, stopRecording,
-  resetCapturedMedia, displayMedia, showFlipCameraButton, hideFlipCameraButton,
+  resetAllRounds, displayMedia, showFlipCameraButton, hideFlipCameraButton,
+  getRounds,
 } from "./camera.js";
+
+const MAX_ROUNDS = 10;
 
 // ─── Session state ────────────────────────────────────────────────────────────
 
@@ -88,15 +91,15 @@ export function pushLiveMessage(text) {
 
 // ─── UI states ────────────────────────────────────────────────────────────────
 
-function applyStopUI() {
-  dom.timeDisplay.style.display           = "none";
-  dom.timeControls.style.pointerEvents    = "none";
-  dom.timeControls.style.opacity          = "0";
+function applyRunningUI() {
+  dom.timeDisplay.style.display        = "none";
+  dom.timeControls.style.pointerEvents = "none";
+  dom.timeControls.style.opacity       = "0";
 
   if (!cameraPermissions) {
-    dom.cameraPreview.style.display       = "none";
-    dom.cameraStart.style.display         = "none";
-    dom.timeContainer.style.marginTop     = "auto";
+    dom.cameraPreview.style.display    = "none";
+    dom.cameraStart.style.display      = "none";
+    dom.timeContainer.style.marginTop  = "auto";
   }
   hideFlipCameraButton();
 
@@ -106,22 +109,28 @@ function applyStopUI() {
   dom.iceButton.style.display        = "none";
   dom.startButton.style.display      = "none";
   dom.stopButton.style.display       = "block";
+  dom.addButton.style.display        = "none";
 }
 
-function applyExitUI() {
+function applySummaryUI() {
+  // Called once the round recording is finalised
   dom.cameraContainer.style.display  = "none";
   dom.cameraStart.style.display      = "none";
   dom.timeCountdown.style.display    = "none";
   dom.timeContainer.style.display    = "none";
 
   displayMedia();
-  dom.mediaLinks.style.display       = "block";
+  dom.mediaLinks.style.display = "block";
 
-  dom.stopButton.style.display       = "none";
-  dom.exitButton.style.display       = "block";
+  dom.stopButton.style.display = "none";
+
+  // Show ADD only if under the 10-round limit
+  const canAddMore = getRounds().length < MAX_ROUNDS;
+  dom.addButton.style.display  = canAddMore ? "block" : "none";
+  dom.exitButton.style.display = "block";
 }
 
-function applyStartUI() {
+function applyStartUI(showBanner = false) {
   dom.mediaLinks.style.display       = "none";
   dom.timeContainer.style.display    = "block";
   dom.cameraContainer.style.display  = "block";
@@ -133,13 +142,21 @@ function applyStartUI() {
   }
   showFlipCameraButton();
 
-  dom.timeDisplay.style.display      = "block";
+  dom.timeDisplay.style.display        = "block";
   dom.timeControls.style.pointerEvents = "";
-  dom.timeControls.style.opacity     = "";
-  dom.exitButton.style.display       = "none";
-  dom.saunaButton.style.display      = "block";
-  dom.iceButton.style.display        = "block";
-  dom.startButton.style.display      = "block";
+  dom.timeControls.style.opacity       = "";
+  dom.exitButton.style.display         = "none";
+  dom.addButton.style.display          = "none";
+  dom.saunaButton.style.display        = "block";
+  dom.iceButton.style.display          = "block";
+  dom.startButton.style.display        = "block";
+
+  // Add-round banner
+  if (showBanner) {
+    dom.addRoundBanner.classList.remove("hidden");
+  } else {
+    dom.addRoundBanner.classList.add("hidden");
+  }
 }
 
 // ─── Session flow ─────────────────────────────────────────────────────────────
@@ -147,11 +164,12 @@ function applyStartUI() {
 function startCountdown() {
   state = "countdown";
 
-  applyStopUI();
+  // Hide the add-round banner once the user picks a mode and taps start
+  dom.addRoundBanner.classList.add("hidden");
+
+  applyRunningUI();
   dom.menuMessage.style.display  = "flex";
   dom.menuControls.style.display = "none";
-
-  resetCapturedMedia();
 
   let countdown = 3;
   dom.timeCountdown.textContent = countdown;
@@ -181,9 +199,9 @@ function beginMainTimer() {
   dom.menuControls.style.display = "flex";
 
   time = 0;
-  const endTime     = parseInt(dom.timeSlider.value, 10);
-  let finishedMark  = false;
-  const themeColor  = () => getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
+  const endTime    = parseInt(dom.timeSlider.value, 10);
+  let finishedMark = false;
+  const themeColor = () => getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
 
   mainInterval = setInterval(() => {
     time++;
@@ -213,7 +231,6 @@ function beginMainTimer() {
 export function stopSession() {
   state = "idle";
 
-  stopRecording(applyExitUI, { mode: getMode(), elapsedSeconds: time });
   clearInterval(photoInterval);
   clearInterval(countdownInterval);
   clearInterval(mainInterval);
@@ -222,16 +239,26 @@ export function stopSession() {
 
   const tc = getMode() === "sauna" ? COLOR_SAUNA : COLOR_ICE;
   dom.timeCountdown.style.background = `linear-gradient(90deg, ${color80(tc)} 0%, ${getBaseColor()} 0%)`;
+
+  // stopRecording finalises the round then calls applySummaryUI
+  stopRecording(applySummaryUI, { mode: getMode(), elapsedSeconds: time });
+}
+
+function addRound() {
+  // Go back to start UI with the ADD ROUND banner visible
+  applyStartUI(true);
 }
 
 function exitSession() {
-  applyStartUI();
+  // Reset all rounds and media, go to fresh start
+  resetAllRounds();
+  applyStartUI(false);
 }
 
 // ─── Mode buttons ─────────────────────────────────────────────────────────────
 
 function applyMode(color) {
-  dom.timeDisplay.style.color    = color;
+  dom.timeDisplay.style.color      = color;
   dom.startButton.style.background = color;
   dom.stopButton.style.background  = color;
 }
@@ -239,16 +266,13 @@ function applyMode(color) {
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 export function initTimer() {
-  // Ensure defaults
   if (!localStorage.getItem("time-countdown-sauna")) localStorage.setItem("time-countdown-sauna", "600");
   if (!localStorage.getItem("time-countdown-ice"))   localStorage.setItem("time-countdown-ice",   "60");
   if (!localStorage.getItem("mode"))                  localStorage.setItem("mode", "ice");
 
-  // Apply stored mode colours
   const mode = getMode();
   applyMode(mode === "sauna" ? COLOR_SAUNA : COLOR_ICE);
 
-  // Slider events
   dom.timeSlider.addEventListener("input", () => {
     const { key } = getSliderSettings();
     localStorage.setItem(key, dom.timeSlider.value);
@@ -256,7 +280,6 @@ export function initTimer() {
     updateSliderFill();
   });
 
-  // Mode buttons
   dom.saunaButton.addEventListener("click", () => {
     applyMode(COLOR_SAUNA);
     localStorage.setItem("mode", "sauna");
@@ -275,11 +298,11 @@ export function initTimer() {
     applyLanguage();
   });
 
-  // Session controls
-  dom.startButton.addEventListener("click", startCountdown);
-  dom.stopButton.addEventListener("click",  stopSession);
-  dom.exitButton.addEventListener("click",  exitSession);
-  dom.cameraStart.addEventListener("click", () => import("./camera.js").then(m => m.startCamera()));
+  dom.startButton.addEventListener("click",  startCountdown);
+  dom.stopButton.addEventListener("click",   stopSession);
+  dom.addButton.addEventListener("click",    addRound);
+  dom.exitButton.addEventListener("click",   exitSession);
+  dom.cameraStart.addEventListener("click",  () => import("./camera.js").then(m => m.startCamera()));
   dom.flipCameraButton.addEventListener("click", () => import("./camera.js").then(m => m.flipCamera()));
 
   applySliderSettings();

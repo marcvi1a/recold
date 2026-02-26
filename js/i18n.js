@@ -13,14 +13,17 @@ export async function applyLanguage() {
   const lang = localStorage.getItem("lang") || "en";
   const tr = await loadTranslations(lang);
 
-  dom.installBannerText.textContent = tr.installBannerText;
-  dom.cameraStart.textContent       = tr.cameraStart;
-  dom.saunaButton.textContent       = tr.saunaButton;
-  dom.iceButton.textContent         = tr.iceButton;
-  dom.startButton.textContent       = tr.startButton;
-  dom.stopButton.textContent        = tr.stopButton;
-  dom.exitButton.textContent        = tr.exitButton;
-  dom.menuMessage.textContent       = tr.menuMessage;
+  dom.installBannerText.textContent    = tr.installBannerText;
+  dom.cameraStart.textContent          = tr.cameraStart;
+  dom.saunaButton.textContent          = tr.saunaButton;
+  dom.iceButton.textContent            = tr.iceButton;
+  dom.startButton.textContent          = tr.startButton;
+  dom.stopButton.textContent           = tr.stopButton;
+  dom.addButton.textContent            = tr.addButton;
+  dom.exitButton.textContent           = tr.exitButton;
+  dom.menuMessage.textContent          = tr.menuMessage;
+  dom.addRoundBannerTitle.textContent    = tr.addRoundBannerTitle;
+  dom.addRoundBannerSubtitle.textContent = tr.addRoundBannerSubtitle;
 }
 
 /**
