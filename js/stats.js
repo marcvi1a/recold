@@ -74,9 +74,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
 
   // Draw wordmark
   ctx.fillStyle   = COLOR_ICE;
-  ctx.globalAlpha = 0.9;
   ctx.fillText("ReCold", startX + ICON_SIZE + GAP, LOGO_Y);
-  ctx.globalAlpha = 1;
 
   // ── Return as PNG blob ───────────────────────────────────────────────────────
   return new Promise((resolve) => {
