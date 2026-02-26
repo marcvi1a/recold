@@ -24,7 +24,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
 
   // ── Mode label: SAUNA / ICE — always white, Montserrat ──────────────────────
   ctx.fillStyle    = "#ffffff";
-  ctx.font         = "bold 72px 'Montserrat', sans-serif";
+  ctx.font         = "bold 48px 'Montserrat', sans-serif";
   ctx.textAlign    = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(mode.toUpperCase(), W / 2, H / 2 - 60);
