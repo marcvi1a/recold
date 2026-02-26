@@ -21,18 +21,22 @@
   "bulletPoint5_sauna": "100+ min weekly",
   "bulletPoint5_ice": "11 min weekly",
 
-  "bulletPoint6_sauna": "Combine com luz vermelha para melhorar saúde da pele",
+  "bulletPoint6_sauna": "Combine with red light for better skin health",
   "bulletPoint6_ice": "<a href='https://gelohealth.com.br/primeiro' target='_blank'>First-time tips</a>",
 
   "saunaButton": "Sauna",
   "iceButton": "Ice",
   "startButton": "Start",
   "stopButton": "Stop",
+  "addButton": "Add round",
   "exitButton": "Exit",
   "menuMessage": "Get ready! We're about to start",
 
   "saunaLabel": "Sauna",
   "iceBathLabel": "Ice bath",
+
+  "addRoundBannerTitle": "Add round",
+  "addRoundBannerSubtitle": "Extend your current session",
 
   "goalReached": "Goal reached: {{time}}",
   "congrats": "Congrats! 🥳🥳"

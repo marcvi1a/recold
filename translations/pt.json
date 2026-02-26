@@ -26,12 +26,16 @@
   "iceButton": "Gelo",
   "startButton": "Start",
   "stopButton": "Stop",
+  "addButton": "Adicionar rodada",
   "exitButton": "Exit",
   "menuMessage": "Prepare-se! Vamos dar início",
 
   "saunaLabel": "Sauna",
   "iceBathLabel": "Banheira de gelo",
-  
+
+  "addRoundBannerTitle": "Adicionar rodada",
+  "addRoundBannerSubtitle": "Extender a sessão atual",
+
   "goalReached": "Objetivo atingido: {{time}}",
   "congrats": "Parabéns! 🥳🥳"
 }
