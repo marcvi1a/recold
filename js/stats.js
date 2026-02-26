@@ -20,11 +20,7 @@ export async function generateStatsImage({ mode, elapsedSeconds }) {
   // ── Background: fully transparent ───────────────────────────────────────────
   ctx.clearRect(0, 0, W, H);
 
-  // ── Rounded dark card (no border) ───────────────────────────────────────────
   const cardPad = 40;
-  roundRect(ctx, cardPad, cardPad, W - cardPad * 2, H - cardPad * 2, 32);
-  ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
-  ctx.fill();
 
   // ── Mode label: SAUNA / ICE — always white, Montserrat ──────────────────────
   ctx.fillStyle    = "#ffffff";
