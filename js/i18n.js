@@ -24,6 +24,29 @@ export async function applyLanguage() {
   dom.menuMessage.textContent          = tr.menuMessage;
   dom.addRoundBannerTitle.textContent    = tr.addRoundBannerTitle;
   dom.addRoundBannerSubtitle.textContent = tr.addRoundBannerSubtitle;
+
+  // Summary card static titles (only present when summary is visible, guard with ?.)
+  const historyTitle = document.getElementById("summary-history__title");
+  const historySoon  = document.getElementById("summary-history__soon");
+  const sessionTitle = document.getElementById("summary-session__title");
+  if (historyTitle) historyTitle.textContent = tr.summaryHistory;
+  if (historySoon)  historySoon.textContent  = tr.summaryHistorySoon;
+  if (sessionTitle) sessionTitle.textContent = tr.summarySession;
+}
+
+/**
+ * Returns the translated strings needed to build the summary table.
+ * camera.js calls this before rendering rows.
+ */
+export async function getSummaryTranslations() {
+  const lang = localStorage.getItem("lang") || "en";
+  const tr   = await loadTranslations(lang);
+  return {
+    download:  tr.summaryDownload,
+    statsBtn:  tr.summaryStatsBtn,
+    saunaLabel: tr.saunaLabel,
+    iceBathLabel: tr.iceBathLabel,
+  };
 }
 
 /**

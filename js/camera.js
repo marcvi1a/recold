@@ -1,6 +1,7 @@
 import { dom, HIGH_RES_CONSTRAINTS } from "./config.js";
 import { isIOS } from "./install.js";
 import { generateStatsImage } from "./stats.js";
+import { getSummaryTranslations } from "./i18n.js";
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -303,18 +304,18 @@ function formatElapsed(s) {
   return m > 0 ? `${m}m ${sec}s` : `${sec}s`;
 }
 
-function modeLabel(mode) {
-  return mode === "sauna" ? "Sauna" : "Ice";
+function modeLabel(mode, tr) {
+  return mode === "sauna" ? tr.saunaLabel : tr.iceBathLabel;
 }
 
-function buildSummaryRow(round, roundIndex) {
+function buildSummaryRow(round, roundIndex, translations) {
   const ri = roundIndex + 1;
   const tr = document.createElement("tr");
   tr.className = "round-row";
 
   const tdMode = document.createElement("td");
-  tdMode.className = `col-mode mode--${round.mode}`;
-  tdMode.textContent = modeLabel(round.mode);
+  tdMode.className = "col-mode";
+  tdMode.textContent = modeLabel(round.mode, translations);
   tr.appendChild(tdMode);
 
   const tdTime = document.createElement("td");
@@ -335,7 +336,7 @@ function buildSummaryRow(round, roundIndex) {
       blob: round.video.blob,
       mimeType: round.video.mimeType,
       filename: round.video.filename,
-      emoji: "\u2b07\ufe0f",
+      icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
       label: `Round ${ri} video`,
     }));
   } else {
@@ -355,13 +356,13 @@ function buildSummaryRow(round, roundIndex) {
   return tr;
 }
 
-function buildPreviewRow(round) {
+function buildPreviewRow(round, translations) {
   const tr = document.createElement("tr");
   tr.className = "round-row round-row--preview";
 
   const tdMode = document.createElement("td");
-  tdMode.className = `col-mode mode--${round.mode}`;
-  tdMode.textContent = modeLabel(round.mode);
+  tdMode.className = "col-mode";
+  tdMode.textContent = modeLabel(round.mode, translations);
   tr.appendChild(tdMode);
 
   const tdTime = document.createElement("td");
@@ -377,12 +378,12 @@ function buildPreviewRow(round) {
   return tr;
 }
 
-function buildDlButton({ blob, mimeType, filename, emoji, label }) {
+function buildDlButton({ blob, mimeType, filename, icon, label }) {
   if (isIOS() && navigator.share) {
     const btn = document.createElement("button");
-    btn.className   = "dl-btn";
-    btn.textContent = emoji;
-    btn.title       = label;
+    btn.className = "dl-btn";
+    btn.innerHTML = icon;
+    btn.title     = label;
     btn.addEventListener("click", async () => {
       try {
         const file = new File([blob], filename, { type: mimeType });
@@ -401,7 +402,7 @@ function buildDlButton({ blob, mimeType, filename, emoji, label }) {
   a.className   = "dl-btn";
   a.href        = URL.createObjectURL(blob);
   a.download    = filename;
-  a.textContent = emoji;
+  a.innerHTML   = icon;
   a.title       = label;
   return a;
 }
@@ -413,7 +414,7 @@ function buildPhotosButton(round, roundNum) {
   const btn = document.createElement("button");
   btn.className = "dl-btn dl-btn--photos";
   btn.title     = `Download ${count} photo${count > 1 ? "s" : ""}`;
-  btn.innerHTML = `<span class="photo-icon">&#128247;</span><span class="photo-count">${count}</span>`;
+  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span class="photo-count">${count}</span>`;
 
   btn.addEventListener("click", async () => {
     if (isIOS() && navigator.share) {
@@ -444,12 +445,18 @@ function buildPhotosButton(round, roundNum) {
 
 // ─── Media display ────────────────────────────────────────────────────────────
 
-export function displayMedia() {
+export async function displayMedia() {
+  const translations = await getSummaryTranslations();
+
   dom.roundsTableBody.innerHTML = "";
   dom.roundsTableFoot.innerHTML = "";
 
+  // Update the "Download" header text
+  const dlHeader = document.getElementById("rounds-table__dl-header");
+  if (dlHeader) dlHeader.textContent = translations.download;
+
   rounds.forEach((round, ri) => {
-    dom.roundsTableBody.appendChild(buildSummaryRow(round, ri));
+    dom.roundsTableBody.appendChild(buildSummaryRow(round, ri, translations));
   });
 
   if (capturedStats) {
@@ -467,7 +474,7 @@ export function displayMedia() {
 
     const btn = document.createElement("button");
     btn.className   = "stats-dl-btn";
-    btn.textContent = "Download stats";
+    btn.textContent = translations.statsBtn;
     btn.addEventListener("click", () => {
       const a    = document.createElement("a");
       a.href     = URL.createObjectURL(capturedStats);
@@ -484,10 +491,11 @@ export function displayMedia() {
   dom.summary.style.display = "block";
 }
 
-export function renderRoundsPreview() {
+export async function renderRoundsPreview() {
+  const translations = await getSummaryTranslations();
   dom.roundsPreviewBody.innerHTML = "";
   rounds.forEach(round => {
-    dom.roundsPreviewBody.appendChild(buildPreviewRow(round));
+    dom.roundsPreviewBody.appendChild(buildPreviewRow(round, translations));
   });
 }
 
