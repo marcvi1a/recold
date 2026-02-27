@@ -135,9 +135,13 @@ function applyStartUI(showBanner = false) {
   dom.cameraContainer.style.display  = "block";
 
   if (!cameraPermissions) {
-    dom.cameraPreview.style.display  = "block";
-    dom.cameraStart.style.display    = "block";
-    dom.timeContainer.style.marginTop = "";
+    dom.cameraPreview.style.display   = "block";
+    dom.cameraStart.style.display     = "block";
+    // Without camera the flex column needs margin-top:auto on time-container
+    // to push it toward the centre (camera-start above it has auto margins too).
+    // When the banner is visible camera-start loses its auto margins, so we let
+    // time-container flow naturally instead.
+    dom.timeContainer.style.marginTop = showBanner ? "" : "auto";
   }
   showFlipCameraButton();
 
