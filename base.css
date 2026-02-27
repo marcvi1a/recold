@@ -656,10 +656,14 @@ button:disabled {
   cursor: default;
 }
 
-.col-dl-video,
-.col-dl-photos {
+.col-dl-video {
   width: 15%;
   text-align: center;
+}
+
+.col-dl-photos {
+  width: 15%;
+  text-align: left;
 }
 
 /* Mode: always black */
@@ -685,12 +689,19 @@ button:disabled {
   stroke-width: 2;
 }
 
+.dl-btn--photos {
+  position: relative;
+}
+
 .photo-count {
-  font-size: 0.7rem;
+  position: absolute;
+  top: -3px;
+  left: 14px;
+  font-size: 0.6rem;
   font-family: "Roboto Mono", monospace;
   font-weight: 700;
   color: #378de2;
-  vertical-align: super;
+  line-height: 1;
 }
 
 /* Download stats foot row */
