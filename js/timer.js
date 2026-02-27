@@ -259,7 +259,20 @@ export function stopSession() {
   stopRecording(applySummaryUI, { mode: getMode(), elapsedSeconds: time });
 }
 
+
+// ─── Mode switching ───────────────────────────────────────────────────────────
+
+function switchToMode(mode) {
+  localStorage.setItem("mode", mode);
+  applyMode(mode === "sauna" ? COLOR_SAUNA : COLOR_ICE);
+  applySliderSettings();
+  updateSliderColor();
+  updateSliderFill();
+}
 function addRound() {
+  // Flip to the opposite mode as a suggestion for the next round
+  const nextMode = getMode() === "sauna" ? "ice" : "sauna";
+  switchToMode(nextMode);
   // Go back to start UI with the ADD ROUND banner visible
   applyStartUI(true);
 }
@@ -267,6 +280,7 @@ function addRound() {
 function exitSession() {
   // Reset all rounds and media, go to fresh start
   resetAllRounds();
+  switchToMode("ice");
   applyStartUI(false);
 }
 
