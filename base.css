@@ -563,3 +563,162 @@ button:disabled {
 }
 
 /* EXIT after a round is right-side, 1/3 width — flex: 1 already set by default */
+
+/* ── Summary screen ──────────────────────────────────────────────────────────── */
+
+#summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  padding-bottom: 5.5rem; /* clear the menu bar */
+}
+
+.summary-card {
+  background: #f5f5f7;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+}
+
+.summary-card__title {
+  margin: 0 0 0.2rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+}
+
+.summary-card__subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+/* Disabled / coming-soon card */
+.summary-card--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Rounds table ─────────────────────────────────────────────────────────── */
+
+#rounds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+#rounds-table thead th {
+  padding: 0 0.25rem 0.4rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #aaa;
+}
+
+#rounds-table thead th.col-download {
+  text-align: center;
+}
+
+.round-row td {
+  padding: 0.4rem 0.25rem;
+  vertical-align: middle;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.col-mode {
+  font-weight: 700;
+  width: 28%;
+}
+
+.col-time {
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.85rem;
+  width: 24%;
+}
+
+.col-temp {
+  width: 18%;
+  font-size: 0.85rem;
+}
+
+.col-temp--disabled {
+  color: #bbb;
+  cursor: default;
+}
+
+.col-dl-video,
+.col-dl-photos {
+  width: 15%;
+  text-align: center;
+}
+
+/* Mode colours */
+.mode--sauna { color: #ef0241; }
+.mode--ice   { color: #378de2; }
+
+/* Download buttons */
+.dl-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dl-btn--photos {
+  font-size: 1rem;
+}
+
+.photo-count {
+  font-size: 0.7rem;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 700;
+  color: #555;
+  vertical-align: super;
+}
+
+/* Download stats foot row */
+.col-stats-dl {
+  text-align: right;
+  padding-top: 0.5rem;
+}
+
+.stats-dl-btn {
+  background: #171a1c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+
+/* ── Add-round preview table ─────────────────────────────────────────────── */
+
+.rounds-preview {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.round-row--preview td {
+  padding: 0.25rem 0.25rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}

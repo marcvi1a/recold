@@ -195,16 +195,46 @@
       </div>
 
 
-      <div id="media-links" style="display:none;">
-        <p id="media-links__title"></p>
-        <ul id="media-links__list">
-        </ul>
+      <div id="summary" style="display:none;">
+
+        <!-- Last 7 days (disabled / coming soon) -->
+        <div id="summary-history" class="summary-card summary-card--disabled">
+          <p class="summary-card__title">Last 7 days</p>
+          <p class="summary-card__subtitle">Coming soon...</p>
+        </div>
+
+        <!-- Current session -->
+        <div id="summary-session" class="summary-card">
+          <p class="summary-card__title">Current session</p>
+          <table id="rounds-table">
+            <thead>
+              <tr>
+                <th class="col-mode"></th>
+                <th class="col-time"></th>
+                <th class="col-temp"></th>
+                <th class="col-download" colspan="2">Download</th>
+              </tr>
+            </thead>
+            <tbody id="rounds-table__body">
+              <!-- rows injected by camera.js -->
+            </tbody>
+            <tfoot id="rounds-table__foot">
+              <!-- "Download stats" button injected by camera.js -->
+            </tfoot>
+          </table>
+        </div>
+
       </div>
 
 
       <div id="add-round-banner" class="hidden">
         <p id="add-round-banner__title"></p>
         <p id="add-round-banner__subtitle"></p>
+        <table id="rounds-preview-table" class="rounds-preview">
+          <tbody id="rounds-preview-table__body">
+            <!-- rows injected by camera.js / timer.js -->
+          </tbody>
+        </table>
       </div>
 
       <div id="menu-container" class="container">
