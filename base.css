@@ -339,6 +339,10 @@ button:disabled {
   text-transform: uppercase;
 }
 
+#menu-controls__exit:only-child {
+  border-radius: 8px;
+}
+
 
 #menu-message {
   padding: 0 0.75rem;
