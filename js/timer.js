@@ -99,8 +99,6 @@ function applyRunningUI() {
   if (!cameraPermissions) {
     dom.cameraPreview.style.display    = "none";
     dom.cameraStart.style.display      = "none";
-    dom.cameraStart.style.marginTop    = "";
-    dom.cameraStart.style.marginBottom = "";
     dom.timeContainer.style.marginTop  = "auto";
   }
   hideFlipCameraButton();
@@ -139,19 +137,11 @@ function applyStartUI(showBanner = false) {
   if (!cameraPermissions) {
     dom.cameraPreview.style.display   = "block";
     dom.cameraStart.style.display     = "block";
-    if (showBanner) {
-      // Banner is in flow below camera-start — let everything stack naturally.
-      // camera-start sits at top, banner below, time-container below that.
-      dom.cameraStart.style.marginTop    = "0";
-      dom.cameraStart.style.marginBottom = "0";
-      dom.timeContainer.style.marginTop  = "";
-    } else {
-      // No banner: push camera-start and time-container to vertical centre
-      // by giving camera-start auto top margin and time-container auto top margin.
-      dom.cameraStart.style.marginTop    = "auto";
-      dom.cameraStart.style.marginBottom = "0";
-      dom.timeContainer.style.marginTop  = "auto";
-    }
+    // Without camera the flex column needs margin-top:auto on time-container
+    // to push it toward the centre (camera-start above it has auto margins too).
+    // When the banner is visible camera-start loses its auto margins, so we let
+    // time-container flow naturally instead.
+    dom.timeContainer.style.marginTop = showBanner ? "" : "auto";
   }
   showFlipCameraButton();
 
