@@ -375,6 +375,11 @@ function buildPreviewRow(round, translations) {
   tdTemp.textContent = "\u2014";
   tr.appendChild(tdTemp);
 
+  // Spacer occupies the space of the hidden download columns
+  const tdSpacer = document.createElement("td");
+  tdSpacer.className = "col-spacer";
+  tr.appendChild(tdSpacer);
+
   return tr;
 }
 
