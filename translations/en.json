@@ -39,5 +39,11 @@
   "addRoundBannerSubtitle": "Extend your current session",
 
   "goalReached": "Goal reached: {{time}}",
-  "congrats": "Congrats! 🥳🥳"
+  "congrats": "Congrats! 🥳🥳",
+  
+  "summaryHistory": "Last 7 days",
+  "summaryHistorySoon": "Coming soon...",
+  "summarySession": "Current session",
+  "summaryDownload": "Download",
+  "summaryStatsBtn": "Stats"
 }

@@ -37,5 +37,11 @@
   "addRoundBannerSubtitle": "Extender a sessão atual",
 
   "goalReached": "Objetivo atingido: {{time}}",
-  "congrats": "Parabéns! 🥳🥳"
+  "congrats": "Parabéns! 🥳🥳",
+  
+  "summaryHistory": "Últimos 7 dias",
+  "summaryHistorySoon": "Em breve...",
+  "summarySession": "Sessão atual",
+  "summaryDownload": "Baixar",
+  "summaryStatsBtn": "Stats"
 }
