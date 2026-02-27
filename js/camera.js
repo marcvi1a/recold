@@ -335,13 +335,7 @@ export function displayMedia() {
     const filename = `ReCold_stats_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.png`;
     const href     = URL.createObjectURL(capturedStats);
 
-    // Preview image
-    const img         = document.createElement("img");
-    img.src           = href;
-    img.style.cssText = "width:100%;border-radius:8px;margin-bottom:0.5rem;display:block;";
-    dom.mediaLinksList.appendChild(img);
-
-    // Download link below the preview
+    // Download link
     dom.mediaLinksList.appendChild(
       createMediaItem({ href, blob: capturedStats, mimeType: "image/png", filename, emoji: "🏅", label: "Save stats image" })
     );
