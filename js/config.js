@@ -49,12 +49,13 @@ export const dom = {
   // Live messages
   liveMessages:    document.getElementById("live-messages"),
 
-  // Media download links
-  mediaLinks:      document.getElementById("media-links"),
-  mediaLinksTitle: document.getElementById("media-links__title"),
-  mediaLinksList:  document.getElementById("media-links__list"),
+  // Summary
+  summary:              document.getElementById("summary"),
+  roundsTableBody:      document.getElementById("rounds-table__body"),
+  roundsTableFoot:      document.getElementById("rounds-table__foot"),
+  roundsPreviewBody:    document.getElementById("rounds-preview-table__body"),
 
-  // Menu
+  // Add-round banner
   menuControls:    document.getElementById("menu-controls"),
   saunaButton:     document.getElementById("menu-controls__sauna"),
   iceButton:       document.getElementById("menu-controls__ice"),

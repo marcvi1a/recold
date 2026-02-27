@@ -120,7 +120,6 @@ function applySummaryUI() {
   dom.timeContainer.style.display    = "none";
 
   displayMedia();
-  dom.mediaLinks.style.display = "block";
 
   dom.stopButton.style.display = "none";
 
@@ -131,7 +130,7 @@ function applySummaryUI() {
 }
 
 function applyStartUI(showBanner = false) {
-  dom.mediaLinks.style.display       = "none";
+  dom.summary.style.display          = "none";
   dom.timeContainer.style.display    = "block";
   dom.cameraContainer.style.display  = "block";
 
@@ -153,6 +152,7 @@ function applyStartUI(showBanner = false) {
 
   // Add-round banner
   if (showBanner) {
+    import("./camera.js").then(m => m.renderRoundsPreview());
     dom.addRoundBanner.classList.remove("hidden");
   } else {
     dom.addRoundBanner.classList.add("hidden");

@@ -295,13 +295,94 @@ export function capturePhoto() {
 
 // ─── Media display ────────────────────────────────────────────────────────────
 
-function createMediaItem({ href, blob, mimeType, filename, emoji, label }) {
-  const li = document.createElement("li");
+// ─── Round row helpers ────────────────────────────────────────────────────────
 
+function formatElapsed(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return m > 0 ? `${m}m ${sec}s` : `${sec}s`;
+}
+
+function modeLabel(mode) {
+  return mode === "sauna" ? "Sauna" : "Ice";
+}
+
+function buildSummaryRow(round, roundIndex) {
+  const ri = roundIndex + 1;
+  const tr = document.createElement("tr");
+  tr.className = "round-row";
+
+  const tdMode = document.createElement("td");
+  tdMode.className = `col-mode mode--${round.mode}`;
+  tdMode.textContent = modeLabel(round.mode);
+  tr.appendChild(tdMode);
+
+  const tdTime = document.createElement("td");
+  tdTime.className = "col-time";
+  tdTime.textContent = formatElapsed(round.elapsedSeconds);
+  tr.appendChild(tdTime);
+
+  const tdTemp = document.createElement("td");
+  tdTemp.className = "col-temp col-temp--disabled";
+  tdTemp.textContent = "\u2014";
+  tdTemp.title = "Temperature coming soon";
+  tr.appendChild(tdTemp);
+
+  const tdVideo = document.createElement("td");
+  tdVideo.className = "col-dl-video";
+  if (round.video) {
+    tdVideo.appendChild(buildDlButton({
+      blob: round.video.blob,
+      mimeType: round.video.mimeType,
+      filename: round.video.filename,
+      emoji: "\u2b07\ufe0f",
+      label: `Round ${ri} video`,
+    }));
+  } else {
+    tdVideo.textContent = "\u2014";
+  }
+  tr.appendChild(tdVideo);
+
+  const tdPhotos = document.createElement("td");
+  tdPhotos.className = "col-dl-photos";
+  if (round.photos.length > 0) {
+    tdPhotos.appendChild(buildPhotosButton(round, ri));
+  } else {
+    tdPhotos.textContent = "\u2014";
+  }
+  tr.appendChild(tdPhotos);
+
+  return tr;
+}
+
+function buildPreviewRow(round) {
+  const tr = document.createElement("tr");
+  tr.className = "round-row round-row--preview";
+
+  const tdMode = document.createElement("td");
+  tdMode.className = `col-mode mode--${round.mode}`;
+  tdMode.textContent = modeLabel(round.mode);
+  tr.appendChild(tdMode);
+
+  const tdTime = document.createElement("td");
+  tdTime.className = "col-time";
+  tdTime.textContent = formatElapsed(round.elapsedSeconds);
+  tr.appendChild(tdTime);
+
+  const tdTemp = document.createElement("td");
+  tdTemp.className = "col-temp col-temp--disabled";
+  tdTemp.textContent = "\u2014";
+  tr.appendChild(tdTemp);
+
+  return tr;
+}
+
+function buildDlButton({ blob, mimeType, filename, emoji, label }) {
   if (isIOS() && navigator.share) {
     const btn = document.createElement("button");
-    btn.textContent   = `${emoji} ${label}`;
-    btn.style.cssText = "background:none;border:1px solid #0969da;color:#0969da;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:0.9rem;cursor:pointer;margin:4px 0;";
+    btn.className   = "dl-btn";
+    btn.textContent = emoji;
+    btn.title       = label;
     btn.addEventListener("click", async () => {
       try {
         const file = new File([blob], filename, { type: mimeType });
@@ -309,57 +390,104 @@ function createMediaItem({ href, blob, mimeType, filename, emoji, label }) {
       } catch (err) {
         if (err.name !== "AbortError") {
           const win = window.open();
-          win.document.write(`<img src="${href}" style="max-width:100%" />`);
+          win.document.write(`<img src="${URL.createObjectURL(blob)}" style="max-width:100%" />`);
           win.document.title = filename;
         }
       }
     });
-    li.appendChild(btn);
-  } else {
-    const a       = document.createElement("a");
-    a.href        = href;
-    a.download    = filename;
-    a.textContent = `${emoji} ${filename}`;
-    li.appendChild(a);
+    return btn;
   }
-
-  return li;
+  const a       = document.createElement("a");
+  a.className   = "dl-btn";
+  a.href        = URL.createObjectURL(blob);
+  a.download    = filename;
+  a.textContent = emoji;
+  a.title       = label;
+  return a;
 }
 
-export function displayMedia() {
-  dom.mediaLinksList.innerHTML = "";
+function buildPhotosButton(round, roundNum) {
+  const count = round.photos.length;
+  const d     = round.startTime;
 
-  // ── Stats card (always present) ────────────────────────────────────────────
+  const btn = document.createElement("button");
+  btn.className = "dl-btn dl-btn--photos";
+  btn.title     = `Download ${count} photo${count > 1 ? "s" : ""}`;
+  btn.innerHTML = `<span class="photo-icon">&#128247;</span><span class="photo-count">${count}</span>`;
+
+  btn.addEventListener("click", async () => {
+    if (isIOS() && navigator.share) {
+      try {
+        const files = round.photos.map((blob, pi) => {
+          const fname = `ReCold_round${roundNum}_photo${pi+1}_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.jpg`;
+          return new File([blob], fname, { type: "image/jpeg" });
+        });
+        await navigator.share({ files, title: "ReCold" });
+      } catch (err) {
+        if (err.name !== "AbortError") console.error(err);
+      }
+      return;
+    }
+    round.photos.forEach((blob, pi) => {
+      const fname = `ReCold_round${roundNum}_photo${pi+1}_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.jpg`;
+      const a     = document.createElement("a");
+      a.href      = URL.createObjectURL(blob);
+      a.download  = fname;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1000);
+    });
+  });
+
+  return btn;
+}
+
+// ─── Media display ────────────────────────────────────────────────────────────
+
+export function displayMedia() {
+  dom.roundsTableBody.innerHTML = "";
+  dom.roundsTableFoot.innerHTML = "";
+
+  rounds.forEach((round, ri) => {
+    dom.roundsTableBody.appendChild(buildSummaryRow(round, ri));
+  });
+
   if (capturedStats) {
     const d        = rounds[0]?.startTime || new Date();
     const filename = `ReCold_stats_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.png`;
-    const href     = URL.createObjectURL(capturedStats);
 
-    // Download link
-    dom.mediaLinksList.appendChild(
-      createMediaItem({ href, blob: capturedStats, mimeType: "image/png", filename, emoji: "🏅", label: "Save stats image" })
-    );
+    const tr      = document.createElement("tr");
+    const tdEmpty = document.createElement("td");
+    tdEmpty.colSpan = 3;
+    tr.appendChild(tdEmpty);
+
+    const tdStats     = document.createElement("td");
+    tdStats.colSpan   = 2;
+    tdStats.className = "col-stats-dl";
+
+    const btn = document.createElement("button");
+    btn.className   = "stats-dl-btn";
+    btn.textContent = "Download stats";
+    btn.addEventListener("click", () => {
+      const a    = document.createElement("a");
+      a.href     = URL.createObjectURL(capturedStats);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1000);
+    });
+    tdStats.appendChild(btn);
+    tr.appendChild(tdStats);
+    dom.roundsTableFoot.appendChild(tr);
   }
 
-  // ── Per-round video + photos ───────────────────────────────────────────────
-  rounds.forEach((round, ri) => {
-    const roundNum = ri + 1;
+  dom.summary.style.display = "block";
+}
 
-    if (round.video) {
-      const href = URL.createObjectURL(round.video.blob);
-      dom.mediaLinksList.appendChild(
-        createMediaItem({ href, blob: round.video.blob, mimeType: round.video.mimeType, filename: round.video.filename, emoji: "⬇️", label: `Save round ${roundNum} video` })
-      );
-    }
-
-    round.photos.forEach((blob, pi) => {
-      const d        = round.startTime;
-      const filename = `ReCold_round${roundNum}_photo${pi+1}_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.jpg`;
-      const href     = URL.createObjectURL(blob);
-      dom.mediaLinksList.appendChild(
-        createMediaItem({ href, blob, mimeType: "image/jpeg", filename, emoji: "📷", label: `Round ${roundNum} photo ${pi+1}` })
-      );
-    });
+export function renderRoundsPreview() {
+  dom.roundsPreviewBody.innerHTML = "";
+  rounds.forEach(round => {
+    dom.roundsPreviewBody.appendChild(buildPreviewRow(round));
   });
 }
 
