@@ -696,7 +696,7 @@ button:disabled {
 .photo-count {
   position: absolute;
   top: -3px;
-  left: 14px;
+  left: 22px;
   font-size: 0.6rem;
   font-family: "Roboto Mono", monospace;
   font-weight: 700;
