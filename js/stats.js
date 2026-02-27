@@ -27,16 +27,6 @@ export async function generateStatsImage(rounds) {
     const y       = i * ROUND_H;
     const centreY = y + ROUND_H / 2;
 
-    // Subtle separator line between rounds (skip first)
-    if (i > 0) {
-      ctx.strokeStyle = "rgba(255,255,255,0.2)";
-      ctx.lineWidth   = 1;
-      ctx.beginPath();
-      ctx.moveTo(60, y);
-      ctx.lineTo(W - 60, y);
-      ctx.stroke();
-    }
-
     // Mode label — localised, always white, Montserrat
     const modeLabel = await getModeLabel(mode);
     ctx.fillStyle    = "#ffffff";
