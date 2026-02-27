@@ -336,7 +336,7 @@ function buildSummaryRow(round, roundIndex, translations) {
       blob: round.video.blob,
       mimeType: round.video.mimeType,
       filename: round.video.filename,
-      icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
+      icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>`,
       label: `Round ${ri} video`,
     }));
   } else {
@@ -419,7 +419,7 @@ function buildPhotosButton(round, roundNum) {
   const btn = document.createElement("button");
   btn.className = "dl-btn dl-btn--photos";
   btn.title     = `Download ${count} photo${count > 1 ? "s" : ""}`;
-  btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span class="photo-count">${count}</span>`;
+  btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><span class="photo-count">${count}</span>`;
 
   btn.addEventListener("click", async () => {
     if (isIOS() && navigator.share) {
@@ -479,7 +479,7 @@ export async function displayMedia() {
 
     const btn = document.createElement("button");
     btn.className   = "stats-dl-btn";
-    btn.textContent = translations.statsBtn;
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> ${translations.statsBtn}`;
     btn.addEventListener("click", () => {
       const a    = document.createElement("a");
       a.href     = URL.createObjectURL(capturedStats);
