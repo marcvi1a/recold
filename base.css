@@ -583,7 +583,7 @@ button:disabled {
 
 .summary-card__title {
   margin: 0 0 0.2rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -659,9 +659,8 @@ button:disabled {
   text-align: center;
 }
 
-/* Mode colours */
-.mode--sauna { color: #ef0241; }
-.mode--ice   { color: #378de2; }
+/* Mode: always black */
+.col-mode { color: #171a1c; }
 
 /* Download buttons */
 .dl-btn {

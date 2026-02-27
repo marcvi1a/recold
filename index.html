@@ -199,20 +199,20 @@
 
         <!-- Last 7 days (disabled / coming soon) -->
         <div id="summary-history" class="summary-card summary-card--disabled">
-          <p class="summary-card__title">Last 7 days</p>
-          <p class="summary-card__subtitle">Coming soon...</p>
+          <p id="summary-history__title" class="summary-card__title">Last 7 days</p>
+          <p id="summary-history__soon" class="summary-card__subtitle">Coming soon...</p>
         </div>
 
         <!-- Current session -->
         <div id="summary-session" class="summary-card">
-          <p class="summary-card__title">Current session</p>
+          <p id="summary-session__title" class="summary-card__title">Current session</p>
           <table id="rounds-table">
             <thead>
               <tr>
                 <th class="col-mode"></th>
                 <th class="col-time"></th>
                 <th class="col-temp"></th>
-                <th class="col-download" colspan="2">Download</th>
+                <th class="col-download" colspan="2" id="rounds-table__dl-header">Download</th>
               </tr>
             </thead>
             <tbody id="rounds-table__body">
