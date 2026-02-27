@@ -154,8 +154,19 @@ function applyStartUI(showBanner = false) {
   if (showBanner) {
     import("./camera.js").then(m => m.renderRoundsPreview());
     dom.addRoundBanner.classList.remove("hidden");
+    // When no camera, camera-start would float with auto margins and sit below the banner.
+    // Reset margins so it stacks naturally above it.
+    if (!cameraPermissions) {
+      dom.cameraStart.style.marginTop    = "1rem";
+      dom.cameraStart.style.marginBottom = "0";
+    }
   } else {
     dom.addRoundBanner.classList.add("hidden");
+    // Restore default auto-centering when banner is hidden
+    if (!cameraPermissions) {
+      dom.cameraStart.style.marginTop    = "";
+      dom.cameraStart.style.marginBottom = "";
+    }
   }
 }
 
