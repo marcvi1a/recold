@@ -135,13 +135,11 @@ function applyStartUI(showBanner = false) {
   dom.cameraContainer.style.display  = "block";
 
   if (!cameraPermissions) {
-    dom.cameraPreview.style.display   = "block";
-    dom.cameraStart.style.display     = "block";
-    // Without camera the flex column needs margin-top:auto on time-container
-    // to push it toward the centre (camera-start above it has auto margins too).
-    // When the banner is visible camera-start loses its auto margins, so we let
-    // time-container flow naturally instead.
-    dom.timeContainer.style.marginTop = showBanner ? "" : "auto";
+    dom.cameraPreview.style.display = "block";
+    dom.cameraStart.style.display   = "block";
+    // When adding a round, move "Allow camera" to top-right corner so it
+    // doesn't interfere with layout. Otherwise keep it centred in the flow.
+    dom.cameraStart.classList.toggle("camera-start--corner", showBanner);
   }
   showFlipCameraButton();
 
@@ -158,19 +156,8 @@ function applyStartUI(showBanner = false) {
   if (showBanner) {
     import("./camera.js").then(m => m.renderRoundsPreview());
     dom.addRoundBanner.classList.remove("hidden");
-    // When no camera, camera-start would float with auto margins and sit below the banner.
-    // Reset margins so it stacks naturally above it.
-    if (!cameraPermissions) {
-      dom.cameraStart.style.marginTop    = "1rem";
-      dom.cameraStart.style.marginBottom = "0";
-    }
   } else {
     dom.addRoundBanner.classList.add("hidden");
-    // Restore default auto-centering when banner is hidden
-    if (!cameraPermissions) {
-      dom.cameraStart.style.marginTop    = "";
-      dom.cameraStart.style.marginBottom = "";
-    }
   }
 }
 
